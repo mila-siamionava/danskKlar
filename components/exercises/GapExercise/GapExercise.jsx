@@ -7,6 +7,8 @@ import GapSelect from "@/components/exercises/GapSelect/GapSelect";
 import ProgressBar from "@/components/ui/ProgressBar/ProgressBar";
 import AnswerFeedback from "@/components/exercises/AnswerFeedback/AnswerFeedback";
 
+import { addReviewItem } from "@/lib/reviewStorage";
+
 import styles from "./GapExercise.module.css";
 
 export default function GapExercise({ exercise }) {
@@ -31,6 +33,31 @@ export default function GapExercise({ exercise }) {
       return;
     }
 
+    const previousAnswer = answers[questionId];
+
+    const isFirstAttempt = !previousAnswer;
+
+    const isCorrect =
+      optionId === question.correctOptionId;
+
+    // Save to Review only if the FIRST attempt is wrong.
+    if (isFirstAttempt && !isCorrect) {
+      const correctOption = question.options.find(
+        (option) =>
+          option.id === question.correctOptionId
+      );
+
+      addReviewItem({
+        id: `${exercise.title}-${question.id}`,
+        exerciseTitle: exercise.title,
+        questionId: question.id,
+        term: correctOption?.text || "",
+        options: question.options,
+        correctOptionId: question.correctOptionId,
+        explanation: question.explanation,
+      });
+    }
+
     setAnswers((previousAnswers) => {
       const previousAnswer =
         previousAnswers[questionId];
@@ -39,14 +66,11 @@ export default function GapExercise({ exercise }) {
       if (!previousAnswer) {
         return {
           ...previousAnswers,
-
           [questionId]: {
             selectedOptionId: optionId,
             firstOptionId: optionId,
-
             firstIsCorrect:
-              optionId ===
-              question.correctOptionId,
+              optionId === question.correctOptionId,
           },
         };
       }
@@ -55,7 +79,6 @@ export default function GapExercise({ exercise }) {
       // Keep the first attempt unchanged.
       return {
         ...previousAnswers,
-
         [questionId]: {
           ...previousAnswer,
           selectedOptionId: optionId,
@@ -82,15 +105,12 @@ export default function GapExercise({ exercise }) {
         );
       }
 
-      const questionId = Number(
-        match[1]
-      );
+      const questionId = Number(match[1]);
 
-      const question =
-        exercise.questions.find(
-          (item) =>
-            item.id === questionId
-        );
+      const question = exercise.questions.find(
+        (item) =>
+          item.id === questionId
+      );
 
       if (!question) {
         return (
@@ -100,8 +120,7 @@ export default function GapExercise({ exercise }) {
         );
       }
 
-      const answer =
-        answers[questionId];
+      const answer = answers[questionId];
 
       const selectedOptionId =
         answer?.selectedOptionId || "";
@@ -114,17 +133,13 @@ export default function GapExercise({ exercise }) {
           <GapSelect
             question={question}
             value={selectedOptionId}
-            checked={Boolean(
-              selectedOptionId
-            )}
+            checked={Boolean(selectedOptionId)}
             onChange={handleAnswer}
           />
 
           <AnswerFeedback
             question={question}
-            selectedOptionId={
-              selectedOptionId
-            }
+            selectedOptionId={selectedOptionId}
           />
         </span>
       );
@@ -137,12 +152,8 @@ export default function GapExercise({ exercise }) {
         title={exercise.title}
         level={exercise.level}
         category={exercise.category}
-        questionCount={
-          totalQuestions
-        }
-        instructions={
-          exercise.instructions
-        }
+        questionCount={totalQuestions}
+        instructions={exercise.instructions}
       />
 
       <ProgressBar
@@ -155,41 +166,25 @@ export default function GapExercise({ exercise }) {
         {renderContent()}
       </section>
 
-      {answeredCount ===
-        totalQuestions && (
+      {answeredCount === totalQuestions && (
         <section
           className={styles.result}
           aria-live="polite"
         >
           <div>
-            <p
-              className={
-                styles.resultLabel
-              }
-            >
+            <p className={styles.resultLabel}>
               Exercise complete
             </p>
 
-            <p
-              className={
-                styles.resultScore
-              }
-            >
-              {score} of{" "}
-              {totalQuestions} correct
+            <p className={styles.resultScore}>
+              {score} of {totalQuestions} correct
               on the first attempt
             </p>
           </div>
 
-          <p
-            className={
-              styles.resultPercentage
-            }
-          >
+          <p className={styles.resultPercentage}>
             {Math.round(
-              (score /
-                totalQuestions) *
-                100
+              (score / totalQuestions) * 100
             )}
             %
           </p>
