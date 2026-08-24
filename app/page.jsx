@@ -114,13 +114,14 @@ export default function Home() {
                   for focused vocabulary practice.
                 </p>
 
-                <Button
-                  variant="secondary"
-                  size="md"
-                  disabled
-                >
-                  Coming next
-                </Button>
+               <Link href="/review">
+  <Button
+    variant="secondary"
+    size="md"
+  >
+    Review words →
+  </Button>
+                </Link>
               </div>
             </Card>
           </section>
