@@ -38,47 +38,58 @@ export default function AnswerFeedback({
 
       {question.explanation && (
         <div className={styles.explanation}>
-          <div className={styles.languageBlock}>
-            <span className={styles.languageLabel}>
-              English
-            </span>
+          <details className={styles.collapsible}>
+            <summary className={styles.summary}>
+              <span className={styles.languageLabel}>
+                English
+              </span>
+              <span className={styles.arrow}>⌄</span>
+            </summary>
 
-            <p>
-              {question.explanation.english}
-            </p>
-          </div>
+            <div className={styles.collapsibleContent}>
+              <p>{question.explanation.english}</p>
+            </div>
+          </details>
 
-          <div className={styles.languageBlock}>
-            <span className={styles.languageLabel}>
-              Русский
-            </span>
+          <details className={styles.collapsible}>
+            <summary className={styles.summary}>
+              <span className={styles.languageLabel}>
+                Русский
+              </span>
+              <span className={styles.arrow}>⌄</span>
+            </summary>
 
-            <p>
-              {question.explanation.russian}
-            </p>
-          </div>
+            <div className={styles.collapsibleContent}>
+              <p>{question.explanation.russian}</p>
+            </div>
+          </details>
 
           {question.explanation.translations && (
-            <div className={styles.translations}>
-              <span className={styles.languageLabel}>
-                Words & expressions
-              </span>
+            <details className={styles.collapsible}>
+              <summary className={styles.summary}>
+                <span className={styles.languageLabel}>
+                  Words & expressions
+                </span>
+                <span className={styles.arrow}>⌄</span>
+              </summary>
 
-              <div className={styles.translationList}>
-                {question.explanation.translations.map(
-                  (item) => (
-                    <div
-                      key={item.word}
-                      className={styles.translationRow}
-                    >
-                      <strong>{item.word}</strong>
-                      <span>{item.english}</span>
-                      <span>{item.russian}</span>
-                    </div>
-                  )
-                )}
+              <div className={styles.collapsibleContent}>
+                <div className={styles.translationList}>
+                  {question.explanation.translations.map(
+                    (item) => (
+                      <div
+                        key={item.word}
+                        className={styles.translationRow}
+                      >
+                        <strong>{item.word}</strong>
+                        <span>{item.english}</span>
+                        <span>{item.russian}</span>
+                      </div>
+                    )
+                  )}
+                </div>
               </div>
-            </div>
+            </details>
           )}
         </div>
       )}

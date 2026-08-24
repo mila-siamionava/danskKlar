@@ -138,3 +138,32 @@
     flex-direction: column;
   }
 }
+.collapsible {
+  border-top: 1px solid #ddd;
+  padding: 14px 0;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.arrow {
+  font-size: 22px;
+  transition: transform 0.2s ease;
+}
+
+.collapsible[open] .arrow {
+  transform: rotate(180deg);
+}
+
+.collapsibleContent {
+  padding-top: 12px;
+}
