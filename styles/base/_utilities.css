@@ -1,0 +1,194 @@
+/* ============================================================
+   CONTAINERS
+   ============================================================ */
+
+.u-container {
+  width: min(
+    calc(100% - (var(--page-gap) * 2)),
+    var(--content-max-width)
+  );
+
+  margin-inline: auto;
+}
+
+.u-reading-container {
+  width: min(
+    100%,
+    var(--reading-max-width)
+  );
+
+  margin-inline: auto;
+}
+
+.u-dashboard-container {
+  width: min(
+    100%,
+    var(--dashboard-max-width)
+  );
+
+  margin-inline: auto;
+}
+
+
+/* ============================================================
+   SURFACES
+   ============================================================ */
+
+.u-surface {
+  background: var(--surface-background);
+
+  border: var(--surface-border);
+  border-radius: var(--surface-radius);
+}
+
+.u-surface-shadow {
+  box-shadow: var(--surface-shadow);
+}
+
+.u-surface-elevated {
+  box-shadow: var(--shadow-elevated);
+}
+
+
+/* ============================================================
+   TEXT COLORS
+   ============================================================ */
+
+.u-text-primary {
+  color: var(--color-text-primary);
+}
+
+.u-text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.u-text-muted {
+  color: var(--color-text-muted);
+}
+
+.u-text-inverse {
+  color: var(--color-text-inverse);
+}
+
+.u-text-accent {
+  color: var(--color-text-accent);
+}
+
+.u-text-success {
+  color: var(--color-text-success);
+}
+
+.u-text-error {
+  color: var(--color-text-error);
+}
+
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+
+.u-visually-hidden {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+
+  white-space: nowrap;
+
+  border: 0;
+}
+
+
+/* ============================================================
+   FLEX
+   ============================================================ */
+
+.u-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.u-flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.u-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* ============================================================
+   GAP
+   ============================================================ */
+
+.u-gap-xs {
+  gap: var(--spacing-xs);
+}
+
+.u-gap-sm {
+  gap: var(--spacing-sm);
+}
+
+.u-gap-md {
+  gap: var(--spacing-md);
+}
+
+.u-gap-lg {
+  gap: var(--spacing-lg);
+}
+
+.u-gap-xl {
+  gap: var(--spacing-xl);
+}
+
+
+/* ============================================================
+   WIDTH
+   ============================================================ */
+
+.u-full-width {
+  width: 100%;
+}
+
+
+/* ============================================================
+   TEXT ALIGNMENT
+   ============================================================ */
+
+.u-text-center {
+  text-align: center;
+}
+
+
+/* ============================================================
+   DISPLAY
+   ============================================================ */
+
+.u-block {
+  display: block;
+}
+
+.u-inline-flex {
+  display: inline-flex;
+}
+
+
+/* ============================================================
+   POSITIONING
+   ============================================================ */
+
+.u-relative {
+  position: relative;
+}

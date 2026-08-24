@@ -1,0 +1,323 @@
+/* ============================================================
+   BODY
+   ============================================================ */
+
+body {
+  min-height: 100vh;
+
+  background: var(--color-background-page);
+}
+
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+
+main {
+  width: min(
+    calc(100% - (var(--page-gap) * 2)),
+    var(--page-max-width)
+  );
+
+  min-height: calc(
+    100vh - (var(--page-gap) * 2)
+  );
+
+  margin: var(--page-gap) auto;
+
+  background: var(--color-background-surface);
+
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--border-radius-lg);
+
+  box-shadow: var(--shadow-card);
+
+  overflow: hidden;
+}
+
+
+/* ============================================================
+   MAIN PAGE CONTENT
+   ============================================================ */
+
+.mainPageContainer {
+  width: min(
+    100%,
+    var(--content-max-width)
+  );
+
+  margin-inline: auto;
+
+  padding:
+    clamp(2rem, 3vw, 4rem)
+    clamp(1.6rem, 3vw, 4rem)
+    calc(var(--bottom-nav-height) + 3rem);
+
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--spacing-lg);
+}
+
+
+/* ============================================================
+   READING / EXERCISE CONTENT
+   ============================================================ */
+
+.readingContainer {
+  width: min(
+    100%,
+    var(--reading-max-width)
+  );
+
+  margin-inline: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--spacing-lg);
+}
+
+
+/* ============================================================
+   DASHBOARD CONTENT
+   ============================================================ */
+
+.dashboardContainer {
+  width: min(
+    100%,
+    var(--dashboard-max-width)
+  );
+
+  margin-inline: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--spacing-lg);
+}
+
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+
+section {
+  width: 100%;
+
+  margin: 0;
+
+  scroll-margin-top:
+    calc(var(--app-header-height) + var(--spacing-md));
+}
+
+
+/* ============================================================
+   APP HEADER
+   ============================================================ */
+
+.appHeader {
+  min-height: var(--app-header-height);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: var(--spacing-md);
+
+  padding-inline:
+    clamp(1.6rem, 3vw, 3.2rem);
+
+  background: var(--color-background-surface);
+
+  border-bottom:
+    1px solid var(--color-border-primary);
+}
+
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--spacing-xs);
+}
+
+.pageHeader__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: var(--spacing-xs);
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-label-small);
+  line-height: var(--line-height-label-small);
+}
+
+
+/* ============================================================
+   CONTENT GRID
+   ============================================================ */
+
+.contentGrid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(min(100%, 28rem), 1fr)
+    );
+
+  gap: var(--spacing-md);
+}
+
+
+/* ============================================================
+   EXERCISE ACTIONS
+   ============================================================ */
+
+.exerciseActions {
+  width: 100%;
+
+  display: flex;
+
+  gap: var(--spacing-md);
+}
+
+.exerciseActions > * {
+  flex: 1;
+}
+
+
+/* ============================================================
+   BOTTOM NAVIGATION
+   ============================================================ */
+
+.bottomNavigation {
+  min-height: var(--bottom-nav-height);
+
+  display: grid;
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  align-items: center;
+
+  background: var(--color-background-surface);
+
+  border-top:
+    1px solid var(--color-border-primary);
+}
+
+
+/* ============================================================
+   LOADING
+   ============================================================ */
+
+.loadingPage {
+  width: 100%;
+  min-height: 50vh;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: var(--spacing-lg);
+
+  padding: var(--spacing-xl);
+}
+
+.loadingMessage {
+  color: var(--color-text-muted);
+
+  font-family: var(--font-family-body);
+
+  font-size: var(--font-size-label-large);
+  line-height: var(--line-height-label-large);
+  font-weight: var(--font-weight-label-large);
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media only screen and (max-width: 56.25em) {
+  main {
+    width: calc(100% - 2.4rem);
+
+    min-height: calc(100vh - 2.4rem);
+
+    margin: 1.2rem auto;
+  }
+
+  .mainPageContainer {
+    padding:
+      2.4rem
+      2rem
+      calc(var(--bottom-nav-height) + 2.4rem);
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media only screen and (max-width: 37.5em) {
+  body {
+    background: var(--color-background-surface);
+  }
+
+  main {
+    width: 100%;
+
+    min-height: 100vh;
+
+    margin: 0;
+
+    border: 0;
+    border-radius: 0;
+
+    box-shadow: none;
+  }
+
+  .mainPageContainer {
+    width: 100%;
+
+    padding:
+      2rem
+      2rem
+      calc(var(--bottom-nav-height) + 2.4rem);
+  }
+
+  .readingContainer,
+  .dashboardContainer {
+    width: 100%;
+  }
+
+  .exerciseActions {
+    flex-direction: column-reverse;
+  }
+}
+
+
+/* ============================================================
+   LARGE DESKTOP
+   ============================================================ */
+
+@media only screen and (min-width: 112.5em) {
+  :root {
+    --page-max-width: 128rem;
+    --content-max-width: 112rem;
+    --reading-max-width: 78rem;
+  }
+}

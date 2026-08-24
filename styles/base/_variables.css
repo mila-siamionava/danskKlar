@@ -1,0 +1,236 @@
+:root {
+  /* ============================================================
+     COLORS
+     ============================================================ */
+
+  /* Base */
+  --color-white: #ffffff;
+  --color-black: #1d1d1d;
+
+  /* Brand / palette */
+  --color-cream: #f7f4ee;
+  --color-cream-soft: #fbf9f5;
+  --color-beige: #d8c7a6;
+  --color-beige-dark: #bda57a;
+
+  /* Text */
+  --color-text-primary: #1d1d1d;
+  --color-text-secondary: #4e4a45;
+  --color-text-muted: #78736c;
+  --color-text-inverse: #ffffff;
+  --color-text-accent: #8a6e43;
+
+  /* Backgrounds */
+  --color-background-page: #f7f4ee;
+  --color-background-surface: #ffffff;
+  --color-background-soft: #fbf9f5;
+  --color-background-accent: #d8c7a6;
+
+  /* Borders */
+  --color-border-primary: #e7e1d7;
+  --color-border-secondary: #d7cfc2;
+  --color-border-accent: #d8c7a6;
+
+  /* Success */
+  --color-success: #48735a;
+  --color-success-background: #eaf3ed;
+  --color-success-border: #bdd3c4;
+  --color-text-success: #48735a;
+
+  /* Error */
+  --color-error: #a84c4c;
+  --color-error-background: #f8eaea;
+  --color-error-border: #e2bcbc;
+  --color-text-error: #a84c4c;
+
+  /* Warning */
+  --color-warning: #b27d32;
+  --color-warning-background: #f8f0df;
+
+  /* ============================================================
+     TYPOGRAPHY
+     ============================================================ */
+
+  --font-family-heading: Georgia, "Times New Roman", serif;
+  --font-family-body: Inter, Arial, sans-serif;
+
+  /* Headlines */
+  --font-size-headline-xl: 4rem;
+  --line-height-headline-xl: 4.8rem;
+  --font-weight-headline-xl: 700;
+
+  --font-size-headline-large: 3.2rem;
+  --line-height-headline-large: 4rem;
+  --font-weight-headline-large: 700;
+
+  --font-size-headline-medium: 2.4rem;
+  --line-height-headline-medium: 3.2rem;
+  --font-weight-headline-medium: 700;
+
+  --font-size-headline-small: 2rem;
+  --line-height-headline-small: 2.8rem;
+  --font-weight-headline-small: 600;
+
+  /* Body */
+  --font-size-body-large: 1.8rem;
+  --line-height-body-large: 2.8rem;
+  --font-weight-body-large: 400;
+
+  --font-size-body-medium: 1.6rem;
+  --line-height-body-medium: 2.4rem;
+  --font-weight-body-medium: 400;
+
+  --font-size-body-small: 1.4rem;
+  --line-height-body-small: 2rem;
+  --font-weight-body-small: 400;
+
+  /* Labels */
+  --font-size-label-large: 1.6rem;
+  --line-height-label-large: 2rem;
+  --font-weight-label-large: 600;
+
+  --font-size-label-medium: 1.4rem;
+  --line-height-label-medium: 1.8rem;
+  --font-weight-label-medium: 600;
+
+  --font-size-label-small: 1.2rem;
+  --line-height-label-small: 1.6rem;
+  --font-weight-label-small: 500;
+
+  /* ============================================================
+     SPACING
+     ============================================================ */
+
+  --spacing-3xs: 0.2rem;
+  --spacing-2xs: 0.4rem;
+  --spacing-xs: 0.8rem;
+  --spacing-sm: 1.2rem;
+  --spacing-md: 1.6rem;
+  --spacing-lg: 2.4rem;
+  --spacing-xl: 3.2rem;
+  --spacing-2xl: 4.8rem;
+  --spacing-3xl: 6.4rem;
+
+  /* ============================================================
+     BORDER RADIUS
+     ============================================================ */
+
+  --border-radius-xs: 0.8rem;
+  --border-radius-sm: 1.2rem;
+  --border-radius-md: 1.6rem;
+  --border-radius-lg: 2rem;
+  --border-radius-xl: 2.4rem;
+  --border-radius-full: 999px;
+
+  /* ============================================================
+     SHADOWS
+     ============================================================ */
+
+  --shadow-small:
+    0 2px 8px rgba(29, 29, 29, 0.05);
+
+  --shadow-card:
+    0 6px 20px rgba(29, 29, 29, 0.07);
+
+  --shadow-elevated:
+    0 10px 30px rgba(29, 29, 29, 0.1);
+
+  --shadow-bottom-sheet:
+    0 -8px 30px rgba(29, 29, 29, 0.12);
+
+  /* ============================================================
+     LAYOUT
+     ============================================================ */
+
+  --page-gap: clamp(1.2rem, 2.4vw, 3.2rem);
+
+  --page-max-width: 118rem;
+  --content-max-width: 104rem;
+  --reading-max-width: 72rem;
+  --dashboard-max-width: 96rem;
+
+  --app-header-height: 6.4rem;
+  --bottom-nav-height: 7.2rem;
+
+  /* ============================================================
+     CONTROL SIZES
+     ============================================================ */
+
+  --control-height-sm: 3.6rem;
+  --control-height-md: 4.4rem;
+  --control-height-lg: 5.2rem;
+
+  --icon-size-sm: 1.6rem;
+  --icon-size-md: 2.4rem;
+  --icon-size-lg: 3.2rem;
+
+  /* ============================================================
+     BUTTONS
+     ============================================================ */
+
+  --button-primary-background: var(--color-beige);
+  --button-primary-background-hover: var(--color-beige-dark);
+  --button-primary-text: var(--color-black);
+
+  --button-secondary-background: var(--color-white);
+  --button-secondary-text: var(--color-black);
+  --button-secondary-border: var(--color-border-primary);
+
+  --button-height: 5.2rem;
+  --button-padding-inline: 2rem;
+  --button-radius: var(--border-radius-sm);
+
+  /* ============================================================
+     CARDS / SURFACES
+     ============================================================ */
+
+  --surface-background: var(--color-background-surface);
+  --surface-border: 1px solid var(--color-border-primary);
+  --surface-radius: var(--border-radius-md);
+  --surface-shadow: var(--shadow-small);
+
+  /* ============================================================
+     EXERCISE UI
+     ============================================================ */
+
+  --gap-background: var(--color-white);
+  --gap-border: var(--color-border-primary);
+  --gap-text: var(--color-text-primary);
+
+  --gap-correct-background: var(--color-success-background);
+  --gap-correct-border: var(--color-success-border);
+  --gap-correct-text: var(--color-text-success);
+
+  --gap-wrong-background: var(--color-error-background);
+  --gap-wrong-border: var(--color-error-border);
+  --gap-wrong-text: var(--color-text-error);
+
+  --progress-track: #e8e2d8;
+  --progress-fill: var(--color-beige);
+  --progress-height: 0.6rem;
+
+  /* ============================================================
+     MOTION
+     ============================================================ */
+
+  --transition-fast: 150ms ease;
+  --transition-base: 220ms ease;
+  --transition-slow: 320ms ease;
+
+  /* ============================================================
+     OPACITY
+     ============================================================ */
+
+  --opacity-disabled: 0.4;
+  --opacity-muted: 0.65;
+
+  /* ============================================================
+     Z-INDEX
+     ============================================================ */
+
+  --z-header: 20;
+  --z-bottom-nav: 30;
+  --z-overlay: 100;
+  --z-bottom-sheet: 110;
+  --z-modal: 120;
+}

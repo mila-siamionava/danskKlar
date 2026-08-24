@@ -1,0 +1,107 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: var(--spacing-xs);
+
+  border-radius: var(--button-radius);
+
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-label-large);
+
+  cursor: pointer;
+
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+/* ==================== VARIANTS ==================== */
+
+.primary {
+  background: var(--button-primary-background);
+  color: var(--button-primary-text);
+
+  border: 1px solid transparent;
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--button-primary-background-hover);
+}
+
+.secondary {
+  background: var(--button-secondary-background);
+  color: var(--button-secondary-text);
+
+  border: 1px solid var(--button-secondary-border);
+}
+
+.secondary:hover:not(:disabled) {
+  background: var(--color-background-soft);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-text-primary);
+
+  border: 1px solid transparent;
+}
+
+.ghost:hover:not(:disabled) {
+  background: var(--color-background-soft);
+}
+
+/* ==================== SIZES ==================== */
+
+.sm {
+  min-height: var(--control-height-sm);
+
+  padding-inline: var(--spacing-sm);
+
+  font-size: var(--font-size-label-small);
+  line-height: var(--line-height-label-small);
+}
+
+.md {
+  min-height: var(--control-height-md);
+
+  padding-inline: var(--spacing-md);
+
+  font-size: var(--font-size-label-medium);
+  line-height: var(--line-height-label-medium);
+}
+
+.lg {
+  min-height: var(--control-height-lg);
+
+  padding-inline: var(--button-padding-inline);
+
+  font-size: var(--font-size-label-large);
+  line-height: var(--line-height-label-large);
+}
+
+/* ==================== WIDTH ==================== */
+
+.fullWidth {
+  width: 100%;
+}
+
+/* ==================== STATES ==================== */
+
+.button:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
