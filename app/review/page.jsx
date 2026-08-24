@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { getReviewItems } from "@/lib/reviewStorage";
@@ -48,11 +48,42 @@ export default function ReviewPage() {
 
     window.location.href = "/review/train";
   }
+function selectAllWords() {
+  setSelectedIds(items.map((item) => item.id));
+}
 
+function clearAllWords() {
+  setSelectedIds([]);
+}
   return (
-    <main>
-      <h1>Review</h1>
+  
+  <main>
+    <Link href="/">
+      <button type="button">
+        ← Back to home
+      </button>
+    </Link>
 
+    <h1>Review</h1>
+{items.length > 0 && (
+  <div>
+    {selectedIds.length === items.length ? (
+      <button
+        type="button"
+        onClick={clearAllWords}
+      >
+        Clear all
+      </button>
+    ) : (
+      <button
+        type="button"
+        onClick={selectAllWords}
+      >
+        Choose all words
+      </button>
+    )}
+  </div>
+)}
       {items.length === 0 ? (
         <p>No words or phrases to review yet.</p>
       ) : (
