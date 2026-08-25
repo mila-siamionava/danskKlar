@@ -1,0 +1,185 @@
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.eyebrow {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #777;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.counter {
+  font-weight: 600;
+  color: #666;
+}
+
+.progress {
+  height: 6px;
+  margin-top: 18px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e8e8e8;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: #222;
+  transition: width 0.25s ease;
+}
+
+.questionCard {
+  margin-top: 32px;
+  padding: 32px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background: white;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.04),
+    0 12px 28px rgba(0, 0, 0, 0.07);
+}
+
+.questionLabel {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #777;
+}
+
+.word {
+  margin: 0;
+  font-size: clamp(34px, 7vw, 54px);
+  line-height: 1.1;
+}
+
+.prompt {
+  margin-top: 16px;
+  color: #666;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.option {
+  width: 100%;
+  min-height: 100px;
+  padding: 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border: 1px solid #ddd;
+  border-radius: 14px;
+
+  background: white;
+
+  text-align: center;
+  cursor: pointer;
+}
+
+.optionEnglish {
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.optionRussian {
+  font-size: 15px;
+  line-height: 1.35;
+  color: #666;
+}
+.option:hover {
+  border-color: #999;
+}
+
+.option:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.correct {
+  border-color: #2f7d32;
+  background: #eef8ef;
+}
+
+.wrong {
+  border-color: #b3261e;
+  background: #fff0ef;
+}
+
+.feedback {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.feedbackCorrect {
+  font-weight: 700;
+}
+
+.feedbackWrong {
+  font-weight: 600;
+}
+
+.nextButton {
+  margin-top: 18px;
+  min-height: 50px;
+  padding: 12px 20px;
+  border: 1px solid #222;
+  border-radius: 12px;
+  background: #222;
+  color: white;
+  font-size: 15px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.complete {
+  padding: 70px 20px;
+  text-align: center;
+}
+
+.backButton {
+  margin-top: 24px;
+  min-height: 48px;
+  padding: 12px 20px;
+  border: 1px solid #222;
+  border-radius: 12px;
+  background: white;
+  font-size: 15px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+@media (max-width: 560px) {
+  .page {
+    padding: 24px 16px 40px;
+  }
+
+  .questionCard {
+    padding: 24px 18px;
+  }
+}

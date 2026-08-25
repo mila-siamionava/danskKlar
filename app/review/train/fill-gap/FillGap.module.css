@@ -1,0 +1,212 @@
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.eyebrow {
+  display: block;
+  margin-bottom: 4px;
+
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+
+  color: #777;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.counter {
+  font-weight: 600;
+  color: #666;
+}
+
+.progress {
+  height: 6px;
+  margin-top: 18px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+  background: #e8e8e8;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: #222;
+
+  transition: width 0.25s ease;
+}
+
+.questionCard {
+  margin-top: 32px;
+  padding: 32px;
+
+  border: 1px solid #ddd;
+  border-radius: 20px;
+
+  background: white;
+
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.04),
+    0 12px 28px rgba(0, 0, 0, 0.07);
+}
+
+.questionLabel {
+  margin: 0 0 18px;
+
+  font-size: 14px;
+  color: #777;
+}
+
+.sentence {
+  margin: 0;
+
+  font-size: 21px;
+  line-height: 1.7;
+}
+
+.gap {
+  display: inline-block;
+  min-width: 100px;
+
+  margin: 0 6px;
+
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  margin-top: 28px;
+}
+
+.inputLabel {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.input {
+  min-height: 50px;
+  padding: 12px 14px;
+
+  border: 1px solid #ccc;
+  border-radius: 12px;
+
+  font-size: 18px;
+}
+
+.input:focus {
+  outline: 2px solid #222;
+  outline-offset: 2px;
+}
+
+.checkButton,
+.nextButton,
+.backButton {
+  min-height: 48px;
+  padding: 12px 20px;
+
+  border-radius: 12px;
+
+  font-size: 15px;
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+.checkButton,
+.nextButton {
+  border: 1px solid #222;
+
+  background: #222;
+  color: white;
+}
+
+.checkButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.backButton {
+  margin-top: 24px;
+
+  border: 1px solid #222;
+
+  background: white;
+}
+
+.feedback {
+  margin-top: 26px;
+  padding-top: 20px;
+
+  border-top: 1px solid #eee;
+}
+
+.feedbackCorrect {
+  font-weight: 700;
+}
+
+.feedbackWrong p {
+  margin: 6px 0;
+}
+
+.nextButton {
+  margin-top: 18px;
+}
+
+.complete {
+  padding: 70px 20px;
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .page {
+    padding: 24px 16px 40px;
+  }
+
+  .questionCard {
+    padding: 24px 18px;
+  }
+
+  .sentence {
+    font-size: 18px;
+  }
+}
+.explanation {
+  margin-top: 18px;
+}
+
+.explanation details {
+  margin-top: 10px;
+  padding: 12px 14px;
+
+  border: 1px solid #e3e3e3;
+  border-radius: 12px;
+
+  background: #fafafa;
+}
+
+.explanation summary {
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.explanation p {
+  margin: 10px 0 0;
+  line-height: 1.6;
+}

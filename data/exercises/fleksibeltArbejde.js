@@ -50,21 +50,67 @@ Vivi Albrechtsen er udviklingskonsulent i en stor dansk softwarevirksomhed. Hun 
             word: "tværtimod",
             english: "on the contrary / quite the opposite",
             russian: "наоборот / напротив",
+
+            definitionDa:
+              "bruges til at sige, at noget er det modsatte af det, der lige er blevet sagt",
+
+            synonyms: [
+              "modsat",
+              "lige omvendt",
+            ],
+
+            example:
+              "Det blev ikke lettere. Tværtimod blev situationen mere kompliceret.",
           },
+
           {
             word: "desværre",
             english: "unfortunately",
             russian: "к сожалению",
+
+            definitionDa:
+              "bruges når man fortæller om noget negativt eller beklageligt",
+
+            synonyms: [
+              "beklageligvis",
+            ],
+
+            example:
+              "Desværre har ikke alle medarbejdere mulighed for at arbejde hjemme.",
           },
+
           {
             word: "derimod",
             english: "on the other hand / in contrast",
             russian: "напротив / с другой стороны",
+
+            definitionDa:
+              "bruges til at sammenligne to ting og vise en forskel eller kontrast",
+
+            synonyms: [
+              "til gengæld",
+              "på den anden side",
+            ],
+
+            example:
+              "Store virksomheder tilbyder ofte fleksibilitet. Små virksomheder er derimod mere tilbageholdende.",
           },
+
           {
             word: "faktisk",
             english: "actually / in fact",
             russian: "фактически / на самом деле",
+
+            definitionDa:
+              "bruges til at understrege, at noget virkelig er sådan",
+
+            synonyms: [
+              "i virkeligheden",
+              "rent faktisk",
+            ],
+
+            example:
+              "Danmark ligger faktisk på førstepladsen, når man sammenligner fleksibilitet på arbejdsmarkedet.",
           },
         ],
       },
@@ -94,21 +140,68 @@ Vivi Albrechtsen er udviklingskonsulent i en stor dansk softwarevirksomhed. Hun 
             word: "Hermed",
             english: "hereby / by this",
             russian: "настоящим / посредством этого",
+
+            definitionDa:
+              "bruges især i formelt sprog om noget, der sker eller erklæres med denne handling eller besked",
+
+            synonyms: [
+              "med dette",
+              "dermed",
+            ],
+
+            example:
+              "Hermed sender jeg de dokumenter, du har bedt om.",
           },
+
           {
             word: "Desuden",
             english: "moreover / furthermore / in addition",
             russian: "кроме того / к тому же / вдобавок",
+
+            definitionDa:
+              "bruges til at tilføje endnu en oplysning eller endnu et argument",
+
+            synonyms: [
+              "derudover",
+              "yderligere",
+            ],
+
+            example:
+              "Desuden er der flere arbejdspladser, hvor medarbejderne kan arbejde om aftenen eller i weekenden.",
           },
+
           {
             word: "Derfor",
             english: "therefore / for that reason",
             russian: "поэтому / по этой причине",
+
+            definitionDa:
+              "bruges til at vise en konsekvens eller et resultat af noget",
+
+            synonyms: [
+              "af den grund",
+              "dermed",
+            ],
+
+            example:
+              "Arbejdet er blevet mere fleksibelt. Derfor kan medarbejderne lettere tilpasse arbejdstiden.",
           },
+
           {
             word: "Alligevel",
             english: "nevertheless / anyway / despite that",
             russian: "тем не менее / всё равно / несмотря на это",
+
+            definitionDa:
+              "bruges når noget sker på trods af en situation eller forventning",
+
+            synonyms: [
+              "ikke desto mindre",
+              "trods det",
+            ],
+
+            example:
+              "Hun havde meget travlt, men hun tog alligevel fri om eftermiddagen.",
           },
         ],
       },
@@ -138,21 +231,68 @@ Vivi Albrechtsen er udviklingskonsulent i en stor dansk softwarevirksomhed. Hun 
             word: "forsvinde",
             english: "to disappear / vanish",
             russian: "исчезать / пропадать",
+
+            definitionDa:
+              "at holde op med at være til stede eller eksistere",
+
+            synonyms: [
+              "blive væk",
+              "ophøre",
+            ],
+
+            example:
+              "Den traditionelle arbejdsuge med faste arbejdstider vil måske langsomt forsvinde.",
           },
+
           {
             word: "prioriteres",
             english: "to be prioritised / given priority",
             russian: "быть приоритетным / получать приоритет",
+
+            definitionDa:
+              "at blive vurderet som vigtigere end noget andet og derfor komme først",
+
+            synonyms: [
+              "sættes først",
+              "gives høj prioritet",
+            ],
+
+            example:
+              "Medarbejdernes trivsel bør prioriteres højt på arbejdspladsen.",
           },
+
           {
             word: "forblive",
             english: "to remain / stay",
             russian: "оставаться",
+
+            definitionDa:
+              "at fortsætte med at være i samme tilstand eller på samme sted",
+
+            synonyms: [
+              "blive",
+              "fortsætte med at være",
+            ],
+
+            example:
+              "Nogle medarbejdere foretrækker at forblive på kontoret hele arbejdsdagen.",
           },
+
           {
             word: "fastholdes",
             english: "to be maintained / retained / kept",
             russian: "сохраняться / удерживаться",
+
+            definitionDa:
+              "at blive bevaret eller holdt på samme niveau eller i samme situation",
+
+            synonyms: [
+              "bevares",
+              "opretholdes",
+            ],
+
+            example:
+              "Den nuværende arbejdstid kan fastholdes, hvis medarbejderne ønsker det.",
           },
         ],
       },
@@ -182,21 +322,67 @@ Vivi Albrechtsen er udviklingskonsulent i en stor dansk softwarevirksomhed. Hun 
             word: "midlertidige",
             english: "temporary",
             russian: "временные",
+
+            definitionDa:
+              "noget der kun gælder eller eksisterer i en begrænset periode",
+
+            synonyms: [
+              "kortvarige",
+              "foreløbige",
+            ],
+
+            example:
+              "Virksomheden har oprettet nogle midlertidige arbejdspladser under renoveringen.",
           },
+
           {
             word: "trygge",
             english: "safe / secure",
             russian: "безопасные / надёжные",
+
+            definitionDa:
+              "at føle sig sikker, rolig og beskyttet",
+
+            synonyms: [
+              "sikre",
+              "beskyttede",
+            ],
+
+            example:
+              "Medarbejderne skal føle sig trygge på deres arbejdsplads.",
           },
+
           {
             word: "stressende",
             english: "stressful",
             russian: "стрессовые / вызывающие стресс",
+
+            definitionDa:
+              "noget der skaber pres, uro eller stress",
+
+            synonyms: [
+              "belastende",
+              "pressende",
+            ],
+
+            example:
+              "Faste deadlines kan være stressende for nogle medarbejdere.",
           },
+
           {
             word: "fysiske",
             english: "physical",
             russian: "физические",
+
+            definitionDa:
+              "noget der eksisterer konkret og fysisk, i modsætning til noget digitalt eller virtuelt",
+
+            synonyms: [
+              "konkrete",
+            ],
+
+            example:
+              "Det fysiske arbejdssted kan være et kontor, et hjem eller en café.",
           },
         ],
       },
@@ -226,21 +412,68 @@ Vivi Albrechtsen er udviklingskonsulent i en stor dansk softwarevirksomhed. Hun 
             word: "ideologien",
             english: "the ideology",
             russian: "идеология",
+
+            definitionDa:
+              "et system af idéer og holdninger om, hvordan samfundet eller verden bør være",
+
+            synonyms: [
+              "tankesættet",
+              "idégrundlaget",
+            ],
+
+            example:
+              "Ideologien bag virksomheden lægger vægt på frihed og ansvar.",
           },
+
           {
             word: "energien",
             english: "the energy",
             russian: "энергия",
+
+            definitionDa:
+              "den kraft eller det overskud man har til at udføre aktiviteter",
+
+            synonyms: [
+              "overskuddet",
+              "kraften",
+            ],
+
+            example:
+              "Hun har mere energi, når hun kan arbejde fleksibelt.",
           },
+
           {
             word: "teknologien",
             english: "the technology",
             russian: "технология / технологии",
+
+            definitionDa:
+              "tekniske løsninger, systemer og redskaber, der bruges til at løse opgaver",
+
+            synonyms: [
+              "de tekniske løsninger",
+              "den digitale teknologi",
+            ],
+
+            example:
+              "Teknologien gør det muligt for medarbejderne at arbejde hjemmefra.",
           },
+
           {
             word: "indsigten",
             english: "the insight / understanding",
             russian: "понимание / осознание / знание",
+
+            definitionDa:
+              "en dybere forståelse eller viden om et bestemt emne",
+
+            synonyms: [
+              "forståelsen",
+              "erkendelsen",
+            ],
+
+            example:
+              "Undersøgelsen giver ny indsigt i danskernes arbejdsvaner.",
           },
         ],
       },
@@ -270,21 +503,68 @@ Vivi Albrechtsen er udviklingskonsulent i en stor dansk softwarevirksomhed. Hun 
             word: "muligt",
             english: "possible",
             russian: "возможный / возможно",
+
+            definitionDa:
+              "noget der kan lade sig gøre",
+
+            synonyms: [
+              "gennemførligt",
+              "realistisk",
+            ],
+
+            example:
+              "Ny teknologi gør det muligt at arbejde hjemmefra.",
           },
+
           {
             word: "sikkert",
             english: "safe / certain / surely",
             russian: "безопасный / наверняка / определённо",
+
+            definitionDa:
+              "noget der er uden stor risiko, eller noget man er meget sikker på",
+
+            synonyms: [
+              "trygt",
+              "uden risiko",
+            ],
+
+            example:
+              "Virksomheden skal sørge for, at det er sikkert at arbejde online.",
           },
+
           {
             word: "vigtigt",
             english: "important",
             russian: "важный / важно",
+
+            definitionDa:
+              "noget der har stor betydning og derfor bør få opmærksomhed",
+
+            synonyms: [
+              "betydningsfuldt",
+              "væsentligt",
+            ],
+
+            example:
+              "Det er vigtigt at have en god balance mellem arbejde og fritid.",
           },
+
           {
             word: "sjovt",
             english: "fun / amusing",
             russian: "весёлый / забавный / интересно",
+
+            definitionDa:
+              "noget der er underholdende eller giver glæde",
+
+            synonyms: [
+              "morsomt",
+              "underholdende",
+            ],
+
+            example:
+              "Det kan være sjovt at arbejde sammen med kolleger på nye måder.",
           },
         ],
       },
@@ -314,21 +594,68 @@ Vivi Albrechtsen er udviklingskonsulent i en stor dansk softwarevirksomhed. Hun 
             word: "fjerne",
             english: "to remove / eliminate",
             russian: "удалять / устранять",
+
+            definitionDa:
+              "at tage noget væk, så det ikke længere er der",
+
+            synonyms: [
+              "tage væk",
+              "eliminere",
+            ],
+
+            example:
+              "Virksomheden ønsker at fjerne unødvendige regler.",
           },
+
           {
             word: "kontrollere",
             english: "to control / check",
             russian: "контролировать / проверять",
+
+            definitionDa:
+              "at undersøge om noget er korrekt eller fungerer, som det skal",
+
+            synonyms: [
+              "tjekke",
+              "undersøge",
+            ],
+
+            example:
+              "Lederen behøver ikke hele tiden at kontrollere, hvor medarbejderne arbejder.",
           },
+
           {
             word: "udnytte",
             english: "to utilise / make use of / exploit",
             russian: "использовать / воспользоваться",
+
+            definitionDa:
+              "at bruge noget på en effektiv eller fordelagtig måde",
+
+            synonyms: [
+              "gøre brug af",
+              "anvende",
+            ],
+
+            example:
+              "Flere virksomheder burde udnytte de digitale teknologier bedre.",
           },
+
           {
             word: "genbruge",
             english: "to reuse / recycle",
             russian: "повторно использовать / перерабатывать",
+
+            definitionDa:
+              "at bruge noget igen i stedet for at smide det væk",
+
+            synonyms: [
+              "bruge igen",
+              "genanvende",
+            ],
+
+            example:
+              "Virksomheden prøver at genbruge gammelt elektronisk udstyr.",
           },
         ],
       },
@@ -358,21 +685,67 @@ Vivi Albrechtsen er udviklingskonsulent i en stor dansk softwarevirksomhed. Hun 
             word: "en følge af",
             english: "a consequence of / a result of",
             russian: "следствие / результат чего-либо",
+
+            definitionDa:
+              "noget der sker som resultat eller konsekvens af noget andet",
+
+            synonyms: [
+              "et resultat af",
+              "en konsekvens af",
+            ],
+
+            example:
+              "Mere hjemmearbejde kan være en følge af den teknologiske udvikling.",
           },
+
           {
             word: "en årsag til",
             english: "a cause of / a reason for",
             russian: "причина чего-либо",
+
+            definitionDa:
+              "noget der får noget andet til at ske",
+
+            synonyms: [
+              "en grund til",
+            ],
+
+            example:
+              "Manglende fleksibilitet kan være en årsag til stress.",
           },
+
           {
             word: "et middel mod",
             english: "a remedy for / a means against",
             russian: "средство против / средство от",
+
+            definitionDa:
+              "noget man bruger for at reducere, forhindre eller bekæmpe et problem",
+
+            synonyms: [
+              "en løsning på",
+              "et middel imod",
+            ],
+
+            example:
+              "Fleksible arbejdstider kan være et middel mod stress.",
           },
+
           {
             word: "et svar på",
             english: "an answer to / a response to",
             russian: "ответ на / реакция на",
+
+            definitionDa:
+              "en reaktion eller løsning, der gives som følge af et spørgsmål eller problem",
+
+            synonyms: [
+              "en reaktion på",
+              "en løsning på",
+            ],
+
+            example:
+              "Fleksibelt arbejde kan være et svar på medarbejdernes behov for mere frihed.",
           },
         ],
       },

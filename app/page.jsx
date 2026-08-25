@@ -19,56 +19,7 @@ export default function Home() {
       <div className="mainPageContainer">
         <div className="dashboardContainer">
 
-          {/* HERO */}
-          <header className="pageHeader">
-            <div className="pageHeader__meta">
-              <span>Danish practice</span>
-            </div>
-
-            <h1>Ready to practice?</h1>
-
-            <p className="u-text-secondary">
-              Improve your Danish through reading,
-              vocabulary and targeted review.
-            </p>
-          </header>
-
-          {/* CONTINUE */}
-          <section>
-            <Card variant="soft" padding="lg">
-              <div className="u-flex-column u-gap-md">
-                <div className="u-flex-between">
-                  <Badge variant="accent">
-                    Continue learning
-                  </Badge>
-
-                  <span className="u-text-muted">
-                    {featuredExercise.questions.length} questions
-                  </span>
-                </div>
-
-                <div className="u-flex-column u-gap-xs">
-                  <h2>{featuredExercise.title}</h2>
-
-                  <p className="u-text-secondary">
-                    {featuredExercise.instructions}
-                  </p>
-                </div>
-
-                <Link
-                  href={`/exercises/${featuredExercise.slug}`}
-                >
-                  <Button
-                    variant="primary"
-                    size="lg"
-                  >
-                    Continue exercise
-                  </Button>
-                </Link>
-              </div>
-            </Card>
-          </section>
-
+     
           {/* QUICK ACCESS */}
           <section className="contentGrid">
             <Card variant="default" padding="lg">
@@ -85,7 +36,7 @@ export default function Home() {
 
                 <p className="u-text-secondary">
                   Practice reading comprehension
-                  with PD3-style gap exercises.
+                  with PD3.5-style gap exercises.
                 </p>
 
                 <Link href="/exercises">

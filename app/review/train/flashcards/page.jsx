@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -24,23 +25,6 @@ export default function FlashcardsPage() {
   if (items.length === 0) {
     return (
       <main className={styles.page}>
-        <h1>Flashcards</h1>
-        <p>No words selected.</p>
-      </main>
-    );
-  }
-
- if (finished) {
-  return (
-    <main className={styles.page}>
-      <div className={styles.complete}>
-        <h1>Review complete</h1>
-
-        <p>
-          You reviewed {items.length}{" "}
-          {items.length === 1 ? "word" : "words"}.
-        </p>
-
         <Link href="/review">
           <button
             type="button"
@@ -49,10 +33,40 @@ export default function FlashcardsPage() {
             ← Back to words
           </button>
         </Link>
-      </div>
-    </main>
-  );
-}
+
+        <h1>Flashcards</h1>
+
+        <p>No words selected.</p>
+      </main>
+    );
+  }
+
+  if (finished) {
+    return (
+      <main className={styles.page}>
+        <div className={styles.complete}>
+          <h1>Review complete</h1>
+
+          <p>
+            You reviewed {items.length}{" "}
+            {items.length === 1
+              ? "word"
+              : "words"}.
+          </p>
+
+          <Link href="/review">
+            <button
+              type="button"
+              className={styles.backButton}
+            >
+              ← Back to words
+            </button>
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
   const currentItem = items[currentIndex];
 
   const translation =
@@ -62,6 +76,16 @@ export default function FlashcardsPage() {
         currentItem.term?.toLowerCase()
     );
 
+  const english =
+    currentItem.english ||
+    translation?.english ||
+    "No English translation";
+
+  const russian =
+    currentItem.russian ||
+    translation?.russian ||
+    "Нет русского перевода";
+
   function moveToNextCard() {
     setFlipped(false);
 
@@ -70,7 +94,9 @@ export default function FlashcardsPage() {
       return;
     }
 
-    setCurrentIndex((current) => current + 1);
+    setCurrentIndex(
+      (current) => current + 1
+    );
   }
 
   function rememberWord() {
@@ -78,7 +104,26 @@ export default function FlashcardsPage() {
   }
 
   function reviewAgain() {
-    moveToNextCard();
+    setFlipped(false);
+
+    const currentCard = items[currentIndex];
+
+    setItems((currentItems) => {
+      const remainingItems =
+        currentItems.filter(
+          (_, index) =>
+            index !== currentIndex
+        );
+
+      return [
+        ...remainingItems,
+        currentCard,
+      ];
+    });
+
+    if (currentIndex >= items.length - 1) {
+      setCurrentIndex(0);
+    }
   }
 
   function handlePointerDown(event) {
@@ -86,9 +131,12 @@ export default function FlashcardsPage() {
   }
 
   function handlePointerUp(event) {
-    if (startX === null) return;
+    if (startX === null) {
+      return;
+    }
 
-    const difference = event.clientX - startX;
+    const difference =
+      event.clientX - startX;
 
     if (difference > 70) {
       rememberWord();
@@ -101,6 +149,15 @@ export default function FlashcardsPage() {
 
   return (
     <main className={styles.page}>
+      <Link href="/review">
+        <button
+          type="button"
+          className={styles.backButton}
+        >
+          ← Back to words
+        </button>
+      </Link>
+
       <div className={styles.header}>
         <div>
           <span className={styles.eyebrow}>
@@ -120,7 +177,9 @@ export default function FlashcardsPage() {
           className={styles.progressFill}
           style={{
             width: `${
-              ((currentIndex + 1) / items.length) * 100
+              ((currentIndex + 1) /
+                items.length) *
+              100
             }%`,
           }}
         />
@@ -137,7 +196,11 @@ export default function FlashcardsPage() {
           className={`${styles.card} ${
             flipped ? styles.flipped : ""
           }`}
-          onClick={() => setFlipped((current) => !current)}
+          onClick={() =>
+            setFlipped(
+              (current) => !current
+            )
+          }
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
           aria-label="Flip flashcard"
@@ -166,14 +229,20 @@ export default function FlashcardsPage() {
                 Translation
               </span>
 
-              <span className={styles.translationEnglish}>
-                {translation?.english ||
-                  "No English translation"}
+              <span
+                className={
+                  styles.translationEnglish
+                }
+              >
+                {english}
               </span>
 
-              <span className={styles.translationRussian}>
-                {translation?.russian ||
-                  "Нет русского перевода"}
+              <span
+                className={
+                  styles.translationRussian
+                }
+              >
+                {russian}
               </span>
 
               <span className={styles.tapHint}>

@@ -24,6 +24,28 @@ export default function GapExercise({ exercise }) {
       answers[question.id]?.firstIsCorrect === true
   ).length;
 
+  function getGapContext(questionId) {
+    const placeholder = `{{${questionId}}}`;
+
+    const paragraphs = exercise.content
+      .split("\n")
+      .map((paragraph) => paragraph.trim())
+      .filter(Boolean);
+
+    const paragraph = paragraphs.find((paragraph) =>
+      paragraph.includes(placeholder)
+    );
+
+    if (!paragraph) {
+      return "";
+    }
+
+    return paragraph.replace(
+      placeholder,
+      "{{gap}}"
+    );
+  }
+
   function handleAnswer(questionId, optionId) {
     const question = exercise.questions.find(
       (item) => item.id === questionId
@@ -40,44 +62,91 @@ export default function GapExercise({ exercise }) {
     const isCorrect =
       optionId === question.correctOptionId;
 
-    // Save to Review only if the FIRST attempt is wrong.
-   if (isFirstAttempt && !isCorrect) {
-  const translations =
-    question.explanation?.translations || [];
+    // Save ALL words/phrases from the block
+    // if the FIRST attempt is wrong.
+    if (isFirstAttempt && !isCorrect) {
+      const translations =
+        question.explanation?.translations || [];
 
-  // If the explanation block contains words/phrases,
-  // save every one of them to Review.
-  if (translations.length > 0) {
-    translations.forEach((translation, index) => {
-      addReviewItem({
-        id: `${exercise.title}-${question.id}-${index}-${translation.word}`,
-        exerciseTitle: exercise.title,
-        questionId: question.id,
-        term: translation.word?.toLowerCase() || "",
-        english: translation.english || "",
-        russian: translation.russian || "",
-        explanation: question.explanation,
-      });
-    });
-  } else {
-    // Fallback: save only the correct answer
-    // if there is no translations block.
-    const correctOption = question.options.find(
-      (option) =>
-        option.id === question.correctOptionId
-    );
+      const gapContext =
+        getGapContext(question.id);
 
-    addReviewItem({
-      id: `${exercise.title}-${question.id}`,
-      exerciseTitle: exercise.title,
-      questionId: question.id,
-      term: correctOption?.text?.toLowerCase() || "",
-      options: question.options,
-      correctOptionId: question.correctOptionId,
-      explanation: question.explanation,
-    });
-  }
-}
+      const originalCorrectAnswer =
+        question.options
+          .find(
+            (option) =>
+              option.id ===
+              question.correctOptionId
+          )
+          ?.text?.toLowerCase() || "";
+
+      if (translations.length > 0) {
+        translations.forEach((translation, index) => {
+          addReviewItem({
+            id: `${exercise.title}-${question.id}-${index}-${translation.word}`,
+
+            exerciseTitle: exercise.title,
+
+            questionId: question.id,
+
+            term:
+              translation.word?.toLowerCase() || "",
+
+            english:
+              translation.english || "",
+
+            russian:
+              translation.russian || "",
+
+            gapSentence: gapContext,
+
+            originalCorrectAnswer,
+
+            options: question.options,
+
+            correctOptionId:
+              question.correctOptionId,
+
+            explanation:
+              question.explanation,
+          });
+        });
+      } else {
+        // Fallback if no translations array exists.
+        const correctOption = question.options.find(
+          (option) =>
+            option.id ===
+            question.correctOptionId
+        );
+
+        addReviewItem({
+          id: `${exercise.title}-${question.id}`,
+
+          exerciseTitle: exercise.title,
+
+          questionId: question.id,
+
+          term:
+            correctOption?.text?.toLowerCase() || "",
+
+          english: "",
+
+          russian: "",
+
+          gapSentence: gapContext,
+
+          originalCorrectAnswer,
+
+          options: question.options,
+
+          correctOptionId:
+            question.correctOptionId,
+
+          explanation:
+            question.explanation,
+        });
+      }
+    }
 
     setAnswers((previousAnswers) => {
       const previousAnswer =
@@ -87,19 +156,23 @@ export default function GapExercise({ exercise }) {
       if (!previousAnswer) {
         return {
           ...previousAnswers,
+
           [questionId]: {
             selectedOptionId: optionId,
             firstOptionId: optionId,
+
             firstIsCorrect:
-              optionId === question.correctOptionId,
+              optionId ===
+              question.correctOptionId,
           },
         };
       }
 
-      // The learner changes the answer later.
-      // Keep the first attempt unchanged.
+      // Later attempt:
+      // keep first-attempt result unchanged.
       return {
         ...previousAnswers,
+
         [questionId]: {
           ...previousAnswer,
           selectedOptionId: optionId,

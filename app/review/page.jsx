@@ -1,8 +1,13 @@
 "use client";
+
 import Link from "next/link";
+
 import { useEffect, useState } from "react";
 
-import { getReviewItems } from "@/lib/reviewStorage";
+import {
+  getReviewItems,
+  removeReviewItem,
+} from "@/lib/reviewStorage";
 
 export default function ReviewPage() {
   const [items, setItems] = useState([]);
@@ -36,6 +41,16 @@ export default function ReviewPage() {
     });
   }
 
+  function selectAllWords() {
+    setSelectedIds(
+      items.map((item) => item.id)
+    );
+  }
+
+  function clearAllWords() {
+    setSelectedIds([]);
+  }
+
   function startTraining() {
     const selectedItems = items.filter((item) =>
       selectedIds.includes(item.id)
@@ -48,44 +63,53 @@ export default function ReviewPage() {
 
     window.location.href = "/review/train";
   }
-function selectAllWords() {
-  setSelectedIds(items.map((item) => item.id));
-}
 
-function clearAllWords() {
-  setSelectedIds([]);
-}
+  function deleteSelectedWords() {
+    selectedIds.forEach((id) => {
+      removeReviewItem(id);
+    });
+
+    const updatedItems = getReviewItems();
+
+    setItems(updatedItems);
+
+    setSelectedIds([]);
+  }
+
   return (
-  
-  <main>
-    <Link href="/">
-      <button type="button">
-        ← Back to home
-      </button>
-    </Link>
+    <main>
+      <Link href="/">
+        <button type="button">
+          ← Back to home
+        </button>
+      </Link>
 
-    <h1>Review</h1>
-{items.length > 0 && (
-  <div>
-    {selectedIds.length === items.length ? (
-      <button
-        type="button"
-        onClick={clearAllWords}
-      >
-        Clear all
-      </button>
-    ) : (
-      <button
-        type="button"
-        onClick={selectAllWords}
-      >
-        Choose all words
-      </button>
-    )}
-  </div>
-)}
+      <h1>Review</h1>
+
+      {items.length > 0 && (
+        <div>
+          {selectedIds.length === items.length ? (
+            <button
+              type="button"
+              onClick={clearAllWords}
+            >
+              Clear all
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={selectAllWords}
+            >
+              Select all
+            </button>
+          )}
+        </div>
+      )}
+
       {items.length === 0 ? (
-        <p>No words or phrases to review yet.</p>
+        <p>
+          No words or phrases to review yet.
+        </p>
       ) : (
         <>
           <div>
@@ -134,6 +158,13 @@ function clearAllWords() {
                 onClick={startTraining}
               >
                 Train selected →
+              </button>
+
+              <button
+                type="button"
+                onClick={deleteSelectedWords}
+              >
+                Delete learned words
               </button>
             </div>
           )}

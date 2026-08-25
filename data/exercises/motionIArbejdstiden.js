@@ -46,31 +46,51 @@ Ifølge den mener flere og flere arbejdsgivere, at sund mad, rygepolitik og moti
 
       explanation: {
         english:
-          '"Ømme" means "sore / aching / tender". The workers lift very large and heavy pots, so their shoulders and arms become sore. "Ømme skuldre" and "ømme arme" are common Danish expressions for muscles or body parts that hurt after physical work.',
+          '"Ømme" means "sore / aching / tender". The workers lift very large and heavy pots, so their shoulders and arms become sore.',
 
         russian:
-          '"Ømme" означает «болящие / ноющие / чувствительные». Работники поднимают очень большие и тяжёлые кастрюли, поэтому руки и плечи у них начинают болеть. Выражения "ømme skuldre" и "ømme arme" естественно употребляются по-датски, когда мышцы болят после физической нагрузки.',
+          '"Ømme" означает «болящие / ноющие / чувствительные». Работники поднимают тяжёлые кастрюли, поэтому руки и плечи начинают болеть.',
 
         translations: [
           {
             word: "stærke",
             english: "strong",
             russian: "сильные / крепкие",
+            definitionDa:
+              "at have stor fysisk kraft eller være robust",
+            synonyms: ["kraftige", "robuste"],
+            example:
+              "Efter flere måneders træning blev hendes arme stærke.",
           },
           {
             word: "kraftige",
             english: "powerful / strong / substantial",
             russian: "мощные / сильные / крепкие",
+            definitionDa:
+              "at være stærk, solid eller have stor styrke",
+            synonyms: ["stærke", "robuste"],
+            example:
+              "De kraftige medarbejdere kunne løfte de tunge gryder.",
           },
           {
             word: "svage",
             english: "weak",
             russian: "слабые",
+            definitionDa:
+              "at have lidt styrke eller kraft",
+            synonyms: ["kraftløse", "skrøbelige"],
+            example:
+              "Efter sygdommen følte hun sig svag i armene.",
           },
           {
             word: "ømme",
             english: "sore / aching / tender",
             russian: "болящие / ноющие / чувствительные",
+            definitionDa:
+              "at gøre ondt eller være følsom efter belastning",
+            synonyms: ["smertende", "ømme i musklerne"],
+            example:
+              "Mine skuldre er ømme efter en lang arbejdsdag.",
           },
         ],
       },
@@ -90,31 +110,51 @@ Ifølge den mener flere og flere arbejdsgivere, at sund mad, rygepolitik og moti
 
       explanation: {
         english:
-          '"Nemlig" means roughly "you see / namely / indeed" and is often used to introduce an explanation for something just mentioned. Eva says that the exercise makes her body hurt less in the evening, and the next sentence explains why: it gets the blood circulating.',
+          '"Nemlig" introduces an explanation for something just mentioned.',
 
         russian:
-          '"Nemlig" можно перевести как «ведь / дело в том, что / а именно». Это слово часто вводит объяснение предыдущей мысли. Ева говорит, что после гимнастики у неё меньше болит тело вечером, а следующее предложение объясняет почему: упражнения улучшают кровообращение.',
+          '"Nemlig" вводит объяснение предыдущей мысли.',
 
         translations: [
           {
             word: "desuden",
             english: "moreover / in addition / furthermore",
             russian: "кроме того / к тому же / вдобавок",
+            definitionDa:
+              "bruges til at tilføje endnu en oplysning",
+            synonyms: ["derudover", "yderligere"],
+            example:
+              "Motion giver mere energi. Desuden kan den forebygge smerter.",
           },
           {
             word: "muligvis",
             english: "possibly / perhaps",
             russian: "возможно / может быть",
+            definitionDa:
+              "bruges når noget kan være tilfældet, men ikke er sikkert",
+            synonyms: ["måske", "eventuelt"],
+            example:
+              "Gymnastikken kan muligvis reducere sygefraværet.",
           },
           {
             word: "sommetider",
             english: "sometimes / at times",
             russian: "иногда / временами",
+            definitionDa:
+              "bruges om noget der sker nogle gange, men ikke altid",
+            synonyms: ["af og til", "indimellem"],
+            example:
+              "Jeg har sommetider ondt i ryggen efter arbejde.",
           },
           {
             word: "nemlig",
             english: "namely / you see / indeed",
             russian: "а именно / ведь / дело в том, что",
+            definitionDa:
+              "bruges til at forklare eller uddybe noget, der lige er blevet sagt",
+            synonyms: ["for", "det skyldes at"],
+            example:
+              "Gymnastikken hjælper. Den får nemlig blodet til at cirkulere.",
           },
         ],
       },
@@ -134,31 +174,51 @@ Ifølge den mener flere og flere arbejdsgivere, at sund mad, rygepolitik og moti
 
       explanation: {
         english:
-          '"For" is used here in the sense of "because / for". The statement that exercise may also be economically beneficial is supported by the fact that the number of sick days has decreased. The second clause therefore explains the first.',
+          '"For" means "because / for" here and introduces the reason for the previous statement.',
 
         russian:
-          '"For" здесь означает «потому что / ведь». Утверждение о том, что гимнастика может быть выгодной и с экономической точки зрения, объясняется тем, что количество дней отсутствия по болезни снизилось.',
+          '"For" здесь означает «потому что / ведь» и вводит объяснение.',
 
         translations: [
           {
             word: "selvom",
             english: "although / even though",
             russian: "хотя / несмотря на то что",
+            definitionDa:
+              "bruges til at vise en kontrast mellem to forhold",
+            synonyms: ["skønt", "på trods af at"],
+            example:
+              "Selvom arbejdet er hårdt, er medarbejderne glade.",
           },
           {
             word: "men",
             english: "but",
             russian: "но",
+            definitionDa:
+              "bruges til at vise modsætning eller kontrast",
+            synonyms: ["dog", "imidlertid"],
+            example:
+              "Motion tager tid, men medarbejderne synes, det er værd at gøre.",
           },
           {
             word: "for",
             english: "because / for",
             russian: "потому что / ведь",
+            definitionDa:
+              "bruges til at forklare årsagen til noget",
+            synonyms: ["fordi", "eftersom"],
+            example:
+              "Gymnastik kan være en god investering, for sygefraværet er faldet.",
           },
           {
             word: "så",
             english: "so / then",
             russian: "так что / тогда",
+            definitionDa:
+              "bruges til at vise en følge eller et næste trin",
+            synonyms: ["derfor", "derefter"],
+            example:
+              "Hun havde ondt i ryggen, så hun begyndte at træne.",
           },
         ],
       },
@@ -178,31 +238,51 @@ Ifølge den mener flere og flere arbejdsgivere, at sund mad, rygepolitik og moti
 
       explanation: {
         english:
-          '"Dog" means "however / though". The text has just said that the number of sick days has fallen, but then adds an important reservation: it is not known for certain whether the exercise caused the decrease.',
+          '"Dog" means "however / though" and introduces an important reservation.',
 
         russian:
-          '"Dog" означает «однако / всё же». Перед этим говорится, что количество больничных дней уменьшилось, но затем автор делает важную оговорку: точно неизвестно, связано ли это снижение именно с гимнастикой.',
+          '"Dog" означает «однако / всё же» и вводит оговорку.',
 
         translations: [
           {
             word: "altså",
             english: "thus / so / in other words",
             russian: "итак / таким образом / то есть",
+            definitionDa:
+              "bruges til at sammenfatte eller forklare en konklusion",
+            synonyms: ["således", "med andre ord"],
+            example:
+              "Sygefraværet er faldet. Motionen kan altså have haft en effekt.",
           },
           {
             word: "desuden",
             english: "moreover / furthermore / in addition",
             russian: "кроме того / к тому же",
+            definitionDa:
+              "bruges til at tilføje endnu en oplysning",
+            synonyms: ["derudover", "yderligere"],
+            example:
+              "Motion forbedrer humøret. Desuden styrker den kroppen.",
           },
           {
             word: "dog",
             english: "however / though / nevertheless",
             russian: "однако / всё же / тем не менее",
+            definitionDa:
+              "bruges til at vise en modsætning eller begrænsning",
+            synonyms: ["imidlertid", "alligevel"],
+            example:
+              "Sygefraværet er faldet. Man ved dog ikke præcist hvorfor.",
           },
           {
             word: "derfor",
             english: "therefore / for that reason",
             russian: "поэтому / по этой причине",
+            definitionDa:
+              "bruges til at vise en konsekvens eller et resultat",
+            synonyms: ["af den grund", "dermed"],
+            example:
+              "Hun havde ondt i skuldrene. Derfor begyndte hun at træne.",
           },
         ],
       },
@@ -222,31 +302,51 @@ Ifølge den mener flere og flere arbejdsgivere, at sund mad, rygepolitik og moti
 
       explanation: {
         english:
-          '"Et fast punkt" means "a regular feature / a fixed part". At Kvadrat, workplace exercise has existed for at least 15 years, so it is not something new or unusual. It has become a regular part of working life.',
+          '"Et fast punkt" means "a regular feature / permanent part".',
 
         russian:
-          '"Et fast punkt" означает «постоянный пункт / регулярная часть чего-либо». В компании Kvadrat гимнастикой занимаются уже как минимум 15 лет, поэтому это не новое и не необычное мероприятие, а постоянная часть рабочего дня.',
+          '"Et fast punkt" означает «постоянный пункт / регулярная часть».',
 
         translations: [
           {
             word: "fast punkt",
             english: "regular feature / fixed item / permanent part",
             russian: "постоянный пункт / регулярная часть",
+            definitionDa:
+              "noget der sker regelmæssigt eller er en permanent del af noget",
+            synonyms: ["fast del", "fast element"],
+            example:
+              "Gymnastik er blevet et fast punkt på arbejdspladsen.",
           },
           {
             word: "nyt indslag",
             english: "new feature / new element",
             russian: "новый элемент / нововведение",
+            definitionDa:
+              "noget nyt der bliver tilføjet til en aktivitet eller sammenhæng",
+            synonyms: ["ny aktivitet", "nyt element"],
+            example:
+              "Den daglige gåtur er et nyt indslag i arbejdsdagen.",
           },
           {
             word: "usædvanligt initiativ",
             english: "unusual initiative",
             russian: "необычная инициатива",
+            definitionDa:
+              "et tiltag der ikke er almindeligt eller forventet",
+            synonyms: ["særligt tiltag", "anderledes initiativ"],
+            example:
+              "Gratis massage på arbejdet var et usædvanligt initiativ.",
           },
           {
             word: "kommende arrangement",
             english: "upcoming event",
             russian: "предстоящее мероприятие",
+            definitionDa:
+              "en aktivitet eller begivenhed der skal finde sted senere",
+            synonyms: ["fremtidigt arrangement", "kommende begivenhed"],
+            example:
+              "Medarbejderne talte om det kommende arrangement.",
           },
         ],
       },
@@ -266,31 +366,51 @@ Ifølge den mener flere og flere arbejdsgivere, at sund mad, rygepolitik og moti
 
       explanation: {
         english:
-          '"Generte" means "shy / embarrassed". At first, employees felt a little embarrassed when visitors unexpectedly saw them doing gymnastics at work. The following sentence contrasts this with the present: now exercise feels completely natural.',
+          '"Generte" means "shy / embarrassed".',
 
         russian:
-          '"Generte" означает «застенчивые / смущённые». Сначала сотрудники немного смущались, когда посетители неожиданно видели их за гимнастикой. Следующее предложение показывает контраст: теперь физические упражнения воспринимаются как совершенно естественная часть работы.',
+          '"Generte" означает «застенчивые / смущённые».',
 
         translations: [
           {
             word: "glade",
             english: "happy / pleased",
             russian: "радостные / довольные",
+            definitionDa:
+              "at føle glæde eller tilfredshed",
+            synonyms: ["tilfredse", "fornøjede"],
+            example:
+              "Medarbejderne var glade for den nye motionsordning.",
           },
           {
             word: "stolte",
             english: "proud",
             russian: "гордые",
+            definitionDa:
+              "at føle tilfredshed med noget man selv eller andre har gjort",
+            synonyms: ["tilfredse", "beærede"],
+            example:
+              "De var stolte af deres gode resultater.",
           },
           {
             word: "generte",
             english: "shy / embarrassed",
             russian: "застенчивые / смущённые",
+            definitionDa:
+              "at føle sig usikker eller flov sammen med andre",
+            synonyms: ["flove", "forlegne"],
+            example:
+              "I starten blev medarbejderne generte, når gæster så dem lave gymnastik.",
           },
           {
             word: "bekymrede",
             english: "worried / concerned",
             russian: "обеспокоенные / встревоженные",
+            definitionDa:
+              "at være urolig eller nervøs for noget",
+            synonyms: ["urolige", "nervøse"],
+            example:
+              "Nogle medarbejdere var bekymrede for deres helbred.",
           },
         ],
       },
@@ -310,31 +430,51 @@ Ifølge den mener flere og flere arbejdsgivere, at sund mad, rygepolitik og moti
 
       explanation: {
         english:
-          '"Går ind for" means "support / are in favour of". The following sentences describe a survey showing that managers increasingly believe that healthy food, smoking policies and exercise are beneficial at work. Therefore, the leaders support workplace exercise.',
+          '"Går ind for" means "support / are in favour of".',
 
         russian:
-          '"Går ind for" означает «поддерживать / выступать за». Далее описывается исследование, согласно которому руководители всё чаще считают здоровое питание, политику в отношении курения и физическую активность полезными для работы. Поэтому речь идёт о том, что руководители поддерживают физические упражнения на рабочем месте.',
+          '"Går ind for" означает «поддерживать / выступать за».',
 
         translations: [
           {
             word: "har brug for",
             english: "need / have a need for",
             russian: "нуждаться в / иметь потребность в",
+            definitionDa:
+              "at have behov for noget",
+            synonyms: ["behøver", "har behov for"],
+            example:
+              "Medarbejderne har brug for pauser i løbet af dagen.",
           },
           {
             word: "er afhængige af",
             english: "are dependent on / depend on",
             russian: "зависят от",
+            definitionDa:
+              "at være nødt til at have eller bruge noget for at kunne fungere",
+            synonyms: ["afhænger af", "er bundet til"],
+            example:
+              "Mange virksomheder er afhængige af deres medarbejdere.",
           },
           {
             word: "trænger til",
             english: "need / could use / are in need of",
             russian: "нуждаются в / им необходимо",
+            definitionDa:
+              "at have behov for noget, ofte fordi man er træt eller belastet",
+            synonyms: ["har brug for", "behøver"],
+            example:
+              "Efter en lang arbejdsdag trænger medarbejderne til at slappe af.",
           },
           {
             word: "går ind for",
             english: "support / are in favour of / advocate",
             russian: "поддерживают / выступают за",
+            definitionDa:
+              "at støtte en idé, holdning eller bestemt løsning",
+            synonyms: ["støtter", "bakker op om"],
+            example:
+              "Mange ledere går ind for motion på arbejdspladsen.",
           },
         ],
       },
@@ -354,31 +494,51 @@ Ifølge den mener flere og flere arbejdsgivere, at sund mad, rygepolitik og moti
 
       explanation: {
         english:
-          '"Dermed" means "thereby / consequently / as a result". The health programmes have increased employee satisfaction and may, as a consequence of that, also have increased their motivation. The word expresses a result or consequence.',
+          '"Dermed" means "thereby / consequently / as a result".',
 
         russian:
-          '"Dermed" означает «тем самым / вследствие этого / таким образом». Программы по укреплению здоровья повысили удовлетворённость сотрудников и, как следствие, возможно, также повысили их мотивацию. Слово выражает результат или следствие.',
+          '"Dermed" означает «тем самым / вследствие этого / таким образом».',
 
         translations: [
           {
             word: "dermed",
             english: "thereby / consequently / as a result",
             russian: "тем самым / вследствие этого / таким образом",
+            definitionDa:
+              "bruges til at vise en konsekvens eller et resultat",
+            synonyms: ["således", "på den måde"],
+            example:
+              "Sundhedsordningen øgede tilfredsheden og dermed også motivationen.",
           },
           {
             word: "faktisk",
             english: "actually / in fact",
             russian: "на самом деле / фактически",
+            definitionDa:
+              "bruges til at understrege at noget virkelig er tilfældet",
+            synonyms: ["rent faktisk", "i virkeligheden"],
+            example:
+              "Medarbejderne blev faktisk mere produktive.",
           },
           {
             word: "egentlig",
             english: "actually / really / properly",
             russian: "собственно / вообще-то / на самом деле",
+            definitionDa:
+              "bruges når man spørger til eller understreger det virkelige forhold",
+            synonyms: ["i virkeligheden", "faktisk"],
+            example:
+              "Hvorfor begyndte virksomheden egentlig med gymnastik?",
           },
           {
             word: "delvis",
             english: "partly / partially",
             russian: "частично / отчасти",
+            definitionDa:
+              "kun i en vis grad og ikke fuldstændigt",
+            synonyms: ["til dels", "partielt"],
+            example:
+              "Faldet i sygefraværet skyldes måske delvis gymnastikken.",
           },
         ],
       },
