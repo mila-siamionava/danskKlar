@@ -9,6 +9,7 @@ import Button from "@/components/ui/Button/Button";
 import { navItems } from "@/data/navigation";
 import { getTexts } from "@/lib/exercises/getTexts";
 
+
 export default async function ExercisesPage() {
   const texts = await getTexts();
 

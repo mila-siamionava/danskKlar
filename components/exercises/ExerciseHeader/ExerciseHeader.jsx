@@ -18,27 +18,7 @@ export default function ExerciseHeader({
 
   return (
     <header className={classes}>
-      <div className={styles.badges}>
-        {level && (
-          <Badge variant="neutral">
-            {level}
-          </Badge>
-        )}
-
-        {category && (
-          <Badge variant="accent">
-            {category}
-          </Badge>
-        )}
-
-        {questionCount && (
-          <Badge variant="neutral">
-            {questionCount} questions
-          </Badge>
-        )}
-      </div>
-
-      <div className={styles.content}>
+            <div className={styles.content}>
         <h1 className={styles.title}>
           {title}
         </h1>

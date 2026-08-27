@@ -4,13 +4,13 @@ import AppHeader from "@/components/navigation/AppHeader/AppHeader";
 import BottomNavigation from "@/components/navigation/BottomNavigation/BottomNavigation";
 import Button from "@/components/ui/Button/Button";
 import Card from "@/components/ui/Card/Card";
-import Badge from "@/components/ui/Badge/Badge";
+
 
 import { navItems } from "@/data/navigation";
-import { exercises } from "@/data/exercises/index";
+import { getTexts } from "@/lib/exercises/getTexts";
 
-export default function Home() {
-  const featuredExercise = exercises[0];
+export default async function Home() {
+  const texts = await getTexts();
 
   return (
     <main>
@@ -30,7 +30,7 @@ export default function Home() {
                   </span>
 
                   <h2>
-                    {exercises.length} exercises
+                    {texts.length} texts
                   </h2>
                 </div>
 
@@ -77,29 +77,7 @@ export default function Home() {
             </Card>
           </section>
 
-          {/* PROGRESS */}
-          <section>
-            <Card variant="flat" padding="lg">
-              <div className="u-flex-between">
-                <div>
-                  <span className="u-text-muted">
-                    Your progress
-                  </span>
-
-                  <h2>Keep going</h2>
-                </div>
-
-                <Link href="/progress">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                  >
-                    View progress →
-                  </Button>
-                </Link>
-              </div>
-            </Card>
-          </section>
+        
 
         </div>
       </div>

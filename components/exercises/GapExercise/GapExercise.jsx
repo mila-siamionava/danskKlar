@@ -1,11 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { Fragment, useState } from "react";
 
 import ExerciseHeader from "@/components/exercises/ExerciseHeader/ExerciseHeader";
 import GapSelect from "@/components/exercises/GapSelect/GapSelect";
 import ProgressBar from "@/components/ui/ProgressBar/ProgressBar";
 import AnswerFeedback from "@/components/exercises/AnswerFeedback/AnswerFeedback";
+import Button from "@/components/ui/Button/Button";
 
 import { addReviewItem } from "@/lib/reviewStorage";
 
@@ -15,10 +17,8 @@ export default function GapExercise({ exercise }) {
   const [answers, setAnswers] = useState({});
 
   const totalQuestions = exercise.questions.length;
-
   const answeredCount = Object.keys(answers).length;
 
-  // Score is based ONLY on the first attempt.
   const score = exercise.questions.filter(
     (question) =>
       answers[question.id]?.firstIsCorrect === true
@@ -56,14 +56,11 @@ export default function GapExercise({ exercise }) {
     }
 
     const previousAnswer = answers[questionId];
-
     const isFirstAttempt = !previousAnswer;
 
     const isCorrect =
       optionId === question.correctOptionId;
 
-    // Save ALL words/phrases from the block
-    // if the FIRST attempt is wrong.
     if (isFirstAttempt && !isCorrect) {
       const translations =
         question.explanation?.translations || [];
@@ -84,35 +81,24 @@ export default function GapExercise({ exercise }) {
         translations.forEach((translation, index) => {
           addReviewItem({
             id: `${exercise.title}-${question.id}-${index}-${translation.word}`,
-
             exerciseTitle: exercise.title,
-
             questionId: question.id,
-
             term:
               translation.word?.toLowerCase() || "",
-
             english:
               translation.english || "",
-
             russian:
               translation.russian || "",
-
             gapSentence: gapContext,
-
             originalCorrectAnswer,
-
             options: question.options,
-
             correctOptionId:
               question.correctOptionId,
-
             explanation:
               question.explanation,
           });
         });
       } else {
-        // Fallback if no translations array exists.
         const correctOption = question.options.find(
           (option) =>
             option.id ===
@@ -121,27 +107,17 @@ export default function GapExercise({ exercise }) {
 
         addReviewItem({
           id: `${exercise.title}-${question.id}`,
-
           exerciseTitle: exercise.title,
-
           questionId: question.id,
-
           term:
             correctOption?.text?.toLowerCase() || "",
-
           english: "",
-
           russian: "",
-
           gapSentence: gapContext,
-
           originalCorrectAnswer,
-
           options: question.options,
-
           correctOptionId:
             question.correctOptionId,
-
           explanation:
             question.explanation,
         });
@@ -152,15 +128,12 @@ export default function GapExercise({ exercise }) {
       const previousAnswer =
         previousAnswers[questionId];
 
-      // First attempt
       if (!previousAnswer) {
         return {
           ...previousAnswers,
-
           [questionId]: {
             selectedOptionId: optionId,
             firstOptionId: optionId,
-
             firstIsCorrect:
               optionId ===
               question.correctOptionId,
@@ -168,11 +141,8 @@ export default function GapExercise({ exercise }) {
         };
       }
 
-      // Later attempt:
-      // keep first-attempt result unchanged.
       return {
         ...previousAnswers,
-
         [questionId]: {
           ...previousAnswer,
           selectedOptionId: optionId,
@@ -261,28 +231,43 @@ export default function GapExercise({ exercise }) {
       </section>
 
       {answeredCount === totalQuestions && (
-        <section
-          className={styles.result}
-          aria-live="polite"
-        >
-          <div>
-            <p className={styles.resultLabel}>
-              Exercise complete
-            </p>
+        <>
+          <section
+            className={styles.result}
+            aria-live="polite"
+          >
+            <div>
+              <p className={styles.resultLabel}>
+                Exercise complete
+              </p>
 
-            <p className={styles.resultScore}>
-              {score} of {totalQuestions} correct
-              on the first attempt
+              <p className={styles.resultScore}>
+                {score} of {totalQuestions} correct on the first attempt
+              </p>
+            </div>
+
+            <p className={styles.resultPercentage}>
+              {Math.round(
+                (score / totalQuestions) * 100
+              )}
+              %
             </p>
+          </section>
+
+          <div className={styles.reviewActions}>
+            <Link href="/review">
+              <Button variant="secondary" size="md">
+                Review wrong answers
+              </Button>
+            </Link>
+
+            <Link href="/review/train">
+              <Button variant="primary" size="md">
+                Train review words
+              </Button>
+            </Link>
           </div>
-
-          <p className={styles.resultPercentage}>
-            {Math.round(
-              (score / totalQuestions) * 100
-            )}
-            %
-          </p>
-        </section>
+        </>
       )}
     </div>
   );

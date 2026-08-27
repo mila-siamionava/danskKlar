@@ -5,22 +5,25 @@ import AppHeader from "@/components/navigation/AppHeader/AppHeader";
 import BottomNavigation from "@/components/navigation/BottomNavigation/BottomNavigation";
 import GapExercise from "@/components/exercises/GapExercise/GapExercise";
 import Button from "@/components/ui/Button/Button";
+import Badge from "@/components/ui/Badge/Badge";
 
 import { navItems } from "@/data/navigation";
 import { getExercise } from "@/lib/exercises/getExercise";
 
-export default async function FleksibeltArbejdePage({
+export default async function ExercisePage({
+  params,
   searchParams,
 }) {
-  const params = await searchParams;
+  const { slug } = await params;
+  const query = await searchParams;
 
   const exerciseType =
-    params?.type === "connector_gap"
+    query?.type === "connector_gap"
       ? "connector_gap"
       : "vocabulary_gap";
 
   const exercise = await getExercise(
-    "fleksibelt-arbejde",
+    slug,
     exerciseType
   );
 
@@ -34,24 +37,60 @@ export default async function FleksibeltArbejdePage({
 
       <div className="mainPageContainer">
         <div className="readingContainer">
-          <Link href="/exercises">
-            <Button variant="ghost" size="sm">
-              ← Back to exercises
-            </Button>
-          </Link>
+
+         <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "1rem",
+    flexWrap: "wrap",
+  }}
+>
+  <Link href="/exercises">
+    <Button variant="ghost" size="sm">
+      ← Back to exercises
+    </Button>
+  </Link>
+
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "0.4rem",
+    }}
+  >
+    <Badge variant="neutral" size="sm">
+      {exercise.level}
+    </Badge>
+
+    <Badge variant="accent" size="sm">
+      {exercise.category}
+    </Badge>
+
+    <Badge variant="neutral" size="sm">
+      {exercise.questions.length} questions
+    </Badge>
+  </div>
+</div>
 
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "01rem",
+              gap: "0.75rem",
             }}
           >
             <div
-              className="u-flex u-gap-sm"
-              style={{ gap: "2rem" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "1rem",
+              }}
             >
-              <Link href="/exercises/fleksibelt-arbejde?type=vocabulary_gap">
+              <Link
+                href={`/exercises/${slug}?type=vocabulary_gap`}
+              >
                 <Button
                   variant={
                     exerciseType === "vocabulary_gap"
@@ -64,7 +103,9 @@ export default async function FleksibeltArbejdePage({
                 </Button>
               </Link>
 
-              <Link href="/exercises/fleksibelt-arbejde?type=connector_gap">
+              <Link
+                href={`/exercises/${slug}?type=connector_gap`}
+              >
                 <Button
                   variant={
                     exerciseType === "connector_gap"
@@ -80,6 +121,7 @@ export default async function FleksibeltArbejdePage({
 
             <GapExercise exercise={exercise} />
           </div>
+
         </div>
       </div>
 
