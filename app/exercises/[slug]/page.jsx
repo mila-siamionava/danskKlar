@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
+import styles from "./ExercisePage.module.css";
 import AppHeader from "@/components/navigation/AppHeader/AppHeader";
 import BottomNavigation from "@/components/navigation/BottomNavigation/BottomNavigation";
 import GapExercise from "@/components/exercises/GapExercise/GapExercise";
@@ -38,28 +38,14 @@ export default async function ExercisePage({
       <div className="mainPageContainer">
         <div className="readingContainer">
 
-         <div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: "1rem",
-    flexWrap: "wrap",
-  }}
->
+         <div className={styles.topRow}>
   <Link href="/exercises">
     <Button variant="ghost" size="sm">
       ← Back to exercises
     </Button>
   </Link>
 
-  <div
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "0.4rem",
-    }}
-  >
+  <div className={styles.badges}>
     <Badge variant="neutral" size="sm">
       {exercise.level}
     </Badge>
@@ -74,20 +60,8 @@ export default async function ExercisePage({
   </div>
 </div>
 
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.75rem",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
+          <div className={styles.exerciseSection}>
+            <div className={styles.exerciseTabs}>
               <Link
                 href={`/exercises/${slug}?type=vocabulary_gap`}
               >

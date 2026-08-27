@@ -216,3 +216,81 @@
 .backButton:hover {
   border-color: #999;
 }
+.cardFace {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 14px;
+
+  padding: 56px 44px 52px;
+
+  border: 1px solid #ddd;
+  border-radius: 22px;
+
+  background: white;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.04),
+    0 14px 32px rgba(0, 0, 0, 0.08);
+}
+
+.cardBack {
+  transform: rotateY(180deg);
+  text-align: left;
+}
+
+.definition {
+  font-size: 21px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.example {
+  padding: 14px 16px;
+
+  border-radius: 12px;
+  background: #f7f7f7;
+
+  font-size: 17px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.translationEnglish {
+  align-self: center;
+
+  margin-top: 4px;
+  padding: 8px 14px;
+
+  border-radius: 999px;
+  background: var(--color-background-soft);
+  color: var(--color-text-accent);
+
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.translationRussian {
+  font-size: 16px;
+  line-height: 1.4;
+  color: #666;
+}
+
+.tapHint {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+}

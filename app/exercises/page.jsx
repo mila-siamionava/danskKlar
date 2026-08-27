@@ -9,7 +9,6 @@ import Button from "@/components/ui/Button/Button";
 import { navItems } from "@/data/navigation";
 import { getTexts } from "@/lib/exercises/getTexts";
 
-
 export default async function ExercisesPage() {
   const texts = await getTexts();
 
@@ -26,25 +25,19 @@ export default async function ExercisesPage() {
 
             <h1>Exercises</h1>
 
-            <p className="u-text-secondary">
-              {texts.length} texts available.
-            </p>
+            <p className="u-text-secondary">{texts.length} texts available.</p>
           </header>
 
           <section className="contentGrid">
             {texts.map((text) => (
-              <Card
-                key={text.id}
-                variant="default"
-                padding="lg"
-              >
+              <Card key={text.id} variant="default" padding="lg">
                 <div className="u-flex-column u-gap-md">
                   <div className="u-flex-between">
                     <Badge>{text.level}</Badge>
 
-                    <Badge variant="accent">
-                      Arbejde
-                    </Badge>
+                   <Badge variant="accent">
+  {text.category}
+</Badge>
                   </div>
 
                   <div className="u-flex-column u-gap-xs">
@@ -56,24 +49,14 @@ export default async function ExercisesPage() {
                   </div>
 
                   <div className="u-flex u-gap-sm">
-                    <Link
-                      href={`/exercises/${text.slug}?type=vocabulary_gap`}
-                    >
-                      <Button
-                        variant="primary"
-                        size="md"
-                      >
+                    <Link href={`/exercises/${text.slug}?type=vocabulary_gap`}>
+                      <Button variant="primary" size="md">
                         Vocabulary
                       </Button>
                     </Link>
 
-                    <Link
-                      href={`/exercises/${text.slug}?type=connector_gap`}
-                    >
-                      <Button
-                        variant="secondary"
-                        size="md"
-                      >
+                    <Link href={`/exercises/${text.slug}?type=connector_gap`}>
+                      <Button variant="secondary" size="md">
                         Bindeord
                       </Button>
                     </Link>

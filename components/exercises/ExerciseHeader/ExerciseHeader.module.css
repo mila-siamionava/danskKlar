@@ -1,11 +1,18 @@
-.badges {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.35rem;
+.header {
+  width: 100%;
 }
 
-.badges > * {
-  font-size: 0.75rem;
-  padding: 0.2rem 0.5rem;
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.title {
+  margin: 0;
+}
+
+.instructions {
+  margin: 0;
+  color: var(--color-text-secondary);
 }

@@ -212,13 +212,10 @@ export default function GapExercise({ exercise }) {
 
   return (
     <div className={styles.exercise}>
-      <ExerciseHeader
-        title={exercise.title}
-        level={exercise.level}
-        category={exercise.category}
-        questionCount={totalQuestions}
-        instructions={exercise.instructions}
-      />
+     <ExerciseHeader
+  title={exercise.title}
+  instructions={exercise.instructions}
+/>
 
       <ProgressBar
         value={answeredCount}
