@@ -24,6 +24,24 @@ const trainingModes = [
       "Read a Danish definition and choose the correct expression.",
   },
   {
+    href: "/review/train/typed-gap",
+    title: "Type the gap",
+    description:
+      "Type the missing Danish word or expression without answer options.",
+  },
+  {
+    href: "/review/train/first-letter",
+    title: "First-letter hint",
+    description:
+      "Type the missing expression with the first letters shown as a hint.",
+  },
+  {
+    href: "/review/train/match-pairs",
+    title: "Match pairs",
+    description:
+      "Match each Danish expression with its English and Russian translation.",
+  },
+  {
     href: "/review/train/fill-gap",
     title: "Fill the gap",
     description:
@@ -34,6 +52,22 @@ const trainingModes = [
 export default function ReviewTrainPage() {
   return (
     <main className={styles.page}>
+      <div className={styles.nav}>
+        <Link
+          href="/"
+          className={styles.navLink}
+        >
+          ← Main
+        </Link>
+
+        <Link
+          href="/review"
+          className={styles.navLink}
+        >
+          Review words
+        </Link>
+      </div>
+
       <header className={styles.header}>
         <span className={styles.eyebrow}>
           Vocabulary training
