@@ -7,9 +7,11 @@ import Badge from "@/components/ui/Badge/Badge";
 import Button from "@/components/ui/Button/Button";
 
 import { navItems } from "@/data/navigation";
-import { exercises } from "@/data/exercises/index";
+import { getTexts } from "@/lib/exercises/getTexts";
 
-export default function ExercisesPage() {
+export default async function ExercisesPage() {
+  const texts = await getTexts();
+
   return (
     <main>
       <AppHeader title="Dansk Trainer" />
@@ -22,57 +24,56 @@ export default function ExercisesPage() {
             </div>
 
             <h1>Exercises</h1>
-<p>
-  {exercises.length} exercises loaded:
-  {" "}
-  {exercises.map((exercise) => exercise.title).join(" | ")}
-</p>
+
             <p className="u-text-secondary">
-              Choose an exercise and practice at your own pace.
+              {texts.length} texts available.
             </p>
           </header>
 
           <section className="contentGrid">
-            {exercises.map((exercise) => (
+            {texts.map((text) => (
               <Card
-                key={exercise.id}
+                key={text.id}
                 variant="default"
                 padding="lg"
               >
                 <div className="u-flex-column u-gap-md">
                   <div className="u-flex-between">
-                    <Badge>
-                      {exercise.level}
-                    </Badge>
+                    <Badge>{text.level}</Badge>
 
                     <Badge variant="accent">
-                      {exercise.category}
+                      Arbejde
                     </Badge>
                   </div>
 
                   <div className="u-flex-column u-gap-xs">
-                    <h2>
-                      {exercise.title}
-                    </h2>
+                    <h2>{text.title}</h2>
 
                     <p className="u-text-secondary">
-                      {exercise.instructions}
+                      Choose how you want to practice.
                     </p>
                   </div>
 
-                  <div className="u-flex-between">
-                    <span className="u-text-muted">
-                      {exercise.questions.length} questions
-                    </span>
-
+                  <div className="u-flex u-gap-sm">
                     <Link
-                      href={`/exercises/${exercise.slug}`}
+                      href={`/exercises/${text.slug}?type=vocabulary_gap`}
                     >
                       <Button
                         variant="primary"
                         size="md"
                       >
-                        Start
+                        Vocabulary
+                      </Button>
+                    </Link>
+
+                    <Link
+                      href={`/exercises/${text.slug}?type=connector_gap`}
+                    >
+                      <Button
+                        variant="secondary"
+                        size="md"
+                      >
+                        Bindeord
                       </Button>
                     </Link>
                   </div>
