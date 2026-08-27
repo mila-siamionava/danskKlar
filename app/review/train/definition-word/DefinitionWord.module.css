@@ -1,0 +1,81 @@
+.questionCard {
+  padding: 28px;
+
+  border: 1px solid #ddd;
+  border-radius: 18px;
+
+  background: white;
+
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.04),
+    0 10px 24px rgba(0, 0, 0, 0.06);
+}
+
+.questionLabel {
+  margin: 0 0 10px;
+
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+
+  color: #888;
+}
+
+.definition {
+  margin: 0 0 22px;
+
+  font-size: 22px;
+  line-height: 1.45;
+  font-weight: 650;
+}
+
+.prompt {
+  margin: 0 0 18px;
+
+  font-size: 15px;
+  line-height: 1.4;
+
+  color: #666;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.option {
+  min-height: 74px;
+  padding: 16px;
+
+  border: 1px solid #ddd;
+  border-radius: 14px;
+
+  background: white;
+
+  font-size: 18px;
+  line-height: 1.35;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.option:hover:not(:disabled) {
+  border-color: #999;
+  background: #fafafa;
+}
+
+@media (max-width: 560px) {
+  .questionCard {
+    padding: 22px;
+  }
+
+  .definition {
+    font-size: 19px;
+  }
+
+  .options {
+    grid-template-columns: 1fr;
+  }
+}

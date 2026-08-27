@@ -21,7 +21,11 @@ export default function ReviewTrainPage() {
             Multiple choice
           </button>
         </Link>
-
+<Link href="/review/train/definition-word">
+  <button type="button">
+    Definition → Word
+  </button>
+</Link>
         <Link href="/review/train/fill-gap">
           <button type="button">
             Fill the gap

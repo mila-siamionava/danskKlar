@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import styles from "./MultipleChoice.module.css";
+import styles from "./DefinitionWord.module.css";
 
-export default function MultipleChoiceClient({
+export default function DefinitionWordClient({
   vocabulary,
 }) {
   const [items] = useState(vocabulary);
@@ -18,21 +18,23 @@ export default function MultipleChoiceClient({
 
   const correctAnswer = currentItem
     ? {
-        definition: currentItem.definition_da,
+        id: currentItem.id,
+        term: currentItem.term,
       }
     : null;
 
   const options = useMemo(() => {
-    if (!currentItem || !correctAnswer?.definition) {
+    if (!currentItem || !correctAnswer?.term) {
       return [];
     }
 
     const wrongAnswers = vocabulary
       .filter((item) => item.id !== currentItem.id)
       .map((item) => ({
-        definition: item.definition_da,
+        id: item.id,
+        term: item.term,
       }))
-      .filter((answer) => answer.definition);
+      .filter((answer) => answer.term);
 
     const uniqueWrongAnswers =
       wrongAnswers.filter(
@@ -40,7 +42,7 @@ export default function MultipleChoiceClient({
           index ===
           array.findIndex(
             (item) =>
-              item.definition === answer.definition
+              item.term === answer.term
           )
       );
 
@@ -57,23 +59,23 @@ export default function MultipleChoiceClient({
     ].sort(() => Math.random() - 0.5);
   }, [
     currentItem,
-    correctAnswer?.definition,
+    correctAnswer?.term,
     vocabulary,
   ]);
 
   if (items.length === 0) {
     return (
       <main className={styles.page}>
-        <h1>Multiple choice</h1>
+        <h1>Definition → Word</h1>
 
         <p>No vocabulary available.</p>
 
-        <Link href="/review">
+        <Link href="/review/train">
           <button
             type="button"
             className={styles.backButton}
           >
-            ← Back to words
+            ← Back to training
           </button>
         </Link>
       </main>
@@ -93,12 +95,12 @@ export default function MultipleChoiceClient({
               : "words"}.
           </p>
 
-          <Link href="/review">
+          <Link href="/review/train">
             <button
               type="button"
               className={styles.backButton}
             >
-              ← Back to words
+              ← Back to training
             </button>
           </Link>
         </div>
@@ -109,10 +111,7 @@ export default function MultipleChoiceClient({
   const isAnswered = selectedAnswer !== null;
 
   function isSameAnswer(answerA, answerB) {
-    return (
-      answerA?.definition ===
-      answerB?.definition
-    );
+    return answerA?.id === answerB?.id;
   }
 
   function chooseAnswer(answer) {
@@ -139,10 +138,10 @@ export default function MultipleChoiceClient({
       <div className={styles.header}>
         <div>
           <span className={styles.eyebrow}>
-            Multiple choice
+            Definition → Word
           </span>
 
-          <h1>Review words</h1>
+          <h1>Choose the expression</h1>
         </div>
 
         <span className={styles.counter}>
@@ -163,27 +162,27 @@ export default function MultipleChoiceClient({
         />
       </div>
 
-      <Link href="/review">
+      <Link href="/review/train">
         <button
           type="button"
           className={styles.backButton}
         >
-          ← Back to words
+          ← Back to training
         </button>
       </Link>
-
+ 
       <section className={styles.questionCard}>
         <p className={styles.questionLabel}>
-          Danish
+          Danish definition
+        </p>
+<p className={styles.prompt}>
+          Choose the correct Danish word or expression.
+        </p>
+        <p className={styles.definition}>
+          {currentItem.definition_da}
         </p>
 
-        <p className={styles.prompt}>
-          Choose the correct Danish definition.
-        </p>
-
-        <h2 className={styles.word}>
-          {currentItem.term?.toLowerCase()}
-        </h2>
+       
 
         <div className={styles.options}>
           {options.map((option) => {
@@ -215,7 +214,7 @@ export default function MultipleChoiceClient({
 
             return (
               <button
-                key={option.definition}
+                key={option.id}
                 type="button"
                 className={optionClass}
                 onClick={() =>
@@ -223,11 +222,7 @@ export default function MultipleChoiceClient({
                 }
                 disabled={isAnswered}
               >
-                <span
-                 className={styles.optionDefinition}
-                >
-                  {option.definition}
-                </span>
+                {option.term}
               </button>
             );
           })}
@@ -239,25 +234,23 @@ export default function MultipleChoiceClient({
               selectedAnswer,
               correctAnswer
             ) ? (
-              <p
-                className={
-                  styles.feedbackCorrect
-                }
-              >
+              <p className={styles.feedbackCorrect}>
                 ✓ Correct
               </p>
             ) : (
-              <div
-                className={
-                  styles.feedbackWrong
-                }
-              >
+              <div className={styles.feedbackWrong}>
                 <p>Correct answer:</p>
 
                 <strong>
-                  {correctAnswer?.definition}
+                  {correctAnswer?.term}
                 </strong>
               </div>
+            )}
+
+            {currentItem.example && (
+              <p className={styles.example}>
+                {currentItem.example}
+              </p>
             )}
 
             <button
