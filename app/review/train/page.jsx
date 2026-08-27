@@ -2,35 +2,66 @@
 
 import Link from "next/link";
 
+import styles from "./ReviewTrain.module.css";
+
+const trainingModes = [
+  {
+    href: "/review/train/flashcards",
+    title: "Flashcards",
+    description:
+      "Review Danish words with definitions, examples and translations.",
+  },
+  {
+    href: "/review/train/multiple-choice",
+    title: "Multiple choice",
+    description:
+      "Choose the correct Danish definition for each word.",
+  },
+  {
+    href: "/review/train/definition-word",
+    title: "Definition → Word",
+    description:
+      "Read a Danish definition and choose the correct expression.",
+  },
+  {
+    href: "/review/train/fill-gap",
+    title: "Fill the gap",
+    description:
+      "Choose the word or expression that fits naturally in context.",
+  },
+];
+
 export default function ReviewTrainPage() {
   return (
-    <main>
-      <h1>Train your words</h1>
+    <main className={styles.page}>
+      <header className={styles.header}>
+        <span className={styles.eyebrow}>
+          Vocabulary training
+        </span>
 
-      <p>Choose how you want to practice.</p>
+        <h1>Train your words</h1>
 
-      <div>
-        <Link href="/review/train/flashcards">
-          <button type="button">
-            Flashcards
-          </button>
-        </Link>
+        <p>
+          Choose how you want to practice.
+        </p>
+      </header>
 
-        <Link href="/review/train/multiple-choice">
-          <button type="button">
-            Multiple choice
-          </button>
-        </Link>
-<Link href="/review/train/definition-word">
-  <button type="button">
-    Definition → Word
-  </button>
-</Link>
-        <Link href="/review/train/fill-gap">
-          <button type="button">
-            Fill the gap
-          </button>
-        </Link>
+      <div className={styles.grid}>
+        {trainingModes.map((mode) => (
+          <Link
+            key={mode.href}
+            href={mode.href}
+            className={styles.card}
+          >
+            <h2>{mode.title}</h2>
+
+            <p>{mode.description}</p>
+
+            <span className={styles.open}>
+              Start practice →
+            </span>
+          </Link>
+        ))}
       </div>
     </main>
   );

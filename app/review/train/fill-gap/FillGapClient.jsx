@@ -1,81 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import styles from "./FillGap.module.css";
 
 export default function FillGapClient({
   vocabulary,
 }) {
-  const [items, setItems] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [finished, setFinished] = useState(false);
-
-  useEffect(() => {
-    const stored = localStorage.getItem(
-      "danskTrainerSelectedReview"
-    );
-
-    if (!stored) {
-      return;
-    }
-
-    const selectedItems = JSON.parse(stored);
-
-    const preparedItems = selectedItems
-      .map((item) => {
-        const translation =
-          item.explanation?.translations?.find(
-            (translationItem) =>
-              translationItem.word
-                ?.toLowerCase()
-                .trim() ===
-              item.term
-                ?.toLowerCase()
-                .trim()
-          );
-
-        const example =
-          item.example ||
-          translation?.example ||
-          "";
-
-        if (!example || !item.term) {
-          return null;
-        }
-
-        const gapSentence = createGapSentence(
-          example,
-          item.term
-        );
-
-        if (!gapSentence) {
-          return null;
-        }
-
-        return {
-          ...item,
-
-          english:
-            item.english ||
-            translation?.english ||
-            "",
-
-          russian:
-            item.russian ||
-            translation?.russian ||
-            "",
-
-          trainingSentence: gapSentence,
-        };
-      })
-      .filter(Boolean);
-
-    setItems(preparedItems);
-  }, []);
-
   function escapeRegExp(text) {
     return text.replace(
       /[.*+?^${}()|[\]\\]/g,
@@ -102,6 +34,40 @@ export default function FillGapClient({
       "{{gap}}"
     );
   }
+
+  const [items] = useState(
+    vocabulary
+      .map((item) => {
+        if (!item.example || !item.term) {
+          return null;
+        }
+
+        const trainingSentence =
+          createGapSentence(
+            item.example,
+            item.term
+          );
+
+        if (!trainingSentence) {
+          return null;
+        }
+
+        return {
+          ...item,
+          trainingSentence,
+        };
+      })
+      .filter(Boolean)
+  );
+
+  const [currentIndex, setCurrentIndex] =
+    useState(0);
+
+  const [selectedAnswer, setSelectedAnswer] =
+    useState(null);
+
+  const [finished, setFinished] =
+    useState(false);
 
   const currentItem = items[currentIndex];
 
@@ -184,15 +150,16 @@ export default function FillGapClient({
         <h1>Fill in the gap</h1>
 
         <p>
-          No selected words have example sentences yet.
+          No vocabulary items with usable example
+          sentences were found.
         </p>
 
-        <Link href="/review">
+        <Link href="/review/train">
           <button
             type="button"
             className={styles.backButton}
           >
-            ← Back to words
+            ← Back to training
           </button>
         </Link>
       </main>
@@ -212,12 +179,12 @@ export default function FillGapClient({
               : "gaps"}.
           </p>
 
-          <Link href="/review">
+          <Link href="/review/train">
             <button
               type="button"
               className={styles.backButton}
             >
-              ← Back to words
+              ← Back to training
             </button>
           </Link>
         </div>
@@ -231,17 +198,17 @@ export default function FillGapClient({
     );
 
   return (
-  <main className={styles.page}>
-    <Link href="/review">
-      <button
-        type="button"
-        className={styles.backButton}
-      >
-        ← Back to words
-      </button>
-    </Link>
+    <main className={styles.page}>
+      <Link href="/review/train">
+        <button
+          type="button"
+          className={styles.backButton}
+        >
+          ← Back to training
+        </button>
+      </Link>
 
-    <div className={styles.header}>
+      <div className={styles.header}>
         <div>
           <span className={styles.eyebrow}>
             Fill in the gap
@@ -270,7 +237,8 @@ export default function FillGapClient({
 
       <section className={styles.questionCard}>
         <p className={styles.questionLabel}>
-          Choose the word that fits the gap.
+          Choose the word or expression that fits the
+          gap.
         </p>
 
         <p className={styles.sentence}>
@@ -282,7 +250,7 @@ export default function FillGapClient({
                 {correctAnswer}
               </strong>
             ) : (
-              "________"
+              ""
             )}
           </span>
 
@@ -347,61 +315,68 @@ export default function FillGapClient({
           })}
         </div>
 
-       {isAnswered && (
-  <div className={styles.feedback}>
-    {selectedAnswer === correctAnswer ? (
-      <p className={styles.feedbackCorrect}>
-        ✓ Correct
-      </p>
-    ) : (
-      <p className={styles.feedbackWrong}>
-        Correct answer:{" "}
-        <strong>{correctAnswer}</strong>
-      </p>
-    )}
+        {isAnswered && (
+          <div className={styles.feedback}>
+            {selectedAnswer ===
+            correctAnswer ? (
+              <p
+                className={
+                  styles.feedbackCorrect
+                }
+              >
+                ✓ Correct
+              </p>
+            ) : (
+              <p
+                className={
+                  styles.feedbackWrong
+                }
+              >
+                Correct answer:{" "}
+                <strong>
+                  {correctAnswer}
+                </strong>
+              </p>
+            )}
 
-    <div className={styles.explanation}>
-      {currentItem.explanation?.english && (
-        <details>
-          <summary>
-            English explanation
-          </summary>
+            <div
+              className={
+                styles.explanation
+              }
+            >
+              {currentItem.definition_da && (
+                <p>
+                  <strong>
+                    Definition:
+                  </strong>{" "}
+                  {
+                    currentItem.definition_da
+                  }
+                </p>
+              )}
 
-          <p>
-            {
-              currentItem.explanation
-                .english
-            }
-          </p>
-        </details>
-      )}
+              {currentItem.english && (
+                <p>
+                  🇬🇧 {currentItem.english}
+                </p>
+              )}
 
-      {currentItem.explanation?.russian && (
-        <details>
-          <summary>
-            Русское объяснение
-          </summary>
+              {currentItem.russian && (
+                <p>
+                  🇷🇺 {currentItem.russian}
+                </p>
+              )}
+            </div>
 
-          <p>
-            {
-              currentItem.explanation
-                .russian
-            }
-          </p>
-        </details>
-      )}
-    </div>
-
-    <button
-      type="button"
-      className={styles.nextButton}
-      onClick={nextQuestion}
-    >
-      Next →
-    </button>
-  </div>
-)}
-    
+            <button
+              type="button"
+              className={styles.nextButton}
+              onClick={nextQuestion}
+            >
+              Next →
+            </button>
+          </div>
+        )}
       </section>
     </main>
   );

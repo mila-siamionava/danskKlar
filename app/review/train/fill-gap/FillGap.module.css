@@ -13,12 +13,12 @@
 
 .eyebrow {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
 
   color: #777;
 }
@@ -28,7 +28,7 @@
 }
 
 .counter {
-  font-weight: 600;
+  font-weight: 700;
   color: #666;
 }
 
@@ -50,9 +50,30 @@
   transition: width 0.25s ease;
 }
 
+.backButton {
+  min-height: 46px;
+  margin-top: 24px;
+  padding: 10px 16px;
+
+  border: 1px solid #ccc;
+  border-radius: 12px;
+
+  background: white;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.backButton:hover {
+  border-color: #888;
+  background: #fafafa;
+}
+
 .questionCard {
-  margin-top: 32px;
-  padding: 32px;
+  margin-top: 28px;
+  padding: 30px;
 
   border: 1px solid #ddd;
   border-radius: 20px;
@@ -65,63 +86,150 @@
 }
 
 .questionLabel {
-  margin: 0 0 18px;
+  margin: 0 0 20px;
 
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 600;
+
   color: #777;
 }
 
 .sentence {
   margin: 0;
 
-  font-size: 21px;
-  line-height: 1.7;
+  font-size: 22px;
+  line-height: 1.65;
+  font-weight: 500;
 }
 
 .gap {
   display: inline-block;
-  min-width: 100px;
+  min-width: 120px;
 
-  margin: 0 6px;
+  margin: 0 8px;
+  padding: 2px 8px;
+
+  border-bottom: 2px solid #333;
 
   text-align: center;
+  font-weight: 700;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
+.hint {
+  margin-top: 22px;
+  padding: 14px 16px;
+
+  border-radius: 14px;
+
+  background: #f7f7f7;
+}
+
+.hint p {
+  margin: 4px 0;
+
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
 
-  margin-top: 28px;
+  margin-top: 24px;
 }
 
-.inputLabel {
-  font-size: 14px;
+.option {
+  min-height: 64px;
+  padding: 14px 18px;
+
+  border: 1px solid #ddd;
+  border-radius: 14px;
+
+  background: white;
+
+  font-size: 17px;
+  line-height: 1.35;
   font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
 }
 
-.input {
-  min-height: 50px;
-  padding: 12px 14px;
-
-  border: 1px solid #ccc;
-  border-radius: 12px;
-
-  font-size: 18px;
+.option:hover:not(:disabled) {
+  border-color: #999;
+  background: #fafafa;
+  transform: translateY(-1px);
 }
 
-.input:focus {
-  outline: 2px solid #222;
-  outline-offset: 2px;
+.option:disabled {
+  cursor: default;
 }
 
-.checkButton,
-.nextButton,
-.backButton {
+.correct {
+  border-color: #2f7d32;
+  background: #eef8ef;
+}
+
+.wrong {
+  border-color: #b33a3a;
+  background: #fff0f0;
+}
+
+.feedback {
+  margin-top: 26px;
+  padding-top: 22px;
+
+  border-top: 1px solid #eee;
+}
+
+.feedbackCorrect {
+  margin: 0;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  color: #2f7d32;
+}
+
+.feedbackWrong {
+  margin: 0;
+
+  font-size: 16px;
+
+  color: #9c2f2f;
+}
+
+.explanation {
+  margin-top: 18px;
+  padding: 16px 18px;
+
+  border-radius: 14px;
+
+  background: #f7f7f7;
+}
+
+.explanation p {
+  margin: 6px 0;
+
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.nextButton {
   min-height: 48px;
-  padding: 12px 20px;
+  margin-top: 18px;
+  padding: 12px 22px;
 
+  border: 1px solid #222;
   border-radius: 12px;
+
+  background: #222;
+  color: white;
 
   font-size: 15px;
   font-weight: 650;
@@ -129,44 +237,8 @@
   cursor: pointer;
 }
 
-.checkButton,
-.nextButton {
-  border: 1px solid #222;
-
-  background: #222;
-  color: white;
-}
-
-.checkButton:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-
-.backButton {
-  margin-top: 24px;
-
-  border: 1px solid #222;
-
-  background: white;
-}
-
-.feedback {
-  margin-top: 26px;
-  padding-top: 20px;
-
-  border-top: 1px solid #eee;
-}
-
-.feedbackCorrect {
-  font-weight: 700;
-}
-
-.feedbackWrong p {
-  margin: 6px 0;
-}
-
-.nextButton {
-  margin-top: 18px;
+.nextButton:hover {
+  background: #333;
 }
 
 .complete {
@@ -179,34 +251,28 @@
     padding: 24px 16px 40px;
   }
 
+  .header {
+    align-items: flex-start;
+  }
+
   .questionCard {
-    padding: 24px 18px;
+    padding: 22px 18px;
   }
 
   .sentence {
-    font-size: 18px;
+    font-size: 19px;
   }
-}
-.explanation {
-  margin-top: 18px;
-}
 
-.explanation details {
-  margin-top: 10px;
-  padding: 12px 14px;
+  .gap {
+    min-width: 90px;
+  }
 
-  border: 1px solid #e3e3e3;
-  border-radius: 12px;
+  .options {
+    grid-template-columns: 1fr;
+  }
 
-  background: #fafafa;
-}
-
-.explanation summary {
-  font-weight: 650;
-  cursor: pointer;
-}
-
-.explanation p {
-  margin: 10px 0 0;
-  line-height: 1.6;
+  .option {
+    min-height: 56px;
+    font-size: 16px;
+  }
 }
