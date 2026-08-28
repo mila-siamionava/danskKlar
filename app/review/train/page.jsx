@@ -6,6 +6,12 @@ import styles from "./ReviewTrain.module.css";
 
 const trainingModes = [
   {
+  href: "/review/train/mixed",
+  title: "Mixed training",
+  description:
+    "Practice with fill gaps, true or false, matching, definitions and translations.",
+},
+  {
     href: "/review/train/flashcards",
     title: "Flashcards",
     description:
@@ -17,6 +23,19 @@ const trainingModes = [
     description:
       "Choose the correct Danish definition for each word.",
   },
+  {
+  href: "/review/train/true-false",
+  title: "True or false",
+  description:
+    "Decide whether the English and Russian meaning matches the Danish expression.",
+  },
+{
+  href: "/review/train/build-sentence",
+  title: "Build a sentence",
+  description:
+    "Drag the words into the correct order to build a Danish sentence.",
+  },
+
   {
     href: "/review/train/definition-word",
     title: "Definition → Word",

@@ -1,0 +1,251 @@
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+.backButton {
+  min-height: 44px;
+  margin-bottom: 22px;
+  padding: 9px 14px;
+
+  border: 1px solid #ccc;
+  border-radius: 12px;
+
+  background: white;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.backButton:hover {
+  border-color: #999;
+  background: #fafafa;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  display: block;
+  margin-bottom: 6px;
+
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+
+  color: #777;
+}
+
+.header h1 {
+  margin: 0 0 8px;
+
+  font-size: clamp(34px, 5vw, 46px);
+  line-height: 1.1;
+}
+
+.counter {
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: #666;
+}
+
+.questionCard {
+  padding: 28px;
+
+  border: 1px solid #ddd;
+  border-radius: 20px;
+
+  background: white;
+
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.04),
+    0 12px 28px rgba(0, 0, 0, 0.06);
+}
+
+.words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  min-height: 120px;
+  padding: 18px;
+
+  border: 1px dashed #ccc;
+  border-radius: 14px;
+
+  background: #fafafa;
+}
+
+.word {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+  padding: 9px 14px;
+
+  border: 1px solid #d7d7d7;
+  border-radius: 10px;
+
+  background: white;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: grab;
+
+  user-select: none;
+
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04);
+
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.word:hover {
+  border-color: #999;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.07);
+}
+
+.word:active {
+  cursor: grabbing;
+
+  transform: scale(0.98);
+}
+
+.checkButton {
+  min-height: 46px;
+  margin-top: 20px;
+  padding: 10px 20px;
+
+  border: 1px solid #222;
+  border-radius: 12px;
+
+  background: #222;
+  color: white;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.checkButton:hover {
+  background: #333;
+}
+
+.checkButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.feedback {
+  margin-top: 22px;
+  padding-top: 18px;
+
+  border-top: 1px solid #eee;
+}
+
+.correct {
+  margin: 0;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  color: #2f7d32;
+}
+
+.wrong {
+  padding: 14px 16px;
+
+  border-radius: 12px;
+
+  background: #fff2f2;
+}
+
+.wrong p {
+  margin: 0 0 5px;
+
+  color: #9c2f2f;
+}
+
+.wrong strong {
+  line-height: 1.5;
+}
+
+.nextButton {
+  min-height: 46px;
+  margin-top: 18px;
+  padding: 10px 20px;
+
+  border: 1px solid #222;
+  border-radius: 12px;
+
+  background: #222;
+  color: white;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.nextButton:hover {
+  background: #333;
+}
+
+.complete {
+  padding: 70px 20px;
+
+  text-align: center;
+}
+
+.complete h1 {
+  margin-bottom: 10px;
+}
+
+.complete p {
+  color: #666;
+}
+
+@media (max-width: 560px) {
+  .page {
+    padding: 24px 16px 40px;
+  }
+
+  .questionCard {
+    padding: 22px 18px;
+  }
+
+  .words {
+    padding: 14px;
+  }
+
+  .word {
+    font-size: 15px;
+  }
+
+  .checkButton,
+  .nextButton {
+    width: 100%;
+  }
+}
