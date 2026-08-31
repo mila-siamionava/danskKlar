@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { shuffle } from "../_lib/arrayUtils";
 import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 import styles from "./DefinitionWord.module.css";
@@ -20,30 +20,51 @@ export default function DefinitionWordClient({ vocabulary }) {
       }
     : null;
 
-  const options = useMemo(() => {
-    if (!currentItem || !correctAnswer?.term) {
-      return [];
-    }
+ const [options, setOptions] = useState([]);
 
-    const wrongAnswers = vocabulary
-      .filter((item) => item.id !== currentItem.id)
-      .map((item) => ({
-        id: item.id,
-        term: item.term,
-      }))
-      .filter((answer) => answer.term);
+useEffect(() => {
+  if (!currentItem || !correctAnswer?.term) {
+    setOptions([]);
+    return;
+  }
 
-    const uniqueWrongAnswers = wrongAnswers.filter(
-      (answer, index, array) =>
-        index === array.findIndex((item) => item.term === answer.term),
+  const wrongAnswers = vocabulary
+    .filter(
+      (item) =>
+        item.id !== currentItem.id
+    )
+    .map((item) => ({
+      id: item.id,
+      term: item.term,
+    }))
+    .filter(
+      (answer) => answer.term
     );
 
-    const shuffledWrongAnswers = shuffle(uniqueWrongAnswers);
+  const uniqueWrongAnswers =
+    wrongAnswers.filter(
+      (answer, index, array) =>
+        index ===
+        array.findIndex(
+          (item) =>
+            item.term === answer.term
+        )
+    );
 
-    const selectedWrongAnswers = shuffledWrongAnswers.slice(0, 3);
+  const selectedWrongAnswers =
+    shuffle(uniqueWrongAnswers).slice(0, 3);
 
-    return shuffle([correctAnswer, ...selectedWrongAnswers]);
-  }, [currentItem, correctAnswer?.term, vocabulary]);
+  setOptions(
+    shuffle([
+      correctAnswer,
+      ...selectedWrongAnswers,
+    ])
+  );
+}, [
+  currentItem,
+  correctAnswer?.term,
+  vocabulary,
+]); 
 
   if (items.length === 0) {
     return (

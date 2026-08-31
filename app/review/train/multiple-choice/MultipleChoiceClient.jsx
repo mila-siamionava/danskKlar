@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { shuffle } from "../_lib/arrayUtils";
 import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 
@@ -19,10 +19,12 @@ export default function MultipleChoiceClient({ vocabulary }) {
         definition: currentItem.definition_da,
       }
     : null;
+  const [options, setOptions] = useState([]);
 
-  const options = useMemo(() => {
+  useEffect(() => {
     if (!currentItem || !correctAnswer?.definition) {
-      return [];
+      setOptions([]);
+      return;
     }
 
     const wrongAnswers = vocabulary
@@ -37,11 +39,10 @@ export default function MultipleChoiceClient({ vocabulary }) {
         index ===
         array.findIndex((item) => item.definition === answer.definition),
     );
-    const shuffledWrongAnswers = shuffle(uniqueWrongAnswers);
 
-    const selectedWrongAnswers = shuffledWrongAnswers.slice(0, 3);
+    const selectedWrongAnswers = shuffle(uniqueWrongAnswers).slice(0, 3);
 
-    return shuffle([correctAnswer, ...selectedWrongAnswers]);
+    setOptions(shuffle([correctAnswer, ...selectedWrongAnswers]));
   }, [currentItem, correctAnswer?.definition, vocabulary]);
 
   if (items.length === 0) {
