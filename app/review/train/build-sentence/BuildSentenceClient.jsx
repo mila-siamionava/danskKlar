@@ -7,6 +7,9 @@ import {
   useState,
 } from "react";
 import { shuffle } from "../_lib/arrayUtils";
+import {
+  useTrainingProgress,
+} from "../_hooks/useTrainingProgress";
 import styles from "./BuildSentence.module.css";
 
 export default function BuildSentenceClient({
@@ -23,8 +26,11 @@ export default function BuildSentenceClient({
     [vocabulary]
   );
 
-  const [currentIndex, setCurrentIndex] =
-    useState(0);
+const {
+  currentIndex,
+  finished,
+  next,
+} = useTrainingProgress(usableItems.length);
 
   const [words, setWords] =
     useState([]);
@@ -35,8 +41,6 @@ export default function BuildSentenceClient({
   const [checked, setChecked] =
     useState(false);
 
-  const [finished, setFinished] =
-    useState(false);
 
   const currentItem =
     usableItems[currentIndex];
@@ -100,22 +104,11 @@ export default function BuildSentenceClient({
     setChecked(true);
   }
 
-  function nextSentence() {
-    setChecked(false);
-    setDraggedIndex(null);
-
-    if (
-      currentIndex ===
-      usableItems.length - 1
-    ) {
-      setFinished(true);
-      return;
-    }
-
-    setCurrentIndex(
-      (current) => current + 1
-    );
-  }
+ function nextSentence() {
+  setChecked(false);
+  setDraggedIndex(null);
+  next();
+}
 
   if (usableItems.length === 0) {
     return (
