@@ -2,38 +2,18 @@
 
 import Link from "next/link";
 import { useState } from "react";
-
+import {
+  createGapSentence,
+} from "../_lib/sentenceUtils";
+import {
+  useTrainingProgress,
+} from "../_hooks/useTrainingProgress";
 import styles from "./TypedGap.module.css";
 
 export default function TypedGapClient({
   vocabulary,
 }) {
-  function escapeRegExp(text) {
-    return text.replace(
-      /[.*+?^${}()|[\]\\]/g,
-      "\\$&"
-    );
-  }
-
-  function createGapSentence(sentence, word) {
-    if (!sentence || !word) {
-      return "";
-    }
-
-    const regex = new RegExp(
-      escapeRegExp(word),
-      "i"
-    );
-
-    if (!regex.test(sentence)) {
-      return "";
-    }
-
-    return sentence.replace(
-      regex,
-      "{{gap}}"
-    );
-  }
+  
 
   const [items] = useState(
     vocabulary
@@ -60,8 +40,7 @@ export default function TypedGapClient({
       .filter(Boolean)
   );
 
-  const [currentIndex, setCurrentIndex] =
-    useState(0);
+ 
 
   const [answer, setAnswer] =
     useState("");
@@ -69,8 +48,11 @@ export default function TypedGapClient({
   const [checked, setChecked] =
     useState(false);
 
-  const [finished, setFinished] =
-    useState(false);
+const {
+  currentIndex,
+  finished,
+  next,
+} = useTrainingProgress(items.length);
 
   const currentItem =
     items[currentIndex];
@@ -131,24 +113,13 @@ export default function TypedGapClient({
     setChecked(true);
   }
 
-  function nextQuestion() {
-    setAnswer("");
-    setChecked(false);
+ function nextQuestion() {
+  setAnswer("");
+  setChecked(false);
+  next();
+}
 
-    if (
-      currentIndex ===
-      items.length - 1
-    ) {
-      setFinished(true);
-      return;
-    }
-
-    setCurrentIndex(
-      (current) => current + 1
-    );
-  }
-
-  return (
+return (
     <main className={styles.page}>
       <Link href="/review/train">
         <button
