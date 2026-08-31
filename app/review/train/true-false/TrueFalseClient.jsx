@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 
 import styles from "./TrueFalse.module.css";
 
@@ -18,32 +25,40 @@ export default function TrueFalseClient({
     [vocabulary]
   );
 
-  const [currentIndex, setCurrentIndex] =
-    useState(0);
+  const {
+    currentIndex,
+    finished,
+    next,
+  } = useTrainingProgress(
+    usableVocabulary.length
+  );
 
   const [selectedAnswer, setSelectedAnswer] =
     useState(null);
 
-  const [finished, setFinished] =
-    useState(false);
+  const [statement, setStatement] =
+    useState(null);
 
   const currentItem =
     usableVocabulary[currentIndex];
 
-  const statement = useMemo(() => {
+  useEffect(() => {
     if (!currentItem) {
-      return null;
+      setStatement(null);
+      return;
     }
 
     const shouldBeCorrect =
       Math.random() >= 0.5;
 
     if (shouldBeCorrect) {
-      return {
+      setStatement({
         english: currentItem.english,
         russian: currentItem.russian,
         isCorrect: true,
-      };
+      });
+
+      return;
     }
 
     const wrongItems =
@@ -53,6 +68,16 @@ export default function TrueFalseClient({
           (item.english || item.russian)
       );
 
+    if (wrongItems.length === 0) {
+      setStatement({
+        english: currentItem.english,
+        russian: currentItem.russian,
+        isCorrect: true,
+      });
+
+      return;
+    }
+
     const wrongItem =
       wrongItems[
         Math.floor(
@@ -61,18 +86,17 @@ export default function TrueFalseClient({
         )
       ];
 
-    return {
-      english: wrongItem?.english,
-      russian: wrongItem?.russian,
+    setStatement({
+      english: wrongItem.english,
+      russian: wrongItem.russian,
       isCorrect: false,
-    };
-  }, [currentItem, usableVocabulary]);
+    });
+  }, [
+    currentItem,
+    usableVocabulary,
+  ]);
 
-  if (
-    usableVocabulary.length === 0 ||
-    !currentItem ||
-    !statement
-  ) {
+  if (usableVocabulary.length === 0) {
     return (
       <main className={styles.page}>
         <h1>True or false</h1>
@@ -112,6 +136,10 @@ export default function TrueFalseClient({
     );
   }
 
+  if (!statement) {
+    return null;
+  }
+
   const isAnswered =
     selectedAnswer !== null;
 
@@ -127,21 +155,11 @@ export default function TrueFalseClient({
     setSelectedAnswer(answer);
   }
 
-  function nextQuestion() {
-    setSelectedAnswer(null);
-
-    if (
-      currentIndex ===
-      usableVocabulary.length - 1
-    ) {
-      setFinished(true);
-      return;
-    }
-
-    setCurrentIndex(
-      (current) => current + 1
-    );
-  }
+ function nextQuestion() {
+  setSelectedAnswer(null);
+  setStatement(null);
+  next();
+}
 
   return (
     <main className={styles.page}>
@@ -171,7 +189,9 @@ export default function TrueFalseClient({
         </span>
       </div>
 
-      <section className={styles.questionCard}>
+      <section
+        className={styles.questionCard}
+      >
         <p className={styles.term}>
           {currentItem.term}
         </p>
@@ -180,24 +200,34 @@ export default function TrueFalseClient({
           means
         </span>
 
-        <div className={styles.translation}>
+        <div
+          className={styles.translation}
+        >
           {statement.english && (
-            <p className={styles.english}>
+            <p
+              className={styles.english}
+            >
               🇬🇧 {statement.english}
             </p>
           )}
 
           {statement.russian && (
-            <p className={styles.russian}>
+            <p
+              className={styles.russian}
+            >
               🇷🇺 {statement.russian}
             </p>
           )}
         </div>
 
-        <div className={styles.answers}>
+        <div
+          className={styles.answers}
+        >
           <button
             type="button"
-            className={styles.answerButton}
+            className={
+              styles.answerButton
+            }
             onClick={() =>
               chooseAnswer(true)
             }
@@ -208,7 +238,9 @@ export default function TrueFalseClient({
 
           <button
             type="button"
-            className={styles.answerButton}
+            className={
+              styles.answerButton
+            }
             onClick={() =>
               chooseAnswer(false)
             }
@@ -219,38 +251,52 @@ export default function TrueFalseClient({
         </div>
 
         {isAnswered && (
-          <div className={styles.feedback}>
+          <div
+            className={styles.feedback}
+          >
             {isUserCorrect ? (
-              <p className={styles.correct}>
+              <p
+                className={styles.correct}
+              >
                 ✓ Correct
               </p>
             ) : (
-              <p className={styles.wrong}>
+              <p
+                className={styles.wrong}
+              >
                 ✕ Not quite
               </p>
             )}
 
-            <div className={styles.correctMeaning}>
+            <div
+              className={
+                styles.correctMeaning
+              }
+            >
               <strong>
                 Correct meaning:
               </strong>
 
               {currentItem.english && (
                 <p>
-                  🇬🇧 {currentItem.english}
+                  🇬🇧{" "}
+                  {currentItem.english}
                 </p>
               )}
 
               {currentItem.russian && (
                 <p>
-                  🇷🇺 {currentItem.russian}
+                  🇷🇺{" "}
+                  {currentItem.russian}
                 </p>
               )}
             </div>
 
             <button
               type="button"
-              className={styles.nextButton}
+              className={
+                styles.nextButton
+              }
               onClick={nextQuestion}
             >
               Next →
