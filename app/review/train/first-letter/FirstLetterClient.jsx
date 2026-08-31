@@ -2,18 +2,15 @@
 
 import Link from "next/link";
 import { useState } from "react";
-
+import {
+  createGapSentence,
+} from "../_lib/sentenceUtils";
 import styles from "./FirstLetter.module.css";
 
 export default function FirstLetterClient({
   vocabulary,
 }) {
-  function escapeRegExp(text) {
-    return text.replace(
-      /[.*+?^${}()|[\]\\]/g,
-      "\\$&"
-    );
-  }
+  
 
   function createLetterHint(term) {
     return term
@@ -30,25 +27,6 @@ export default function FirstLetterClient({
       });
   }
 
-  function createGapSentence(sentence, word) {
-    if (!sentence || !word) {
-      return "";
-    }
-
-    const regex = new RegExp(
-      escapeRegExp(word),
-      "i"
-    );
-
-    if (!regex.test(sentence)) {
-      return "";
-    }
-
-    return sentence.replace(
-      regex,
-      "{{gap}}"
-    );
-  }
 
   const [items] = useState(
     vocabulary

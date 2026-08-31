@@ -2,63 +2,40 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import {
+  createGapSentence,
+} from "../_lib/sentenceUtils";
 
 import styles from "./FillGap.module.css";
 
 export default function FillGapClient({
   vocabulary,
 }) {
-  function escapeRegExp(text) {
-    return text.replace(
-      /[.*+?^${}()|[\]\\]/g,
-      "\\$&"
-    );
-  }
+  
 
-  function createGapSentence(sentence, word) {
-    if (!sentence || !word) {
-      return "";
-    }
+  const [items] = useState(() =>
+  vocabulary
+    .map((item) => {
+      if (!item.example || !item.term) {
+        return null;
+      }
 
-    const regex = new RegExp(
-      escapeRegExp(word),
-      "i"
-    );
+      const trainingSentence = createGapSentence(
+        item.example,
+        item.term
+      );
 
-    if (!regex.test(sentence)) {
-      return "";
-    }
+      if (!trainingSentence) {
+        return null;
+      }
 
-    return sentence.replace(
-      regex,
-      "{{gap}}"
-    );
-  }
-
-  const [items] = useState(
-    vocabulary
-      .map((item) => {
-        if (!item.example || !item.term) {
-          return null;
-        }
-
-        const trainingSentence =
-          createGapSentence(
-            item.example,
-            item.term
-          );
-
-        if (!trainingSentence) {
-          return null;
-        }
-
-        return {
-          ...item,
-          trainingSentence,
-        };
-      })
-      .filter(Boolean)
-  );
+      return {
+        ...item,
+        trainingSentence,
+      };
+    })
+    .filter(Boolean)
+);
 
   const [currentIndex, setCurrentIndex] =
     useState(0);
