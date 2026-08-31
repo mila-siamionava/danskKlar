@@ -14,14 +14,21 @@
       var(--spacing-xl)
     );
 }
-
-
-.header {
-  margin-bottom: var(--spacing-lg);
+.back {
+  margin-bottom: var(--spacing-md);
 }
+
+
 
 .header h1 {
   margin-bottom: var(--spacing-xs);
+
+  font-size: clamp(2.8rem, 4vw, 3.6rem);
+  line-height: 1.08;
+}
+
+.header {
+  margin-bottom: var(--spacing-lg);
 }
 
 .header p {

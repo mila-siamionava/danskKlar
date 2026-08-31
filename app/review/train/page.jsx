@@ -1,87 +1,90 @@
 import BackLink from "@/components/navigation/BackLink/BackLink";
+import {
+  Eye,
+  RotateCcw,
+  PencilLine,
+  Brain,
+} from "lucide-react";
+
 import ExerciseModeGroup from "../_components/ExerciseModeGroup/ExerciseModeGroup";
 import styles from "./ReviewTrain.module.css";
 
 const trainingGroups = [
   {
     title: "Recognition",
+         icon: Eye,
     modes: [
       {
         href: "/review/train/multiple-choice",
         title: "Multiple choice",
         description: "Choose the correct answer.",
-         icon: "☷",
+        icon: "☷",
       },
       {
         href: "/review/train/true-false",
         title: "True or false",
-        description:
-          "Decide whether the meaning is correct.",
+        description: "Decide whether the meaning is correct.",
         icon: "✓✕",
       },
       {
         href: "/review/train/definition-word",
         title: "Definition → Word",
-        description:
-          "Choose the word that matches the definition.",
+        description: "Choose the word that matches the definition.",
         icon: "A→",
       },
     ],
   },
   {
     title: "Recall",
+   icon: RotateCcw,
     modes: [
       {
         href: "/review/train/fill-gap",
         title: "Fill the gap",
-        description:
-          "Choose the expression that fits the context.",
-         icon: "___",
+        description: "Choose the expression that fits the context.",
+        icon: "___",
       },
       {
         href: "/review/train/first-letter",
         title: "First-letter hint",
-        description:
-          "Complete the expression using the first-letter hint.",
+        description: "Complete the expression using the first-letter hint.",
         icon: "A_D",
       },
       {
         href: "/review/train/typed-gap",
         title: "Type the gap",
-        description:
-          "Type the missing word or expression.",
-         icon: "⌨",
+        description: "Type the missing word or expression.",
+        icon: "⌨",
       },
     ],
   },
   {
     title: "Production",
+      icon: PencilLine,
     modes: [
       {
         href: "/review/train/build-sentence",
         title: "Build a sentence",
-        description:
-          "Put the words in the correct order.",
-         icon: "▤",
+        description: "Put the words in the correct order.",
+        icon: "▤",
       },
     ],
   },
   {
     title: "Memory",
+     icon: Brain,
     modes: [
       {
         href: "/review/train/match-pairs",
         title: "Match pairs",
-        description:
-          "Match each expression with its translation.",
+        description: "Match each expression with its translation.",
         icon: "▱▱",
       },
       {
         href: "/review/train/flashcards",
         title: "Flashcards",
-        description:
-          "Review words one by one.",
-         icon: "▣",
+        description: "Review words one by one.",
+        icon: "▣",
       },
     ],
   },
@@ -90,17 +93,13 @@ const trainingGroups = [
 export default function ReviewTrainPage() {
   return (
     <main className={styles.page}>
-    <BackLink
-  href="/review"
-  label="Back to review"
-/>
-
+      <div className={styles.back}>
+        <BackLink href="/review" label="Back to review" />
+      </div>
       <header className={styles.header}>
         <h1>Choose exercise type</h1>
 
-        <p>
-          Select how you want to practise your words.
-        </p>
+        <p>Select how you want to practise your words.</p>
       </header>
 
       <div className={styles.groups}>
@@ -109,6 +108,7 @@ export default function ReviewTrainPage() {
             key={group.title}
             title={group.title}
             modes={group.modes}
+            icon={group.icon}
           />
         ))}
       </div>
