@@ -1,88 +1,67 @@
-import Link from "next/link";
+import HomeNavigationCard from "@/components/navigation/HomeNavigationCard/HomeNavigationCard";
+import {
+  BookOpen,
+  RotateCcw,
+  Dumbbell,
+  ClipboardList,
+  Settings,
+} from "lucide-react";
+import styles from "./Home.module.css";
 
-import AppHeader from "@/components/navigation/AppHeader/AppHeader";
-import BottomNavigation from "@/components/navigation/BottomNavigation/BottomNavigation";
-import Button from "@/components/ui/Button/Button";
-import Card from "@/components/ui/Card/Card";
-
-
-import { navItems } from "@/data/navigation";
-import { getTexts } from "@/lib/exercises/getTexts";
-
-export default async function Home() {
-  const texts = await getTexts();
-
+export default function Home() {
   return (
-    <main>
-      <AppHeader title="Dansk Trainer" />
+    <main className={styles.page}>
+      <div className={styles.topBar}>
+        <span className={styles.logo} aria-label="DanskKlar">
+          DK
+        </span>
 
-      <div className="mainPageContainer">
-        <div className="dashboardContainer">
-
-     
-          {/* QUICK ACCESS */}
-          <section className="contentGrid">
-            <Card variant="default" padding="lg">
-              <div className="u-flex-column u-gap-md">
-                <div>
-                  <span className="u-text-muted">
-                    Practice library
-                  </span>
-
-                  <h2>
-                    {texts.length} texts
-                  </h2>
-                </div>
-
-                <p className="u-text-secondary">
-                  Practice reading comprehension
-                  with PD3.5-style gap exercises.
-                </p>
-
-                <Link href="/exercises">
-                  <Button
-                    variant="secondary"
-                    size="md"
-                  >
-                    View all exercises
-                  </Button>
-                </Link>
-              </div>
-            </Card>
-
-            <Card variant="default" padding="lg">
-              <div className="u-flex-column u-gap-md">
-                <div>
-                  <span className="u-text-muted">
-                    Review
-                  </span>
-
-                  <h2>Words to review</h2>
-                </div>
-
-                <p className="u-text-secondary">
-                  Wrong answers will be saved here
-                  for focused vocabulary practice.
-                </p>
-
-               <Link href="/review">
-  <Button
-    variant="secondary"
-    size="md"
-  >
-    Review words →
-  </Button>
-                </Link>
-              </div>
-            </Card>
-          </section>
-
-        
-
-        </div>
+        <button
+          type="button"
+          className={styles.settingsButton}
+          aria-label="Open settings"
+        >
+          <Settings size={20} strokeWidth={1.7} aria-hidden="true" />
+        </button>
       </div>
 
-      <BottomNavigation items={navItems} />
+      <header className={styles.header}>
+        <h1>DanskKlar</h1>
+
+        <p>Get ready for PD3</p>
+      </header>
+
+      <nav className={styles.navigation} aria-label="Main navigation">
+        <HomeNavigationCard
+          href="/exercises"
+          icon={BookOpen}
+          title="Reading"
+          description="Texts and reading practice"
+        />
+
+        <HomeNavigationCard
+          href="/review"
+          icon={RotateCcw}
+          title="Review"
+          description="Review words you know"
+        />
+
+        <HomeNavigationCard
+          href="/review/train"
+          icon={Dumbbell}
+          title="Train"
+          description="Practice your vocabulary"
+        />
+
+        <HomeNavigationCard
+          href="/topics"
+          icon={ClipboardList}
+          title="Topics"
+          description="Explore by theme"
+        />
+      </nav>
+
+      <div className={styles.illustration} aria-hidden="true" />
     </main>
   );
 }
