@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import {
   createGapSentence,
 } from "../_lib/sentenceUtils";
-
+import { shuffle } from "../_lib/shuffle";
 import styles from "./FillGap.module.css";
 
 export default function FillGapClient({
@@ -74,21 +74,16 @@ export default function FillGapClient({
       ...new Set(wrongAnswers),
     ];
 
-    const shuffledWrongAnswers = [
-      ...uniqueWrongAnswers,
-    ].sort(
-      () => Math.random() - 0.5
-    );
+    const shuffledWrongAnswers =
+  shuffle(uniqueWrongAnswers);
 
     const selectedWrongAnswers =
       shuffledWrongAnswers.slice(0, 3);
 
-    return [
-      correctAnswer,
-      ...selectedWrongAnswers,
-    ].sort(
-      () => Math.random() - 0.5
-    );
+    return shuffle([
+  correctAnswer,
+  ...selectedWrongAnswers,
+]);
   }, [currentItem, items]);
 
   const correctAnswer =

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-
+import { shuffle } from "../_lib/shuffle";
 import styles from "./DefinitionWord.module.css";
 
 export default function DefinitionWordClient({
@@ -46,17 +46,16 @@ export default function DefinitionWordClient({
           )
       );
 
-    const shuffledWrongAnswers = [
-      ...uniqueWrongAnswers,
-    ].sort(() => Math.random() - 0.5);
-
+    const shuffledWrongAnswers =
+      shuffle(uniqueWrongAnswers);
+    
     const selectedWrongAnswers =
       shuffledWrongAnswers.slice(0, 3);
 
-    return [
-      correctAnswer,
-      ...selectedWrongAnswers,
-    ].sort(() => Math.random() - 0.5);
+    return shuffle([
+  correctAnswer,
+  ...selectedWrongAnswers,
+]);
   }, [
     currentItem,
     correctAnswer?.term,
