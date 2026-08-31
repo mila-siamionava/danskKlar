@@ -5,12 +5,7 @@ import Link from "next/link";
 import styles from "./ReviewTrain.module.css";
 
 const trainingModes = [
-  {
-  href: "/review/train/mixed",
-  title: "Mixed training",
-  description:
-    "Practice with fill gaps, true or false, matching, definitions and translations.",
-},
+  
   {
     href: "/review/train/flashcards",
     title: "Flashcards",
