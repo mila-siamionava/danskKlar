@@ -1,58 +1,38 @@
 "use client";
 
 import Link from "next/link";
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 import { shuffle } from "../_lib/arrayUtils";
-import {
-  useTrainingProgress,
-} from "../_hooks/useTrainingProgress";
+import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 import styles from "./BuildSentence.module.css";
 
-export default function BuildSentenceClient({
-  vocabulary,
-}) {
+export default function BuildSentenceClient({ vocabulary }) {
   const usableItems = useMemo(
     () =>
       vocabulary.filter(
-        (item) =>
-          item.example &&
-          item.example.trim().split(/\s+/)
-            .length >= 3
+        (item) => item.example && item.example.trim().split(/\s+/).length >= 3,
       ),
-    [vocabulary]
+    [vocabulary],
   );
 
-const {
-  currentIndex,
-  finished,
-  next,
-} = useTrainingProgress(usableItems.length);
+  const { currentIndex, finished, next } = useTrainingProgress(
+    usableItems.length,
+  );
 
-  const [words, setWords] =
-    useState([]);
+  const [words, setWords] = useState([]);
 
-  const [draggedIndex, setDraggedIndex] =
-    useState(null);
+  const [draggedIndex, setDraggedIndex] = useState(null);
 
-  const [checked, setChecked] =
-    useState(false);
+  const [checked, setChecked] = useState(false);
 
-
-  const currentItem =
-    usableItems[currentIndex];
+  const currentItem = usableItems[currentIndex];
 
   const originalWords = useMemo(() => {
     if (!currentItem?.example) {
       return [];
     }
 
-    return currentItem.example
-      .trim()
-      .split(/\s+/);
+    return currentItem.example.trim().split(/\s+/);
   }, [currentItem]);
 
   useEffect(() => {
@@ -61,40 +41,25 @@ const {
       return;
     }
 
-  setWords(
-  shuffle(originalWords)
-);
+    setWords(shuffle(originalWords));
   }, [originalWords]);
 
-  const isCorrect =
-    words.join(" ") ===
-    originalWords.join(" ");
+  const isCorrect = words.join(" ") === originalWords.join(" ");
 
   function handleDragStart(index) {
     setDraggedIndex(index);
   }
 
   function handleDrop(dropIndex) {
-    if (
-      draggedIndex === null ||
-      checked
-    ) {
+    if (draggedIndex === null || checked) {
       return;
     }
 
     const updatedWords = [...words];
 
-    const [draggedWord] =
-      updatedWords.splice(
-        draggedIndex,
-        1
-      );
+    const [draggedWord] = updatedWords.splice(draggedIndex, 1);
 
-    updatedWords.splice(
-      dropIndex,
-      0,
-      draggedWord
-    );
+    updatedWords.splice(dropIndex, 0, draggedWord);
 
     setWords(updatedWords);
     setDraggedIndex(null);
@@ -104,24 +69,20 @@ const {
     setChecked(true);
   }
 
- function nextSentence() {
-  setChecked(false);
-  setDraggedIndex(null);
-  next();
-}
+  function nextSentence() {
+    setChecked(false);
+    setDraggedIndex(null);
+    next();
+  }
 
   if (usableItems.length === 0) {
     return (
       <main className={styles.page}>
         <h1>Build a sentence</h1>
 
-        <p>
-          No usable example sentences found.
-        </p>
+        <p>No usable example sentences found.</p>
 
-        <Link href="/review/train">
-          ← Back to training
-        </Link>
+        <Link href="/review/train">← Back to training</Link>
       </main>
     );
   }
@@ -132,16 +93,10 @@ const {
         <div className={styles.complete}>
           <h1>Practice complete</h1>
 
-          <p>
-            You completed{" "}
-            {usableItems.length} sentences.
-          </p>
+          <p>You completed {usableItems.length} sentences.</p>
 
           <Link href="/review/train">
-            <button
-              type="button"
-              className={styles.backButton}
-            >
+            <button type="button" className={styles.backButton}>
               ← Back to training
             </button>
           </Link>
@@ -153,47 +108,31 @@ const {
   return (
     <main className={styles.page}>
       <Link href="/review/train">
-        <button
-          type="button"
-          className={styles.backButton}
-        >
+        <button type="button" className={styles.backButton}>
           ← Back to training
         </button>
       </Link>
 
       <header className={styles.header}>
-        <span className={styles.eyebrow}>
-          Build a sentence
-        </span>
+        <span className={styles.eyebrow}>Build a sentence</span>
 
-        <h1>
-          Put the words in the correct order
-        </h1>
+        <h1>Put the words in the correct order</h1>
 
         <p className={styles.counter}>
-          {currentIndex + 1} /{" "}
-          {usableItems.length}
+          {currentIndex + 1} / {usableItems.length}
         </p>
       </header>
 
-      <section
-        className={styles.questionCard}
-      >
+      <section className={styles.questionCard}>
         <div className={styles.words}>
           {words.map((word, index) => (
             <div
               key={`${word}-${index}`}
               className={styles.word}
               draggable={!checked}
-              onDragStart={() =>
-                handleDragStart(index)
-              }
-              onDragOver={(event) =>
-                event.preventDefault()
-              }
-              onDrop={() =>
-                handleDrop(index)
-              }
+              onDragStart={() => handleDragStart(index)}
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={() => handleDrop(index)}
             >
               {word}
             </div>
@@ -213,18 +152,12 @@ const {
         {checked && (
           <div className={styles.feedback}>
             {isCorrect ? (
-              <p className={styles.correct}>
-                ✓ Correct
-              </p>
+              <p className={styles.correct}>✓ Correct</p>
             ) : (
               <div className={styles.wrong}>
-                <p>
-                  Correct sentence:
-                </p>
+                <p>Correct sentence:</p>
 
-                <strong>
-                  {currentItem.example}
-                </strong>
+                <strong>{currentItem.example}</strong>
               </div>
             )}
 
