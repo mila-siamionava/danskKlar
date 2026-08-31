@@ -3,16 +3,22 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { shuffle } from "../_lib/arrayUtils";
+import {
+  useTrainingProgress,
+} from "../_hooks/useTrainingProgress";
 import styles from "./DefinitionWord.module.css";
 
 export default function DefinitionWordClient({
   vocabulary,
 }) {
   const [items] = useState(vocabulary);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const {
+  currentIndex,
+  finished,
+  next,
+} = useTrainingProgress(items.length);
   const [selectedAnswer, setSelectedAnswer] =
     useState(null);
-  const [finished, setFinished] = useState(false);
 
   const currentItem = items[currentIndex];
 
@@ -122,15 +128,9 @@ export default function DefinitionWordClient({
   }
 
   function nextQuestion() {
-    setSelectedAnswer(null);
-
-    if (currentIndex === items.length - 1) {
-      setFinished(true);
-      return;
-    }
-
-    setCurrentIndex((current) => current + 1);
-  }
+  setSelectedAnswer(null);
+  next();
+}
 
   return (
     <main className={styles.page}>
