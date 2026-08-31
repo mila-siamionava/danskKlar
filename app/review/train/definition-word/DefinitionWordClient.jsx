@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { shuffle } from "../_lib/shuffle";
+import { shuffle } from "../_lib/arrayUtils";
 import styles from "./DefinitionWord.module.css";
 
 export default function DefinitionWordClient({

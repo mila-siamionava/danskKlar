@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import {
   createGapSentence,
 } from "../_lib/sentenceUtils";
-import { shuffle } from "../_lib/shuffle";
+import { shuffle } from "../_lib/arrayUtils";
 import styles from "./FillGap.module.css";
 
 export default function FillGapClient({
