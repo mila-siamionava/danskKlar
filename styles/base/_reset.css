@@ -83,3 +83,12 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
