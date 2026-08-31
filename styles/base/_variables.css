@@ -31,6 +31,9 @@
   --color-border-secondary: #d7cfc2;
   --color-border-accent: #d8c7a6;
 
+  /* Focus */
+--color-focus: #765c32;
+
   /* Success */
   --color-success: #48735a;
   --color-success-background: #eaf3ed;
@@ -135,9 +138,6 @@
   --shadow-elevated:
     0 10px 30px rgba(29, 29, 29, 0.1);
 
-  --shadow-bottom-sheet:
-    0 -8px 30px rgba(29, 29, 29, 0.12);
-
   /* ============================================================
      LAYOUT
      ============================================================ */
@@ -147,7 +147,7 @@
   --page-max-width: 118rem;
   --content-max-width: 104rem;
   --reading-max-width: 72rem;
-  --dashboard-max-width: 96rem;
+
 
   --app-header-height: 6.4rem;
   --bottom-nav-height: 7.2rem;
@@ -222,7 +222,7 @@
      ============================================================ */
 
   --opacity-disabled: 0.4;
-  --opacity-muted: 0.65;
+
 
   /* ============================================================
      Z-INDEX
@@ -231,6 +231,5 @@
   --z-header: 20;
   --z-bottom-nav: 30;
   --z-overlay: 100;
-  --z-bottom-sheet: 110;
-  --z-modal: 120;
+  
 }
