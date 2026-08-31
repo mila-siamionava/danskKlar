@@ -28,7 +28,7 @@ export default function Home() {
       <header className={styles.header}>
         <h1>DanskKlar</h1>
 
-        <p>Get ready for PD3</p>
+        <p>Get ready for PD3.5</p>
       </header>
 
       <nav className={styles.navigation} aria-label="Main navigation">

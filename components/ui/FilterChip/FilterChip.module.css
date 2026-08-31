@@ -1,0 +1,39 @@
+.chip {
+  min-height: 3.2rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    0
+    var(--spacing-sm);
+
+  border: 1px solid var(--color-border-primary);
+  border-radius: 999px;
+
+  background: var(--color-background-surface);
+  color: var(--color-text-secondary);
+
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-label-small);
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.chip:hover {
+  border-color: var(--color-border-accent);
+}
+
+.active {
+  background: var(--color-background-accent);
+  border-color: var(--color-border-accent);
+
+  color: var(--color-text-primary);
+}

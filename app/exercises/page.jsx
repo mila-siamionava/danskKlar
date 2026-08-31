@@ -1,10 +1,6 @@
-import Link from "next/link";
-
 import AppHeader from "@/components/navigation/AppHeader/AppHeader";
 import BottomNavigation from "@/components/navigation/BottomNavigation/BottomNavigation";
-import Card from "@/components/ui/Card/Card";
-import Badge from "@/components/ui/Badge/Badge";
-import Button from "@/components/ui/Button/Button";
+import ReadingCard from "@/components/reading/ReadingCard/ReadingCard";
 
 import { navItems } from "@/data/navigation";
 import { getTexts } from "@/lib/exercises/getTexts";
@@ -25,44 +21,21 @@ export default async function ExercisesPage() {
 
             <h1>Exercises</h1>
 
-            <p className="u-text-secondary">{texts.length} texts available.</p>
+            <p>
+              {texts.length} texts available.
+            </p>
           </header>
 
           <section className="contentGrid">
             {texts.map((text) => (
-              <Card key={text.id} variant="default" padding="lg">
-                <div className="u-flex-column u-gap-md">
-                  <div className="u-flex-between">
-                    <Badge>{text.level}</Badge>
-
-                   <Badge variant="accent">
-  {text.category}
-</Badge>
-                  </div>
-
-                  <div className="u-flex-column u-gap-xs">
-                    <h2>{text.title}</h2>
-
-                    <p className="u-text-secondary">
-                      Choose how you want to practice.
-                    </p>
-                  </div>
-
-                  <div className="u-flex u-gap-sm">
-                    <Link href={`/exercises/${text.slug}?type=vocabulary_gap`}>
-                      <Button variant="primary" size="md">
-                        Vocabulary
-                      </Button>
-                    </Link>
-
-                    <Link href={`/exercises/${text.slug}?type=connector_gap`}>
-                      <Button variant="secondary" size="md">
-                        Bindeord
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </Card>
+              <ReadingCard
+                key={text.id}
+                title={text.title}
+                level={text.level || "PD3.5"}
+                topic={text.category}
+                vocabularyHref={`/exercises/${text.slug}/vocabulary`}
+                conjunctionsHref={`/exercises/${text.slug}/bindeord`}
+              />
             ))}
           </section>
         </div>
