@@ -6,6 +6,9 @@ import {
   createGapSentence,
 } from "../_lib/sentenceUtils";
 import { shuffle } from "../_lib/arrayUtils";
+import {
+  useTrainingProgress,
+} from "../_hooks/useTrainingProgress";
 import styles from "./FillGap.module.css";
 
 export default function FillGapClient({
@@ -37,15 +40,16 @@ export default function FillGapClient({
     .filter(Boolean)
 );
 
-  const [currentIndex, setCurrentIndex] =
-    useState(0);
+  const {
+  currentIndex,
+  finished,
+  next,
+} = useTrainingProgress(items.length);
 
   const [selectedAnswer, setSelectedAnswer] =
     useState(null);
 
-  const [finished, setFinished] =
-    useState(false);
-
+ 
   const currentItem = items[currentIndex];
 
   const options = useMemo(() => {
@@ -100,21 +104,10 @@ export default function FillGapClient({
     setSelectedAnswer(answer);
   }
 
-  function nextQuestion() {
-    setSelectedAnswer(null);
-
-    if (
-      currentIndex ===
-      items.length - 1
-    ) {
-      setFinished(true);
-      return;
-    }
-
-    setCurrentIndex(
-      (current) => current + 1
-    );
-  }
+ function nextQuestion() {
+  setSelectedAnswer(null);
+  next();
+}
 
   if (items.length === 0) {
     return (
