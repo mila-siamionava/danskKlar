@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from "react";
-
+import { shuffle } from "../_lib/arrayUtils";
 import styles from "./BuildSentence.module.css";
 
 export default function BuildSentenceClient({
@@ -57,11 +57,9 @@ export default function BuildSentenceClient({
       return;
     }
 
-    setWords(
-      [...originalWords].sort(
-        () => Math.random() - 0.5
-      )
-    );
+  setWords(
+  shuffle(originalWords)
+);
   }, [originalWords]);
 
   const isCorrect =
