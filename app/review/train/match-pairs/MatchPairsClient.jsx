@@ -1,7 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { shuffle } from "../_lib/arrayUtils";
 
 import styles from "./MatchPairs.module.css";
 
@@ -43,11 +48,14 @@ export default function MatchPairsClient({
     );
   }, [usableVocabulary, round]);
 
-  const translations = useMemo(() => {
-    return [...roundItems].sort(
-      () => Math.random() - 0.5
-    );
-  }, [roundItems]);
+ const [translations, setTranslations] =
+  useState([]);
+
+useEffect(() => {
+  setTranslations(
+    shuffle(roundItems)
+  );
+}, [roundItems]);
 
   function chooseTerm(item) {
     if (matchedIds.includes(item.id)) {
@@ -114,13 +122,15 @@ export default function MatchPairsClient({
     );
 
   function nextRound() {
-    setRound((current) => current + 1);
+  setTranslations([]);
 
-    setMatchedIds([]);
-    setSelectedTerm(null);
-    setSelectedTranslation(null);
-    setWrongPair(false);
-  }
+  setRound((current) => current + 1);
+
+  setMatchedIds([]);
+  setSelectedTerm(null);
+  setSelectedTranslation(null);
+  setWrongPair(false);
+}
 
   if (roundItems.length === 0) {
     return (
