@@ -2,16 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import {
-  createGapSentence,
-} from "../_lib/sentenceUtils";
+import { createGapSentence } from "../_lib/sentenceUtils";
+import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 import styles from "./FirstLetter.module.css";
 
-export default function FirstLetterClient({
-  vocabulary,
-}) {
-  
-
+export default function FirstLetterClient({ vocabulary }) {
   function createLetterHint(term) {
     return term
       .trim()
@@ -21,12 +16,9 @@ export default function FirstLetterClient({
           return word;
         }
 
-        return `${word[0]}${"_".repeat(
-          word.length - 1
-        )}`;
+        return `${word[0]}${"_".repeat(word.length - 1)}`;
       });
   }
-
 
   const [items] = useState(
     vocabulary
@@ -35,11 +27,7 @@ export default function FirstLetterClient({
           return null;
         }
 
-        const trainingSentence =
-          createGapSentence(
-            item.example,
-            item.term
-          );
+        const trainingSentence = createGapSentence(item.example, item.term);
 
         if (!trainingSentence) {
           return null;
@@ -50,36 +38,25 @@ export default function FirstLetterClient({
           trainingSentence,
         };
       })
-      .filter(Boolean)
+      .filter(Boolean),
   );
 
-  const [currentIndex, setCurrentIndex] =
-    useState(0);
+  const { currentIndex, finished, next } = useTrainingProgress(items.length);
 
-  const [answer, setAnswer] =
-    useState("");
+  const [answer, setAnswer] = useState("");
 
-  const [checked, setChecked] =
-    useState(false);
+  const [checked, setChecked] = useState(false);
 
-  const [finished, setFinished] =
-    useState(false);
-
-  const currentItem =
-    items[currentIndex];
+  const currentItem = items[currentIndex];
 
   if (items.length === 0) {
     return (
       <main className={styles.page}>
         <h1>First-letter hint</h1>
 
-        <p>
-          No usable example sentences were found.
-        </p>
+        <p>No usable example sentences were found.</p>
 
-        <Link href="/review/train">
-          ← Back to training
-        </Link>
+        <Link href="/review/train">← Back to training</Link>
       </main>
     );
   }
@@ -89,35 +66,22 @@ export default function FirstLetterClient({
       <main className={styles.page}>
         <h1>Practice complete</h1>
 
-        <p>
-          You completed {items.length} gaps.
-        </p>
+        <p>You completed {items.length} gaps.</p>
 
-        <Link href="/review/train">
-          ← Back to training
-        </Link>
+        <Link href="/review/train">← Back to training</Link>
       </main>
     );
   }
 
-  const correctAnswer =
-    currentItem.term
-      .trim()
-      .toLowerCase();
+  const correctAnswer = currentItem.term.trim().toLowerCase();
 
-  const letterHint =
-    createLetterHint(currentItem.term);
+  const letterHint = createLetterHint(currentItem.term);
 
-  const normalizedAnswer =
-    answer.trim().toLowerCase();
+  const normalizedAnswer = answer.trim().toLowerCase();
 
-  const isCorrect =
-    normalizedAnswer === correctAnswer;
+  const isCorrect = normalizedAnswer === correctAnswer;
 
-  const sentenceParts =
-    currentItem.trainingSentence.split(
-      "{{gap}}"
-    );
+  const sentenceParts = currentItem.trainingSentence.split("{{gap}}");
 
   function checkAnswer(event) {
     event.preventDefault();
@@ -132,40 +96,22 @@ export default function FirstLetterClient({
   function nextQuestion() {
     setAnswer("");
     setChecked(false);
-
-    if (
-      currentIndex ===
-      items.length - 1
-    ) {
-      setFinished(true);
-      return;
-    }
-
-    setCurrentIndex(
-      (current) => current + 1
-    );
+    next();
   }
 
   return (
     <main className={styles.page}>
       <Link href="/review/train">
-        <button
-          type="button"
-          className={styles.backButton}
-        >
+        <button type="button" className={styles.backButton}>
           ← Back to training
         </button>
       </Link>
 
       <div className={styles.header}>
         <div>
-          <span className={styles.eyebrow}>
-            First-letter hint
-          </span>
+          <span className={styles.eyebrow}>First-letter hint</span>
 
-          <h1>
-            Complete the expression
-          </h1>
+          <h1>Complete the expression</h1>
         </div>
 
         <span className={styles.counter}>
@@ -178,31 +124,18 @@ export default function FirstLetterClient({
           {sentenceParts[0]}
 
           <span className={styles.gap}>
-            {letterHint.map(
-              (word, index) => (
-                <span
-                  key={`${word}-${index}`}
-                  className={
-                    styles.hintWord
-                  }
-                >
-                  {word}
-                </span>
-              )
-            )}
+            {letterHint.map((word, index) => (
+              <span key={`${word}-${index}`} className={styles.hintWord}>
+                {word}
+              </span>
+            ))}
           </span>
 
           {sentenceParts[1]}
         </p>
 
-        <form
-          className={styles.form}
-          onSubmit={checkAnswer}
-        >
-          <label
-            className={styles.inputLabel}
-            htmlFor="first-letter-answer"
-          >
+        <form className={styles.form} onSubmit={checkAnswer}>
+          <label className={styles.inputLabel} htmlFor="first-letter-answer">
             Your answer
           </label>
 
@@ -210,22 +143,13 @@ export default function FirstLetterClient({
             id="first-letter-answer"
             className={styles.input}
             value={answer}
-            onChange={(event) =>
-              setAnswer(
-                event.target.value
-              )
-            }
+            onChange={(event) => setAnswer(event.target.value)}
             disabled={checked}
             autoComplete="off"
           />
 
           {!checked && (
-            <button
-              type="submit"
-              className={
-                styles.checkButton
-              }
-            >
+            <button type="submit" className={styles.checkButton}>
               Check
             </button>
           )}
@@ -234,31 +158,17 @@ export default function FirstLetterClient({
         {checked && (
           <div className={styles.feedback}>
             {isCorrect ? (
-              <p className={styles.correct}>
-                ✓ Correct
-              </p>
+              <p className={styles.correct}>✓ Correct</p>
             ) : (
               <div className={styles.wrong}>
-                <p>
-                  Correct answer:
-                </p>
+                <p>Correct answer:</p>
 
-                <strong>
-                  {currentItem.term}
-                </strong>
+                <strong>{currentItem.term}</strong>
               </div>
             )}
 
             {currentItem.definition_da && (
-              <p
-                className={
-                  styles.definition
-                }
-              >
-                {
-                  currentItem.definition_da
-                }
-              </p>
+              <p className={styles.definition}>{currentItem.definition_da}</p>
             )}
 
             <button

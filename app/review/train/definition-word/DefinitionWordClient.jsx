@@ -3,22 +3,13 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { shuffle } from "../_lib/arrayUtils";
-import {
-  useTrainingProgress,
-} from "../_hooks/useTrainingProgress";
+import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 import styles from "./DefinitionWord.module.css";
 
-export default function DefinitionWordClient({
-  vocabulary,
-}) {
+export default function DefinitionWordClient({ vocabulary }) {
   const [items] = useState(vocabulary);
-  const {
-  currentIndex,
-  finished,
-  next,
-} = useTrainingProgress(items.length);
-  const [selectedAnswer, setSelectedAnswer] =
-    useState(null);
+  const { currentIndex, finished, next } = useTrainingProgress(items.length);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
 
   const currentItem = items[currentIndex];
 
@@ -42,31 +33,17 @@ export default function DefinitionWordClient({
       }))
       .filter((answer) => answer.term);
 
-    const uniqueWrongAnswers =
-      wrongAnswers.filter(
-        (answer, index, array) =>
-          index ===
-          array.findIndex(
-            (item) =>
-              item.term === answer.term
-          )
-      );
+    const uniqueWrongAnswers = wrongAnswers.filter(
+      (answer, index, array) =>
+        index === array.findIndex((item) => item.term === answer.term),
+    );
 
-    const shuffledWrongAnswers =
-      shuffle(uniqueWrongAnswers);
-    
-    const selectedWrongAnswers =
-      shuffledWrongAnswers.slice(0, 3);
+    const shuffledWrongAnswers = shuffle(uniqueWrongAnswers);
 
-    return shuffle([
-  correctAnswer,
-  ...selectedWrongAnswers,
-]);
-  }, [
-    currentItem,
-    correctAnswer?.term,
-    vocabulary,
-  ]);
+    const selectedWrongAnswers = shuffledWrongAnswers.slice(0, 3);
+
+    return shuffle([correctAnswer, ...selectedWrongAnswers]);
+  }, [currentItem, correctAnswer?.term, vocabulary]);
 
   if (items.length === 0) {
     return (
@@ -76,10 +53,7 @@ export default function DefinitionWordClient({
         <p>No vocabulary available.</p>
 
         <Link href="/review/train">
-          <button
-            type="button"
-            className={styles.backButton}
-          >
+          <button type="button" className={styles.backButton}>
             ← Back to training
           </button>
         </Link>
@@ -94,17 +68,11 @@ export default function DefinitionWordClient({
           <h1>Practice complete</h1>
 
           <p>
-            You reviewed {items.length}{" "}
-            {items.length === 1
-              ? "word"
-              : "words"}.
+            You reviewed {items.length} {items.length === 1 ? "word" : "words"}.
           </p>
 
           <Link href="/review/train">
-            <button
-              type="button"
-              className={styles.backButton}
-            >
+            <button type="button" className={styles.backButton}>
               ← Back to training
             </button>
           </Link>
@@ -128,17 +96,15 @@ export default function DefinitionWordClient({
   }
 
   function nextQuestion() {
-  setSelectedAnswer(null);
-  next();
-}
+    setSelectedAnswer(null);
+    next();
+  }
 
   return (
     <main className={styles.page}>
       <div className={styles.header}>
         <div>
-          <span className={styles.eyebrow}>
-            Definition → Word
-          </span>
+          <span className={styles.eyebrow}>Definition → Word</span>
 
           <h1>Choose the expression</h1>
         </div>
@@ -152,50 +118,29 @@ export default function DefinitionWordClient({
         <div
           className={styles.progressFill}
           style={{
-            width: `${
-              ((currentIndex + 1) /
-                items.length) *
-              100
-            }%`,
+            width: `${((currentIndex + 1) / items.length) * 100}%`,
           }}
         />
       </div>
 
       <Link href="/review/train">
-        <button
-          type="button"
-          className={styles.backButton}
-        >
+        <button type="button" className={styles.backButton}>
           ← Back to training
         </button>
       </Link>
- 
+
       <section className={styles.questionCard}>
-        <p className={styles.questionLabel}>
-          Danish definition
-        </p>
-<p className={styles.prompt}>
+        <p className={styles.questionLabel}>Danish definition</p>
+        <p className={styles.prompt}>
           Choose the correct Danish word or expression.
         </p>
-        <p className={styles.definition}>
-          {currentItem.definition_da}
-        </p>
-
-       
+        <p className={styles.definition}>{currentItem.definition_da}</p>
 
         <div className={styles.options}>
           {options.map((option) => {
-            const isCorrect =
-              isSameAnswer(
-                option,
-                correctAnswer
-              );
+            const isCorrect = isSameAnswer(option, correctAnswer);
 
-            const isSelected =
-              isSameAnswer(
-                option,
-                selectedAnswer
-              );
+            const isSelected = isSameAnswer(option, selectedAnswer);
 
             let optionClass = styles.option;
 
@@ -203,11 +148,7 @@ export default function DefinitionWordClient({
               optionClass += ` ${styles.correct}`;
             }
 
-            if (
-              isAnswered &&
-              isSelected &&
-              !isCorrect
-            ) {
+            if (isAnswered && isSelected && !isCorrect) {
               optionClass += ` ${styles.wrong}`;
             }
 
@@ -216,9 +157,7 @@ export default function DefinitionWordClient({
                 key={option.id}
                 type="button"
                 className={optionClass}
-                onClick={() =>
-                  chooseAnswer(option)
-                }
+                onClick={() => chooseAnswer(option)}
                 disabled={isAnswered}
               >
                 {option.term}
@@ -229,27 +168,18 @@ export default function DefinitionWordClient({
 
         {isAnswered && (
           <div className={styles.feedback}>
-            {isSameAnswer(
-              selectedAnswer,
-              correctAnswer
-            ) ? (
-              <p className={styles.feedbackCorrect}>
-                ✓ Correct
-              </p>
+            {isSameAnswer(selectedAnswer, correctAnswer) ? (
+              <p className={styles.feedbackCorrect}>✓ Correct</p>
             ) : (
               <div className={styles.feedbackWrong}>
                 <p>Correct answer:</p>
 
-                <strong>
-                  {correctAnswer?.term}
-                </strong>
+                <strong>{correctAnswer?.term}</strong>
               </div>
             )}
 
             {currentItem.example && (
-              <p className={styles.example}>
-                {currentItem.example}
-              </p>
+              <p className={styles.example}>{currentItem.example}</p>
             )}
 
             <button
