@@ -1,0 +1,21 @@
+.filters {
+  display: flex;
+  gap: var(--spacing-xs);
+
+  margin-bottom: var(--spacing-md);
+
+  overflow-x: auto;
+
+  scrollbar-width: none;
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
+}
+
+.readingList {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--spacing-sm);
+}

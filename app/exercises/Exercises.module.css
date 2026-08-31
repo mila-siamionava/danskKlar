@@ -1,49 +1,30 @@
 .page {
-  width: min(
-    100%,
-    var(--reading-max-width)
-  );
-
-  margin-inline: auto;
+  width: 100%;
 
   padding:
-    var(--spacing-xl)
     var(--spacing-md)
+    var(--spacing-sm)
     calc(
       var(--bottom-nav-height) +
-      var(--spacing-xl)
+      var(--spacing-lg)
     );
 }
 
-.header {
-  margin-bottom: var(--spacing-lg);
-}
+@media only screen and (min-width: 37.5em) {
+  .page {
+    width: min(
+      100%,
+      var(--reading-max-width)
+    );
 
-.headerMeta {
-  margin-bottom: var(--spacing-xs);
+    margin-inline: auto;
 
-  color: var(--color-text-accent);
-
-  font-size: var(--font-size-label-medium);
-  font-weight: 700;
-}
-
-.header h1 {
-  margin-bottom: var(--spacing-xs);
-
-  font-size: clamp(2.8rem, 4vw, 3.6rem);
-  line-height: 1.08;
-}
-
-.header p {
-  margin: 0;
-
-  color: var(--color-text-secondary);
-}
-
-.readingList {
-  display: flex;
-  flex-direction: column;
-
-  gap: var(--spacing-sm);
+    padding:
+      var(--spacing-xl)
+      var(--spacing-md)
+      calc(
+        var(--bottom-nav-height) +
+        var(--spacing-xl)
+      );
+  }
 }

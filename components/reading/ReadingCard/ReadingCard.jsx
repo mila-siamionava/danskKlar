@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import Badge from "@/components/ui/Badge/Badge";
-
+import Image from "next/image";
 import styles from "./ReadingCard.module.css";
 
 export default function ReadingCard({
@@ -11,13 +11,20 @@ export default function ReadingCard({
   duration,
   vocabularyHref,
   conjunctionsHref,
-  illustration,
+   imageSrc,
 }) {
   return (
     <article className={styles.card}>
       <div className={styles.illustration}>
-        {illustration}
-      </div>
+  {imageSrc && (
+    <Image
+      src={imageSrc}
+      alt=""
+      fill
+      sizes="80px"
+    />
+  )}
+</div>
 
       <div className={styles.content}>
         <div className={styles.topRow}>

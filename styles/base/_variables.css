@@ -100,6 +100,9 @@
   --line-height-label-small: 1.6rem;
   --font-weight-label-small: 500;
 
+    --font-size-label-xsmall: 0.8rem;
+  --line-height-label-xsmall: 1.3rem;
+  --font-weight-label-xsmall: 400;
   /* ============================================================
      SPACING
      ============================================================ */
