@@ -1,114 +1,117 @@
-"use client";
-
 import Link from "next/link";
-
+import ExerciseModeGroup from "../_components/ExerciseModeGroup/ExerciseModeGroup";
 import styles from "./ReviewTrain.module.css";
 
-const trainingModes = [
-  
+const trainingGroups = [
   {
-    href: "/review/train/flashcards",
-    title: "Flashcards",
-    description:
-      "Review Danish words with definitions, examples and translations.",
+    title: "Recognition",
+    modes: [
+      {
+        href: "/review/train/multiple-choice",
+        title: "Multiple choice",
+        description: "Choose the correct answer.",
+         icon: "☷",
+      },
+      {
+        href: "/review/train/true-false",
+        title: "True or false",
+        description:
+          "Decide whether the meaning is correct.",
+        icon: "✓✕",
+      },
+      {
+        href: "/review/train/definition-word",
+        title: "Definition → Word",
+        description:
+          "Choose the word that matches the definition.",
+        icon: "A→",
+      },
+    ],
   },
   {
-    href: "/review/train/multiple-choice",
-    title: "Multiple choice",
-    description:
-      "Choose the correct Danish definition for each word.",
+    title: "Recall",
+    modes: [
+      {
+        href: "/review/train/fill-gap",
+        title: "Fill the gap",
+        description:
+          "Choose the expression that fits the context.",
+         icon: "___",
+      },
+      {
+        href: "/review/train/first-letter",
+        title: "First-letter hint",
+        description:
+          "Complete the expression using the first-letter hint.",
+        icon: "A_D",
+      },
+      {
+        href: "/review/train/typed-gap",
+        title: "Type the gap",
+        description:
+          "Type the missing word or expression.",
+         icon: "⌨",
+      },
+    ],
   },
   {
-  href: "/review/train/true-false",
-  title: "True or false",
-  description:
-    "Decide whether the English and Russian meaning matches the Danish expression.",
-  },
-{
-  href: "/review/train/build-sentence",
-  title: "Build a sentence",
-  description:
-    "Drag the words into the correct order to build a Danish sentence.",
-  },
-
-  {
-    href: "/review/train/definition-word",
-    title: "Definition → Word",
-    description:
-      "Read a Danish definition and choose the correct expression.",
+    title: "Production",
+    modes: [
+      {
+        href: "/review/train/build-sentence",
+        title: "Build a sentence",
+        description:
+          "Put the words in the correct order.",
+         icon: "▤",
+      },
+    ],
   },
   {
-    href: "/review/train/typed-gap",
-    title: "Type the gap",
-    description:
-      "Type the missing Danish word or expression without answer options.",
-  },
-  {
-    href: "/review/train/first-letter",
-    title: "First-letter hint",
-    description:
-      "Type the missing expression with the first letters shown as a hint.",
-  },
-  {
-    href: "/review/train/match-pairs",
-    title: "Match pairs",
-    description:
-      "Match each Danish expression with its English and Russian translation.",
-  },
-  {
-    href: "/review/train/fill-gap",
-    title: "Fill the gap",
-    description:
-      "Choose the word or expression that fits naturally in context.",
+    title: "Memory",
+    modes: [
+      {
+        href: "/review/train/match-pairs",
+        title: "Match pairs",
+        description:
+          "Match each expression with its translation.",
+        icon: "▱▱",
+      },
+      {
+        href: "/review/train/flashcards",
+        title: "Flashcards",
+        description:
+          "Review words one by one.",
+         icon: "▣",
+      },
+    ],
   },
 ];
 
 export default function ReviewTrainPage() {
   return (
     <main className={styles.page}>
-      <div className={styles.nav}>
-        <Link
-          href="/"
-          className={styles.navLink}
-        >
-          ← Main
-        </Link>
-
-        <Link
-          href="/review"
-          className={styles.navLink}
-        >
-          Review words
-        </Link>
-      </div>
+      <Link
+        href="/review"
+        className={styles.backLink}
+      >
+        ← Review
+      </Link>
 
       <header className={styles.header}>
-        <span className={styles.eyebrow}>
-          Vocabulary training
-        </span>
-
-        <h1>Train your words</h1>
+        <h1>Choose exercise type</h1>
 
         <p>
-          Choose how you want to practice.
+          Select how you want to practise your words.
         </p>
       </header>
 
-      <div className={styles.grid}>
-        {trainingModes.map((mode) => (
-          <Link
-            key={mode.href}
-            href={mode.href}
-            className={styles.card}
-          >
-            <h2>{mode.title}</h2>
-
-            <p>{mode.description}</p>
-
-            <span className={styles.open}>
-              Start practice →
-            </span>
-          </Link>
+      <div className={styles.groups}>
+        {trainingGroups.map((group) => (
+          <ExerciseModeGroup
+            key={group.title}
+            title={group.title}
+            modes={group.modes}
+          />
         ))}
       </div>
     </main>
