@@ -1,4 +1,4 @@
-import Link from "next/link";
+import BackLink from "@/components/navigation/BackLink/BackLink";
 import ExerciseModeGroup from "../_components/ExerciseModeGroup/ExerciseModeGroup";
 import styles from "./ReviewTrain.module.css";
 
@@ -90,12 +90,10 @@ const trainingGroups = [
 export default function ReviewTrainPage() {
   return (
     <main className={styles.page}>
-      <Link
-        href="/review"
-        className={styles.backLink}
-      >
-        ← Review
-      </Link>
+    <BackLink
+  href="/review"
+  label="Back to review"
+/>
 
       <header className={styles.header}>
         <h1>Choose exercise type</h1>

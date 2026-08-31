@@ -68,3 +68,29 @@
   font-size: var(--font-size-body-large);
   line-height: 1;
 }
+.group {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--spacing-sm);
+}
+
+.title {
+  margin: 0 0 var(--spacing-2xs);
+
+  color: var(--color-text-accent);
+
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-label-medium);
+  line-height: var(--line-height-label-medium);
+  font-weight: 700;
+
+  letter-spacing: 0.02em;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--spacing-xs);
+}
