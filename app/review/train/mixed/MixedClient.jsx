@@ -1,7 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { shuffle } from "../_lib/arrayUtils";
 
 import styles from "./Mixed.module.css";
 
@@ -40,15 +45,16 @@ function getDefinitionOptions(
         )
     );
 
-  return [
-    {
-      id: currentItem.id,
-      term: currentItem.term,
-    },
-    ...[...uniqueWrongAnswers]
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3),
-  ].sort(() => Math.random() - 0.5);
+  const selectedWrongAnswers =
+  shuffle(uniqueWrongAnswers).slice(0, 3);
+
+return shuffle([
+  {
+    id: currentItem.id,
+    term: currentItem.term,
+  },
+  ...selectedWrongAnswers,
+]);
 }
 
 export default function MixedClient({
@@ -69,12 +75,16 @@ export default function MixedClient({
     [vocabulary]
   );
 
-  const session = useMemo(() => {
+  const [session, setSession] =
+    useState([]);
+
+  useEffect(() => {
     if (usableVocabulary.length === 0) {
-      return [];
+      setSession([]);
+      return;
     }
 
-    return Array.from({
+    const newSession = Array.from({
       length: Math.min(
         SESSION_SIZE,
         usableVocabulary.length
@@ -82,15 +92,15 @@ export default function MixedClient({
     }).map((_, index) => {
       const item =
         usableVocabulary[
-          index % usableVocabulary.length
+        index % usableVocabulary.length
         ];
 
       const type =
         EXERCISE_TYPES[
-          Math.floor(
-            Math.random() *
-              EXERCISE_TYPES.length
-          )
+        Math.floor(
+          Math.random() *
+          EXERCISE_TYPES.length
+        )
         ];
 
       return {
@@ -99,6 +109,8 @@ export default function MixedClient({
         type,
       };
     });
+
+    setSession(newSession);
   }, [usableVocabulary]);
 
   const [currentIndex, setCurrentIndex] =
@@ -107,34 +119,47 @@ export default function MixedClient({
   const currentTask =
     session[currentIndex];
 
-  const definitionOptions = useMemo(() => {
+  const [
+    definitionOptions,
+    setDefinitionOptions,
+  ] = useState([]);
+
+  useEffect(() => {
     if (
       !currentTask ||
       currentTask.type !== "definition-word"
     ) {
-      return [];
+      setDefinitionOptions([]);
+      return;
     }
 
-    return getDefinitionOptions(
-      currentTask.item,
-      usableVocabulary
+    setDefinitionOptions(
+      getDefinitionOptions(
+        currentTask.item,
+        usableVocabulary
+      )
     );
-  }, [currentTask, usableVocabulary]);
+  }, [
+    currentTask,
+    usableVocabulary,
+  ]);
 
-  if (session.length === 0) {
+  if (usableVocabulary.length === 0) {
     return (
       <main className={styles.page}>
         <h1>Mixed training</h1>
 
-        <p>
-          No vocabulary available.
-        </p>
+        <p>No vocabulary available.</p>
 
         <Link href="/review/train">
           ← Back to training
         </Link>
       </main>
     );
+  }
+
+  if (session.length === 0) {
+    return null;
   }
 
   return (
@@ -165,7 +190,7 @@ export default function MixedClient({
 
       <section className={styles.questionCard}>
         {currentTask.type ===
-        "definition-word" ? (
+          "definition-word" ? (
           <>
             <span className={styles.taskType}>
               Definition → Word
