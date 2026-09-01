@@ -1,62 +1,204 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+
+import {
+  useMemo,
+  useEffect,
+  useState,
+} from "react";
+
 import { shuffle } from "../_lib/arrayUtils";
+import { useSelectedReviewItems } from "../_hooks/useSelectedReviewItems";
 import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 
 import styles from "./MultipleChoice.module.css";
 
-export default function MultipleChoiceClient({ vocabulary }) {
-  const [items] = useState(vocabulary);
-  const { currentIndex, finished, next } = useTrainingProgress(items.length);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+const ANSWER_TYPES = {
+  definition: {
+    label: "Danish definition",
+    field: "definition_da",
+    prompt:
+      "Choose the correct Danish definition.",
+  },
 
-  const currentItem = items[currentIndex];
+  english: {
+    label: "English",
+    field: "english",
+    prompt:
+      "Choose the correct English translation.",
+  },
 
-  const correctAnswer = currentItem
-    ? {
-        definition: currentItem.definition_da,
+  russian: {
+    label: "Russian",
+    field: "russian",
+    prompt:
+      "Choose the correct Russian translation.",
+  },
+};
+
+export default function MultipleChoiceClient({
+  vocabulary,
+}) {
+  const {
+    items,
+    isLoading,
+  } = useSelectedReviewItems();
+
+  const {
+    currentIndex,
+    finished,
+    next,
+  } = useTrainingProgress(items.length);
+
+  const [
+    selectedAnswer,
+    setSelectedAnswer,
+  ] = useState(null);
+
+  const [options, setOptions] =
+    useState([]);
+
+  /*
+    Only one practice type can be
+    selected at a time.
+  */
+  const [
+    selectedType,
+    setSelectedType,
+  ] = useState("definition");
+
+  const currentItem =
+    items[currentIndex];
+
+  const answerConfig =
+    ANSWER_TYPES[selectedType];
+
+  const correctAnswer =
+    useMemo(() => {
+      if (
+        !currentItem ||
+        !answerConfig
+      ) {
+        return null;
       }
-    : null;
-  const [options, setOptions] = useState([]);
 
+      const value =
+        currentItem[
+          answerConfig.field
+        ];
+
+      if (!value) {
+        return null;
+      }
+
+      return {
+        value,
+      };
+    }, [
+      currentItem,
+      answerConfig,
+    ]);
+
+  /*
+    Build four answer choices:
+    one correct answer and
+    three distractors.
+  */
   useEffect(() => {
-    if (!currentItem || !correctAnswer?.definition) {
+    if (
+      !currentItem ||
+      !answerConfig ||
+      !correctAnswer
+    ) {
       setOptions([]);
       return;
     }
 
-    const wrongAnswers = vocabulary
-      .filter((item) => item.id !== currentItem.id)
-      .map((item) => ({
-        definition: item.definition_da,
-      }))
-      .filter((answer) => answer.definition);
+    const field =
+      answerConfig.field;
 
-    const uniqueWrongAnswers = wrongAnswers.filter(
-      (answer, index, array) =>
-        index ===
-        array.findIndex((item) => item.definition === answer.definition),
+    const wrongAnswers =
+      vocabulary
+        .filter(
+          (item) =>
+            item.term !==
+              currentItem.term &&
+            item[field] &&
+            item[field] !==
+              correctAnswer.value
+        )
+        .map((item) => ({
+          value: item[field],
+        }));
+
+    /*
+      Remove duplicate answers.
+    */
+    const uniqueWrongAnswers =
+      wrongAnswers.filter(
+        (
+          answer,
+          index,
+          array
+        ) =>
+          index ===
+          array.findIndex(
+            (item) =>
+              item.value ===
+              answer.value
+          )
+      );
+
+    const selectedWrongAnswers =
+      shuffle(
+        uniqueWrongAnswers
+      ).slice(0, 3);
+
+    setOptions(
+      shuffle([
+        correctAnswer,
+        ...selectedWrongAnswers,
+      ])
     );
+  }, [
+    currentItem,
+    answerConfig,
+    correctAnswer,
+    vocabulary,
+  ]);
 
-    const selectedWrongAnswers = shuffle(uniqueWrongAnswers).slice(0, 3);
-
-    setOptions(shuffle([correctAnswer, ...selectedWrongAnswers]));
-  }, [currentItem, correctAnswer?.definition, vocabulary]);
+  if (isLoading) {
+    return (
+      <main className={styles.page}>
+        <p>
+          Loading multiple choice…
+        </p>
+      </main>
+    );
+  }
 
   if (items.length === 0) {
     return (
       <main className={styles.page}>
-        <h1>Multiple choice</h1>
-
-        <p>No vocabulary available.</p>
-
-        <Link href="/review">
-          <button type="button" className={styles.backButton}>
-            ← Back to words
-          </button>
+        <Link
+          href="/review"
+          className={styles.backLink}
+        >
+          ← Back to words
         </Link>
+
+        <div
+          className={styles.complete}
+        >
+          <h1>
+            Multiple choice
+          </h1>
+
+          <p>
+            No words selected.
+          </p>
+        </div>
       </main>
     );
   }
@@ -64,27 +206,46 @@ export default function MultipleChoiceClient({ vocabulary }) {
   if (finished) {
     return (
       <main className={styles.page}>
-        <div className={styles.complete}>
-          <h1>Practice complete</h1>
+        <div
+          className={styles.complete}
+        >
+          <h1>
+            Practice complete
+          </h1>
 
           <p>
-            You reviewed {items.length} {items.length === 1 ? "word" : "words"}.
+            You reviewed{" "}
+            {items.length}{" "}
+            {items.length === 1
+              ? "word"
+              : "words"}
+            .
           </p>
 
-          <Link href="/review">
-            <button type="button" className={styles.backButton}>
-              ← Back to words
-            </button>
+          <Link
+            href="/review"
+            className={
+              styles.backLink
+            }
+          >
+            ← Back to words
           </Link>
         </div>
       </main>
     );
   }
 
-  const isAnswered = selectedAnswer !== null;
+  const isAnswered =
+    selectedAnswer !== null;
 
-  function isSameAnswer(answerA, answerB) {
-    return answerA?.definition === answerB?.definition;
+  function isSameAnswer(
+    answerA,
+    answerB
+  ) {
+    return (
+      answerA?.value ===
+      answerB?.value
+    );
   }
 
   function chooseAnswer(answer) {
@@ -97,93 +258,372 @@ export default function MultipleChoiceClient({ vocabulary }) {
 
   function nextQuestion() {
     setSelectedAnswer(null);
+
     next();
+  }
+
+  function selectType(type) {
+    if (type === selectedType) {
+      return;
+    }
+
+    setSelectedType(type);
+    setSelectedAnswer(null);
   }
 
   return (
     <main className={styles.page}>
+      <Link
+        href="/review"
+        className={styles.backLink}
+      >
+        ← Back to words
+      </Link>
+
+      {/* HEADER */}
+
       <div className={styles.header}>
         <div>
-          <span className={styles.eyebrow}>Multiple choice</span>
+          <span
+            className={
+              styles.eyebrow
+            }
+          >
+            Multiple choice
+          </span>
 
-          <h1>Review words</h1>
+          <h1>
+            Review words
+          </h1>
         </div>
 
-        <span className={styles.counter}>
-          {currentIndex + 1} / {items.length}
+        <span
+          className={
+            styles.counter
+          }
+        >
+          {currentIndex + 1} /{" "}
+          {items.length}
         </span>
       </div>
 
-      <div className={styles.progress}>
+      {/* PROGRESS */}
+
+      <div
+        className={styles.progress}
+      >
         <div
-          className={styles.progressFill}
+          className={
+            styles.progressFill
+          }
           style={{
-            width: `${((currentIndex + 1) / items.length) * 100}%`,
+            width: `${
+              ((currentIndex + 1) /
+                items.length) *
+              100
+            }%`,
           }}
         />
       </div>
 
-      <Link href="/review">
-        <button type="button" className={styles.backButton}>
-          ← Back to words
-        </button>
-      </Link>
+      {/* PRACTICE TYPE */}
 
-      <section className={styles.questionCard}>
-        <p className={styles.questionLabel}>Danish</p>
+      <div
+        className={
+          styles.practiceCard
+        }
+      >
+        <span
+          className={
+            styles.filterLabel
+          }
+        >
+          Practice
+        </span>
 
-        <p className={styles.prompt}>Choose the correct Danish definition.</p>
+        <div
+          className={
+            styles.filterOptions
+          }
+        >
+          <label
+            className={`${
+              styles.filterOption
+            } ${
+              selectedType ===
+              "definition"
+                ? styles.filterSelected
+                : styles.filterFaded
+            }`}
+          >
+            <input
+              type="radio"
+              name="practiceType"
+              value="definition"
+              checked={
+                selectedType ===
+                "definition"
+              }
+              onChange={() =>
+                selectType(
+                  "definition"
+                )
+              }
+            />
 
-        <h2 className={styles.word}>{currentItem.term?.toLowerCase()}</h2>
+            <span>
+              Danish definition
+            </span>
+          </label>
 
-        <div className={styles.options}>
-          {options.map((option) => {
-            const isCorrect = isSameAnswer(option, correctAnswer);
+          <label
+            className={`${
+              styles.filterOption
+            } ${
+              selectedType ===
+              "english"
+                ? styles.filterSelected
+                : styles.filterFaded
+            }`}
+          >
+            <input
+              type="radio"
+              name="practiceType"
+              value="english"
+              checked={
+                selectedType ===
+                "english"
+              }
+              onChange={() =>
+                selectType(
+                  "english"
+                )
+              }
+            />
 
-            const isSelected = isSameAnswer(option, selectedAnswer);
+            <span>
+              English
+            </span>
+          </label>
 
-            let optionClass = styles.option;
+          <label
+            className={`${
+              styles.filterOption
+            } ${
+              selectedType ===
+              "russian"
+                ? styles.filterSelected
+                : styles.filterFaded
+            }`}
+          >
+            <input
+              type="radio"
+              name="practiceType"
+              value="russian"
+              checked={
+                selectedType ===
+                "russian"
+              }
+              onChange={() =>
+                selectType(
+                  "russian"
+                )
+              }
+            />
 
-            if (isAnswered && isCorrect) {
-              optionClass += ` ${styles.correct}`;
+            <span>
+              Russian
+            </span>
+          </label>
+        </div>
+      </div>
+
+      {/* QUESTION */}
+
+      <section
+        className={
+          styles.questionCard
+        }
+      >
+        <div
+          className={
+            styles.questionTop
+          }
+        >
+          <span
+            className={
+              styles.questionLabel
             }
+          >
+            Danish
+          </span>
 
-            if (isAnswered && isSelected && !isCorrect) {
-              optionClass += ` ${styles.wrong}`;
-            }
-
-            return (
-              <button
-                key={option.definition}
-                type="button"
-                className={optionClass}
-                onClick={() => chooseAnswer(option)}
-                disabled={isAnswered}
-              >
-                <span className={styles.optionDefinition}>
-                  {option.definition}
-                </span>
-              </button>
-            );
-          })}
+          {currentItem
+            .part_of_speech && (
+            <span
+              className={
+                styles.partOfSpeech
+              }
+            >
+              {
+                currentItem
+                  .part_of_speech
+              }
+            </span>
+          )}
         </div>
 
-        {isAnswered && (
-          <div className={styles.feedback}>
-            {isSameAnswer(selectedAnswer, correctAnswer) ? (
-              <p className={styles.feedbackCorrect}>✓ Correct</p>
-            ) : (
-              <div className={styles.feedbackWrong}>
-                <p>Correct answer:</p>
+        <h2
+          className={styles.word}
+        >
+          {currentItem.term
+            ?.toLowerCase()}
+        </h2>
 
-                <strong>{correctAnswer?.definition}</strong>
+        <p
+          className={styles.prompt}
+        >
+          {answerConfig.prompt}
+        </p>
+
+        {/* ANSWERS */}
+
+        {correctAnswer ? (
+          <div
+            className={
+              styles.options
+            }
+          >
+            {options.map(
+              (
+                option,
+                index
+              ) => {
+                const isCorrect =
+                  isSameAnswer(
+                    option,
+                    correctAnswer
+                  );
+
+                const isSelected =
+                  isSameAnswer(
+                    option,
+                    selectedAnswer
+                  );
+
+                let optionClass =
+                  styles.option;
+
+                if (
+                  isAnswered &&
+                  isCorrect
+                ) {
+                  optionClass +=
+                    ` ${styles.correct}`;
+                }
+
+                if (
+                  isAnswered &&
+                  isSelected &&
+                  !isCorrect
+                ) {
+                  optionClass +=
+                    ` ${styles.wrong}`;
+                }
+
+                return (
+                  <button
+                    key={`${option.value}-${index}`}
+                    type="button"
+                    className={
+                      optionClass
+                    }
+                    onClick={() =>
+                      chooseAnswer(
+                        option
+                      )
+                    }
+                    disabled={
+                      isAnswered
+                    }
+                  >
+                    <span
+                      className={
+                        styles.optionDefinition
+                      }
+                    >
+                      {
+                        option.value
+                      }
+                    </span>
+                  </button>
+                );
+              }
+            )}
+          </div>
+        ) : (
+          <p
+            className={
+              styles.noAnswer
+            }
+          >
+            No{" "}
+            {answerConfig.label.toLowerCase()}{" "}
+            is available for this
+            word.
+          </p>
+        )}
+
+        {/* FEEDBACK */}
+
+        {isAnswered && (
+          <div
+            className={
+              styles.feedback
+            }
+          >
+            {isSameAnswer(
+              selectedAnswer,
+              correctAnswer
+            ) ? (
+              <p
+                className={
+                  styles.feedbackCorrect
+                }
+              >
+                ✓ Correct
+              </p>
+            ) : (
+              <div
+                className={
+                  styles.feedbackWrong
+                }
+              >
+                <p>
+                  Correct{" "}
+                  {
+                    answerConfig.label
+                  }
+                  :
+                </p>
+
+                <strong>
+                  {
+                    correctAnswer
+                      ?.value
+                  }
+                </strong>
               </div>
             )}
 
             <button
               type="button"
-              className={styles.nextButton}
-              onClick={nextQuestion}
+              className={
+                styles.nextButton
+              }
+              onClick={
+                nextQuestion
+              }
             >
               Next →
             </button>
