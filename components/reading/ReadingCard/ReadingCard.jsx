@@ -49,21 +49,25 @@ export default function ReadingCard({
           </p>
         )}
 
-        <div className={styles.actions}>
-          <Link
-            href={vocabularyHref}
-            className={styles.action}
-          >
-            Vocabulary
-          </Link>
+  <div className={styles.actions}>
+  {vocabularyHref && (
+    <Link
+      href={vocabularyHref}
+      className={styles.action}
+    >
+      Vocabulary
+    </Link>
+  )}
 
-          <Link
-            href={conjunctionsHref}
-            className={styles.action}
-          >
-            Conjunctions
-          </Link>
-        </div>
+  {conjunctionsHref && (
+    <Link
+      href={conjunctionsHref}
+      className={styles.action}
+    >
+      Conjunctions
+    </Link>
+  )}
+</div>
       </div>
     </article>
   );

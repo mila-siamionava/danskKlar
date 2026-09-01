@@ -41,6 +41,11 @@
   padding-top: 0.5rem;
 }
 .gapWrapper {
-  display: inline-block;
-  margin-block: 0.5rem;
+  display: inline-grid;
+  grid-template-columns: max-content;
+  grid-template-rows: auto auto;
+  vertical-align: top;
+
+  margin-inline: 0.2rem;
+  margin-block: 0.2rem;
 }

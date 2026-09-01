@@ -15,7 +15,9 @@ import styles from "./GapExercise.module.css";
 
 export default function GapExercise({ exercise }) {
   const [answers, setAnswers] = useState({});
-
+const [activeFeedbackId, setActiveFeedbackId] =
+    useState(null);
+  
   const totalQuestions = exercise.questions.length;
   const answeredCount = Object.keys(answers).length;
 
@@ -54,6 +56,7 @@ export default function GapExercise({ exercise }) {
     if (!question) {
       return;
     }
+    setActiveFeedbackId(questionId);
 
     const previousAnswer = answers[questionId];
     const isFirstAttempt = !previousAnswer;
@@ -191,9 +194,9 @@ export default function GapExercise({ exercise }) {
 
       return (
         <span
-          key={`${questionId}-${index}`}
-          className={styles.gapWrapper}
-        >
+  key={`${questionId}-${index}`}
+  className={styles.gapWrapper}
+>
           <GapSelect
             question={question}
             value={selectedOptionId}
@@ -201,10 +204,12 @@ export default function GapExercise({ exercise }) {
             onChange={handleAnswer}
           />
 
-          <AnswerFeedback
-            question={question}
-            selectedOptionId={selectedOptionId}
-          />
+         {activeFeedbackId === questionId && (
+  <AnswerFeedback
+    question={question}
+    selectedOptionId={selectedOptionId}
+  />
+)}
         </span>
       );
     });

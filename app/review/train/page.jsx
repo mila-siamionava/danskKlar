@@ -99,7 +99,7 @@ export default function ReviewTrainPage() {
       <header className={styles.header}>
         <h1>Choose exercise type</h1>
 
-        <p>Select how you want to practise your words.</p>
+        <p>Select how you want to practice your words.</p>
       </header>
 
       <div className={styles.groups}>
