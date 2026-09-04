@@ -1,6 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import BackLink from "@/components/navigation/BackLink/BackLink";
+import ExerciseHeader from "@/components/exercises/ExerciseHeader/ExerciseHeader";
+import ExerciseProgress from "@/components/exercises/ExerciseProgress/ExerciseProgress";
 
 import {
   useEffect,
@@ -105,9 +107,10 @@ export default function TrueFalseClient({
           No vocabulary items available.
         </p>
 
-        <Link href="/review/train">
-          ← Back to training
-        </Link>
+    <BackLink
+  href="/review/train"
+  label="Back to training"
+/>
       </main>
     );
   }
@@ -123,14 +126,10 @@ export default function TrueFalseClient({
             {usableVocabulary.length} words.
           </p>
 
-          <Link href="/review/train">
-            <button
-              type="button"
-              className={styles.backButton}
-            >
-              ← Back to training
-            </button>
-          </Link>
+          <BackLink
+  href="/review/train"
+  label="Back to training"
+/>
         </div>
       </main>
     );
@@ -163,32 +162,22 @@ export default function TrueFalseClient({
 
   return (
     <main className={styles.page}>
-      <Link href="/review/train">
-        <button
-          type="button"
-          className={styles.backButton}
-        >
-          ← Back to training
-        </button>
-      </Link>
+      <BackLink
+  href="/review/train"
+  label="Back to training"
+/>
 
-      <div className={styles.header}>
-        <div>
-          <span className={styles.eyebrow}>
-            True or false
-          </span>
+      <ExerciseHeader
+  eyebrow="True / False"
+  title="Decide if the meaning is correct"
+  current={currentIndex + 1}
+  total={usableVocabulary.length}
+/>
 
-          <h1>
-            Is this meaning correct?
-          </h1>
-        </div>
-
-        <span className={styles.counter}>
-          {currentIndex + 1} /{" "}
-          {usableVocabulary.length}
-        </span>
-      </div>
-
+<ExerciseProgress
+  current={currentIndex + 1}
+  total={usableVocabulary.length}
+/>
       <section
         className={styles.questionCard}
       >
