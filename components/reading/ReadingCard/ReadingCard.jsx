@@ -1,7 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import Badge from "@/components/ui/Badge/Badge";
-import Image from "next/image";
 import styles from "./ReadingCard.module.css";
 
 export default function ReadingCard({
@@ -11,20 +11,30 @@ export default function ReadingCard({
   duration,
   vocabularyHref,
   conjunctionsHref,
-   imageSrc,
+  imageSrc,
 }) {
+  const primaryHref = vocabularyHref || conjunctionsHref;
+
   return (
     <article className={styles.card}>
+      {primaryHref && (
+        <Link
+          href={primaryHref}
+          className={styles.cardLink}
+          aria-label={`Open ${title}`}
+        />
+      )}
+
       <div className={styles.illustration}>
-  {imageSrc && (
-    <Image
-      src={imageSrc}
-      alt=""
-      fill
-      sizes="80px"
-    />
-  )}
-</div>
+        {imageSrc && (
+          <Image
+            src={imageSrc}
+            alt=""
+            fill
+            sizes="96px"
+          />
+        )}
+      </div>
 
       <div className={styles.content}>
         <div className={styles.topRow}>
@@ -49,25 +59,25 @@ export default function ReadingCard({
           </p>
         )}
 
-  <div className={styles.actions}>
-  {vocabularyHref && (
-    <Link
-      href={vocabularyHref}
-      className={styles.action}
-    >
-      Vocabulary
-    </Link>
-  )}
+        <div className={styles.actions}>
+          {vocabularyHref && (
+            <Link
+              href={vocabularyHref}
+              className={`${styles.action} ${styles.primaryAction}`}
+            >
+              Vocabulary
+            </Link>
+          )}
 
-  {conjunctionsHref && (
-    <Link
-      href={conjunctionsHref}
-      className={styles.action}
-    >
-      Conjunctions
-    </Link>
-  )}
-</div>
+          {conjunctionsHref && (
+            <Link
+              href={conjunctionsHref}
+              className={`${styles.action}  ${styles.secondaryAction}`}
+            >
+              Conjunctions
+            </Link>
+          )}
+        </div>
       </div>
     </article>
   );
