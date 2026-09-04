@@ -4,119 +4,7 @@
 
   margin: 0 auto;
 
-  padding:
-    var(--spacing-lg)
-    var(--spacing-md)
-    var(--spacing-xl);
-}
-
-/* ============================================================
-   BACK LINK
-   ============================================================ */
-
-.backLink {
-  display: inline-flex;
-  align-items: center;
-
-  min-height: var(--control-height-sm);
-
-  margin-bottom: var(--spacing-lg);
-
-  padding:
-    var(--spacing-2xs)
-    var(--spacing-sm);
-
-  border: 1px solid var(--color-border-primary);
-  border-radius: var(--border-radius-sm);
-
-  background: var(--color-background-surface);
-  color: var(--color-text-primary);
-
-  font-size: var(--font-size-label-small);
-  font-weight: var(--font-weight-label-medium);
-
-  text-decoration: none;
-
-  transition:
-    border-color var(--transition-fast),
-    background var(--transition-fast);
-}
-
-.backLink:hover {
-  border-color: var(--color-border-accent);
-
-  background: var(--color-background-soft);
-}
-
-/* ============================================================
-   HEADER
-   ============================================================ */
-
-.header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-
-  gap: var(--spacing-sm);
-}
-
-.eyebrow {
-  display: block;
-
-  margin-bottom: var(--spacing-2xs);
-
-  color: var(--color-text-accent);
-
-  font-size: var(--font-size-label-xsmall);
-  font-weight: 700;
-
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.header h1 {
-  margin: 0;
-
-  color: var(--color-text-primary);
-
-  font-family: var(--font-family-heading);
-  font-size: var(--font-size-headline-small);
-  line-height: var(--line-height-headline-small);
-}
-
-.counter {
-  flex-shrink: 0;
-
-  color: var(--color-text-muted);
-
-  font-size: var(--font-size-label-small);
-  font-weight: var(--font-weight-label-medium);
-}
-
-/* ============================================================
-   PROGRESS
-   ============================================================ */
-
-.progress {
-  height: var(--progress-height);
-
-  margin-top: var(--spacing-sm);
-
-  overflow: hidden;
-
-  border-radius: var(--border-radius-full);
-
-  background: var(--progress-track);
-}
-
-.progressFill {
-  height: 100%;
-
-  border-radius: inherit;
-
-  background: var(--progress-fill);
-
-  transition: width var(--transition-base);
+  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-xl);
 }
 
 /* ============================================================
@@ -153,8 +41,7 @@
 .filterOptions {
   display: grid;
 
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 
   gap: var(--spacing-2xs);
 }
@@ -218,9 +105,7 @@
 
   background: var(--color-background-accent);
 
-  box-shadow:
-    inset 0 0 0 1px
-      var(--color-border-accent);
+  box-shadow: inset 0 0 0 1px var(--color-border-accent);
 }
 
 /* non-selected filters */
@@ -294,11 +179,7 @@
 
   font-family: var(--font-family-heading);
 
-  font-size: clamp(
-    2rem,
-    9vw,
-    var(--font-size-headline-large)
-  );
+  font-size: clamp(2rem, 9vw, var(--font-size-headline-large));
 
   line-height: 1.1;
 }
@@ -308,10 +189,7 @@
    ============================================================ */
 
 .prompt {
-  margin:
-    var(--spacing-sm)
-    0
-    0;
+  margin: var(--spacing-sm) 0 0;
 
   color: var(--color-text-muted);
 
@@ -329,8 +207,7 @@
 .options {
   display: grid;
 
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
   gap: var(--spacing-xs);
 
@@ -460,10 +337,7 @@
 }
 
 .feedbackWrong p {
-  margin:
-    0
-    0
-    var(--spacing-2xs);
+  margin: 0 0 var(--spacing-2xs);
 }
 
 /* ============================================================
@@ -477,29 +351,21 @@
 
   margin-top: var(--spacing-md);
 
-  padding:
-    var(--spacing-xs)
-    var(--button-padding-inline);
+  padding: var(--spacing-xs) var(--button-padding-inline);
 
-  border: 1px solid
-    var(--button-primary-background);
+  border: 1px solid var(--button-primary-background);
 
   border-radius: var(--button-radius);
 
-  background:
-    var(--button-primary-background);
+  background: var(--button-primary-background);
 
-  color:
-    var(--button-primary-text);
+  color: var(--button-primary-text);
 
-  font-family:
-    var(--font-family-body);
+  font-family: var(--font-family-body);
 
-  font-size:
-    var(--font-size-label-medium);
+  font-size: var(--font-size-label-medium);
 
-  font-weight:
-    var(--font-weight-label-large);
+  font-weight: var(--font-weight-label-large);
 
   cursor: pointer;
 
@@ -509,11 +375,9 @@
 }
 
 .nextButton:hover {
-  border-color:
-    var(--button-primary-background-hover);
+  border-color: var(--button-primary-background-hover);
 
-  background:
-    var(--button-primary-background-hover);
+  background: var(--button-primary-background-hover);
 }
 
 /* ============================================================
@@ -521,9 +385,7 @@
    ============================================================ */
 
 .complete {
-  padding:
-    var(--spacing-2xl)
-    var(--spacing-md);
+  padding: var(--spacing-2xl) var(--spacing-md);
 
   color: var(--color-text-primary);
 
@@ -531,65 +393,12 @@
 }
 
 /* ============================================================
-   LEGACY BACK BUTTON
-   ============================================================ */
-
-.backButton {
-  min-height: var(--control-height-md);
-
-  margin-top: var(--spacing-lg);
-
-  padding:
-    var(--spacing-xs)
-    var(--spacing-md);
-
-  border: 1px solid var(--color-border-primary);
-  border-radius: var(--border-radius-sm);
-
-  background: var(--color-background-surface);
-  color: var(--color-text-primary);
-
-  font-family: var(--font-family-body);
-
-  font-size: var(--font-size-label-medium);
-  font-weight: var(--font-weight-label-medium);
-
-  cursor: pointer;
-
-  transition:
-    border-color var(--transition-fast),
-    background var(--transition-fast);
-}
-
-.backButton:hover {
-  border-color: var(--color-border-accent);
-
-  background: var(--color-background-soft);
-}
-
-/* ============================================================
    TABLET / DESKTOP
    ============================================================ */
 
-@media (min-width: 35rem) {
+@media (min-width: 37.5rem) {
   .page {
-    padding:
-      var(--spacing-xl)
-      var(--spacing-lg)
-      var(--spacing-2xl);
-  }
-
-  .header h1 {
-    font-size: var(--font-size-headline-medium);
-    line-height: var(--line-height-headline-medium);
-  }
-
-  .eyebrow {
-    font-size: var(--font-size-label-small);
-  }
-
-  .counter {
-    font-size: var(--font-size-label-medium);
+    padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-2xl);
   }
 
   .practiceCard {
@@ -601,9 +410,7 @@
   }
 
   .filterOption {
-    padding:
-      var(--spacing-2xs)
-      var(--spacing-xs);
+    padding: var(--spacing-2xs) var(--spacing-xs);
 
     font-size: var(--font-size-label-small);
   }
