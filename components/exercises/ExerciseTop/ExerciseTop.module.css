@@ -1,0 +1,22 @@
+.top {
+  width: min(
+    100%,
+    var(--reading-max-width)
+  );
+
+  margin-inline: auto;
+}
+
+.instructions {
+  margin:
+    var(--spacing-md)
+    0
+    var(--spacing-lg);
+
+  color: var(--color-text-muted);
+
+  font-size:
+    var(--font-size-body-small);
+
+  line-height: 1.5;
+}
