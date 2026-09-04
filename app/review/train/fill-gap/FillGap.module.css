@@ -4,73 +4,6 @@
   padding: 32px 20px 60px;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 20px;
-}
-
-.eyebrow {
-  display: block;
-  margin-bottom: 6px;
-
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-
-  color: #777;
-}
-
-.header h1 {
-  margin: 0;
-}
-
-.counter {
-  font-weight: 700;
-  color: #666;
-}
-
-.progress {
-  height: 6px;
-  margin-top: 18px;
-
-  overflow: hidden;
-
-  border-radius: 999px;
-  background: #e8e8e8;
-}
-
-.progressFill {
-  height: 100%;
-  border-radius: inherit;
-  background: #222;
-
-  transition: width 0.25s ease;
-}
-
-.backButton {
-  min-height: 46px;
-  margin-top: 24px;
-  padding: 10px 16px;
-
-  border: 1px solid #ccc;
-  border-radius: 12px;
-
-  background: white;
-
-  font-size: 14px;
-  font-weight: 600;
-
-  cursor: pointer;
-}
-
-.backButton:hover {
-  border-color: #888;
-  background: #fafafa;
-}
-
 .questionCard {
   margin-top: 28px;
   padding: 30px;
@@ -250,11 +183,6 @@
   .page {
     padding: 24px 16px 40px;
   }
-
-  .header {
-    align-items: flex-start;
-  }
-
   .questionCard {
     padding: 22px 18px;
   }

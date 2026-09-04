@@ -1,6 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import BackLink from "@/components/navigation/BackLink/BackLink";
+import ExerciseHeader from "@/components/exercises/ExerciseHeader/ExerciseHeader";
+import ExerciseProgress from "@/components/exercises/ExerciseProgress/ExerciseProgress";
 import { useEffect, useState } from "react";
 
 import {
@@ -212,14 +214,10 @@ export default function FillGapClient({ vocabulary }) {
           sentences were found.
         </p>
 
-        <Link href="/review/train">
-          <button
-            type="button"
-            className={styles.backButton}
-          >
-            ← Back to training
-          </button>
-        </Link>
+    <BackLink
+  href="/review/train"
+  label="Back to training"
+/>
       </main>
     );
   }
@@ -236,15 +234,10 @@ export default function FillGapClient({ vocabulary }) {
               ? "gap"
               : "gaps"}.
           </p>
-
-          <Link href="/review/train">
-            <button
-              type="button"
-              className={styles.backButton}
-            >
-              ← Back to training
-            </button>
-          </Link>
+<BackLink
+  href="/review/train"
+  label="Back to training"
+/>
         </div>
       </main>
     );
@@ -331,41 +324,21 @@ export default function FillGapClient({ vocabulary }) {
 
   return (
     <main className={styles.page}>
-      <Link href="/review/train">
-        <button
-          type="button"
-          className={styles.backButton}
-        >
-          ← Back to training
-        </button>
-      </Link>
+     <BackLink
+  href="/review/train"
+  label="Back to training"
+/>
+      <ExerciseHeader
+  eyebrow="Fill the gap"
+  title="Choose the expression that fits the sentence"
+  current={currentIndex + 1}
+  total={items.length}
+/>
 
-      <div className={styles.header}>
-        <div>
-          <span className={styles.eyebrow}>
-            Fill in the gap
-          </span>
-
-          <h1>Review words</h1>
-        </div>
-
-        <span className={styles.counter}>
-          {currentIndex + 1} / {items.length}
-        </span>
-      </div>
-
-      <div className={styles.progress}>
-        <div
-          className={styles.progressFill}
-          style={{
-            width: `${
-              ((currentIndex + 1) /
-                items.length) *
-              100
-            }%`,
-          }}
-        />
-      </div>
+<ExerciseProgress
+  current={currentIndex + 1}
+  total={items.length}
+/>
 
       <section className={styles.questionCard}>
         <p className={styles.questionLabel}>
