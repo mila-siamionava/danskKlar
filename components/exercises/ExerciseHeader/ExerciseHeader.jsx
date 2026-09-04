@@ -8,24 +8,26 @@ export default function ExerciseHeader({
 }) {
   return (
     <header className={styles.header}>
-      <div>
-        {eyebrow && (
-          <span className={styles.eyebrow}>
-            {eyebrow}
-          </span>
-        )}
-
-        <h1>{title}</h1>
-      </div>
-
-      {current && total && (
-        <span
-          className={styles.counter}
-          aria-label={`Question ${current} of ${total}`}
-        >
-          {current} / {total}
+      {eyebrow && (
+        <span className={styles.eyebrow}>
+          {eyebrow}
         </span>
       )}
+
+      <div className={styles.titleRow}>
+        <h1 className={styles.title}>
+          {title}
+        </h1>
+
+        {current && total && (
+          <span
+            className={styles.counter}
+            aria-label={`Question ${current} of ${total}`}
+          >
+            {current} / {total}
+          </span>
+        )}
+      </div>
     </header>
   );
 }
