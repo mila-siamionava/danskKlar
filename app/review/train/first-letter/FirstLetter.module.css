@@ -3,39 +3,6 @@
   margin: 0 auto;
   padding: 32px 20px 60px;
 }
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 20px;
-}
-
-.eyebrow {
-  display: block;
-  margin-bottom: 8px;
-
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-
-  color: #777;
-}
-
-.header h1 {
-  margin: 0;
-
-  font-size: clamp(36px, 6vw, 52px);
-  line-height: 1.1;
-}
-
-.counter {
-  font-size: 18px;
-  font-weight: 700;
-  color: #666;
-}
-
 .questionCard {
   margin-top: 28px;
   padding: 30px;
@@ -100,8 +67,7 @@
 
   border-color: #777;
 
-  box-shadow:
-    0 0 0 3px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
 }
 
 .checkButton {
@@ -194,34 +160,9 @@
   background: #333;
 }
 
-.backButton {
-  min-height: 46px;
-  margin-bottom: 18px;
-  padding: 10px 16px;
-
-  border: 1px solid #ccc;
-  border-radius: 12px;
-
-  background: white;
-
-  font-size: 14px;
-  font-weight: 600;
-
-  cursor: pointer;
-}
-
-.backButton:hover {
-  border-color: #888;
-  background: #fafafa;
-}
-
 @media (max-width: 560px) {
   .page {
     padding: 24px 16px 40px;
-  }
-
-  .header {
-    align-items: flex-start;
   }
 
   .questionCard {
