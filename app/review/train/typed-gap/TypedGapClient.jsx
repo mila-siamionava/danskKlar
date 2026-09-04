@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import BackLink from "@/components/navigation/BackLink/BackLink";
+
 import { useState } from "react";
 
 import { createGapSentence } from "../_lib/sentenceUtils";
@@ -53,31 +54,37 @@ export default function TypedGapClient({ vocabulary }) {
 
   if (items.length === 0) {
     return (
-      <main className={styles.page}>
-        <h1>Type the missing word</h1>
+      <main>
+        <div className="mobilePage">
+          <BackLink
+            href="/review/train"
+            label="Back to training"
+          />
 
-        <p>No usable example sentences were found.</p>
+          <h1>Type the missing word</h1>
 
-        <Link href="/review/train">
-          ← Back to training
-        </Link>
+          <p>No usable example sentences were found.</p>
+        </div>
       </main>
     );
   }
 
   if (finished) {
     return (
-      <main className={styles.page}>
-        <h1>Practice complete</h1>
+      <main>
+        <div className="mobilePage">
+          <BackLink
+            href="/review/train"
+            label="Back to training"
+          />
 
-        <p>
-          You completed {items.length}{" "}
-          {items.length === 1 ? "gap" : "gaps"}.
-        </p>
+          <h1>Practice complete</h1>
 
-        <Link href="/review/train">
-          ← Back to training
-        </Link>
+          <p>
+            You completed {items.length}{" "}
+            {items.length === 1 ? "gap" : "gaps"}.
+          </p>
+        </div>
       </main>
     );
   }
@@ -111,103 +118,104 @@ export default function TypedGapClient({ vocabulary }) {
   }
 
   return (
-    <main className={styles.page}>
-      <Link href="/review/train">
-        <button
-          type="button"
-          className={styles.backButton}
-        >
-          ← Back to training
-        </button>
-      </Link>
+    <main>
+      <div className="mobilePage">
+        <BackLink
+          href="/review/train"
+          label="Back to training"
+        />
 
-      <div className={styles.header}>
-        <div>
-          <span className={styles.eyebrow}>
-            Typed fill gap
+        <div className={styles.header}>
+          <div>
+            <span className={styles.eyebrow}>
+              Typed fill gap
+            </span>
+
+            <h1>Type the missing expression</h1>
+          </div>
+
+          <span className={styles.counter}>
+            {currentIndex + 1} / {items.length}
           </span>
-
-          <h1>Type the missing expression</h1>
         </div>
 
-        <span className={styles.counter}>
-          {currentIndex + 1} / {items.length}
-        </span>
-      </div>
+        <section className={styles.questionCard}>
+          <p className={styles.sentence}>
+            {sentenceParts[0]}
 
-      <section className={styles.questionCard}>
-        <p className={styles.sentence}>
-          {sentenceParts[0]}
+            <span
+              className={styles.gap}
+              aria-hidden="true"
+            />
 
-          <span className={styles.gap}></span>
+            {sentenceParts[1]}
+          </p>
 
-          {sentenceParts[1]}
-        </p>
-
-        <form
-          className={styles.form}
-          onSubmit={checkAnswer}
-        >
-          <label
-            className={styles.inputLabel}
-            htmlFor="typed-answer"
+          <form
+            className={styles.form}
+            onSubmit={checkAnswer}
           >
-            Your answer
-          </label>
-
-          <input
-            id="typed-answer"
-            className={styles.input}
-            value={answer}
-            onChange={(event) =>
-              setAnswer(event.target.value)
-            }
-            disabled={checked}
-            autoComplete="off"
-          />
-
-          {!checked && (
-            <button
-              type="submit"
-              className={styles.checkButton}
+            <label
+              className={styles.inputLabel}
+              htmlFor="typed-answer"
             >
-              Check
-            </button>
+              Your answer
+            </label>
+
+            <input
+              id="typed-answer"
+              className={styles.input}
+              value={answer}
+              onChange={(event) =>
+                setAnswer(event.target.value)
+              }
+              disabled={checked}
+              autoComplete="off"
+            />
+
+            {!checked && (
+              <button
+                type="submit"
+                className={styles.checkButton}
+              >
+                Check
+              </button>
+            )}
+          </form>
+
+          {checked && (
+            <div className={styles.feedback}>
+              {isCorrect ? (
+                <p className={styles.correct}>
+                  ✓ Correct
+                </p>
+              ) : (
+                <div className={styles.wrong}>
+                  <p>Correct answer:</p>
+
+                  <strong>
+                    {currentItem.target}
+                  </strong>
+                </div>
+              )}
+
+              {currentItem.definition_da && (
+                <p className={styles.definition}>
+                  {currentItem.definition_da}
+                </p>
+              )}
+
+              <button
+                type="button"
+                className={styles.nextButton}
+                onClick={nextQuestion}
+              >
+                Next →
+              </button>
+            </div>
           )}
-        </form>
-
-        {checked && (
-          <div className={styles.feedback}>
-            {isCorrect ? (
-              <p className={styles.correct}>
-                ✓ Correct
-              </p>
-            ) : (
-              <div className={styles.wrong}>
-                <p>Correct answer:</p>
-
-                <strong>
-                  {currentItem.target}
-                </strong>
-              </div>
-            )}
-
-            {currentItem.definition_da && (
-              <p className={styles.definition}>
-                {currentItem.definition_da}
-              </p>
-            )}
-
-            <button
-              type="button"
-              className={styles.nextButton}
-              onClick={nextQuestion}
-            >
-              Next →
-            </button>
-          </div>
-        )}
-      </section>
+        </section>
+      </div>
     </main>
   );
 }

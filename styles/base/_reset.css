@@ -52,6 +52,19 @@ textarea {
   font: inherit;
 }
 
+input,
+textarea,
+select,
+button {
+  max-width: 100%;
+}
+
+input,
+textarea,
+select {
+  font-size: max(1.6rem, 16px);
+}
+
 button {
   cursor: pointer;
 }

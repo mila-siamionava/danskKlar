@@ -1,27 +1,31 @@
 import styles from "./ExerciseHeader.module.css";
 
 export default function ExerciseHeader({
+  eyebrow,
   title,
-  instructions,
-  className = "",
+  current,
+  total,
 }) {
-  const classes = [styles.header, className]
-    .filter(Boolean)
-    .join(" ");
-
   return (
-    <header className={classes}>
-      <div className={styles.content}>
-        <h1 className={styles.title}>
-          {title}
-        </h1>
-
-        {instructions && (
-          <p className={styles.instructions}>
-            {instructions}
-          </p>
+    <header className={styles.header}>
+      <div>
+        {eyebrow && (
+          <span className={styles.eyebrow}>
+            {eyebrow}
+          </span>
         )}
+
+        <h1>{title}</h1>
       </div>
+
+      {current && total && (
+        <span
+          className={styles.counter}
+          aria-label={`Question ${current} of ${total}`}
+        >
+          {current} / {total}
+        </span>
+      )}
     </header>
   );
 }

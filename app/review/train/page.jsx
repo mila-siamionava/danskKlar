@@ -1,30 +1,43 @@
 import BackLink from "@/components/navigation/BackLink/BackLink";
-import {
-  Eye,
-  RotateCcw,
-  PencilLine,
-  Brain,
-} from "lucide-react";
+import { Eye, RotateCcw, PencilLine, Brain } from "lucide-react";
 
 import ExerciseModeGroup from "../_components/ExerciseModeGroup/ExerciseModeGroup";
 import styles from "./ReviewTrain.module.css";
 
 const trainingGroups = [
   {
-    title: "Recognition",
-         icon: Eye,
+    title: "Memory",
+    icon: Brain,
     modes: [
       {
-        href: "/review/train/multiple-choice",
-        title: "Multiple choice",
-        description: "Choose the correct answer.",
-        icon: "☷",
+        href: "/review/train/flashcards",
+        title: "Flashcards",
+        description: "Review words and their meanings.",
+        icon: "▣",
       },
+      {
+        href: "/review/train/match-pairs",
+        title: "Match pairs",
+        description: "Match each expression with its translation.",
+        icon: "▱▱",
+      },
+    ],
+  },
+  {
+    title: "Recognition",
+    icon: Eye,
+    modes: [
       {
         href: "/review/train/true-false",
         title: "True or false",
         description: "Decide whether the meaning is correct.",
         icon: "✓✕",
+      },
+      {
+        href: "/review/train/multiple-choice",
+        title: "Multiple choice",
+        description: "Choose the correct meaning.",
+        icon: "☷",
       },
       {
         href: "/review/train/definition-word",
@@ -36,7 +49,7 @@ const trainingGroups = [
   },
   {
     title: "Recall",
-   icon: RotateCcw,
+    icon: RotateCcw,
     modes: [
       {
         href: "/review/train/fill-gap",
@@ -47,7 +60,7 @@ const trainingGroups = [
       {
         href: "/review/train/first-letter",
         title: "First-letter hint",
-        description: "Complete the expression using the first-letter hint.",
+        description: "Recall the expression using the first-letter hint.",
         icon: "A_D",
       },
       {
@@ -60,7 +73,7 @@ const trainingGroups = [
   },
   {
     title: "Production",
-      icon: PencilLine,
+    icon: PencilLine,
     modes: [
       {
         href: "/review/train/build-sentence",
@@ -70,47 +83,31 @@ const trainingGroups = [
       },
     ],
   },
-  {
-    title: "Memory",
-     icon: Brain,
-    modes: [
-      {
-        href: "/review/train/match-pairs",
-        title: "Match pairs",
-        description: "Match each expression with its translation.",
-        icon: "▱▱",
-      },
-      {
-        href: "/review/train/flashcards",
-        title: "Flashcards",
-        description: "Review words one by one.",
-        icon: "▣",
-      },
-    ],
-  },
 ];
 
 export default function ReviewTrainPage() {
   return (
-    <main className={styles.page}>
-      <div className={styles.back}>
-        <BackLink href="/review" label="Back to review" />
-      </div>
-      <header className={styles.header}>
-        <h1>Choose exercise type</h1>
+    <main>
+      <div className="mobilePage">
+        <div className={styles.back}>
+          <BackLink href="/review" label="Back to review" />
+        </div>
 
-        <p>Select how you want to practice your words.</p>
-      </header>
+        <header className={styles.header}>
+          <h1>Choose exercise type</h1>
+          <p>Practice from memory to active use.</p>
+        </header>
 
-      <div className={styles.groups}>
-        {trainingGroups.map((group) => (
-          <ExerciseModeGroup
-            key={group.title}
-            title={group.title}
-            modes={group.modes}
-            icon={group.icon}
-          />
-        ))}
+        <div className={styles.groups}>
+          {trainingGroups.map((group) => (
+            <ExerciseModeGroup
+              key={group.title}
+              title={group.title}
+              modes={group.modes}
+              icon={group.icon}
+            />
+          ))}
+        </div>
       </div>
     </main>
   );
