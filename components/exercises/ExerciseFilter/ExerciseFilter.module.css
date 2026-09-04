@@ -1,0 +1,127 @@
+.card {
+  margin-top: var(--spacing-md);
+
+  padding: var(--spacing-sm);
+
+  border: var(--surface-border);
+  border-radius: var(--border-radius-sm);
+
+  background: var(--surface-background);
+
+  box-shadow: var(--surface-shadow);
+}
+
+.label {
+  display: block;
+
+  margin-bottom: var(--spacing-xs);
+
+  color: var(--color-text-accent);
+
+  font-size: var(--font-size-label-xsmall);
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.options {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: var(--spacing-2xs);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: var(--spacing-2xs);
+
+  min-width: 0;
+  min-height: var(--control-height-sm);
+
+  padding: var(--spacing-2xs);
+
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--border-radius-xs);
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-label-xsmall);
+  font-weight: var(--font-weight-label-small);
+
+  cursor: pointer;
+
+  transition:
+    opacity var(--transition-fast),
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.option input {
+  flex-shrink: 0;
+
+  width: 1.3rem;
+  height: 1.3rem;
+
+  margin: 0;
+
+  accent-color: var(--color-focus);
+
+  cursor: pointer;
+}
+
+.option span {
+  min-width: 0;
+
+  line-height: 1.2;
+
+  text-align: center;
+}
+
+.selected {
+  opacity: 1;
+
+  border-color: var(--color-border-accent);
+
+  background: var(--color-background-accent);
+
+  box-shadow:
+    inset 0 0 0 1px
+      var(--color-border-accent);
+}
+
+.faded {
+  opacity: 0.4;
+
+  background: var(--color-background-soft);
+}
+
+.faded:hover {
+  opacity: 0.7;
+
+  border-color: var(--color-border-accent);
+}
+
+@media (min-width: 37.5em) {
+  .card {
+    padding: var(--spacing-md);
+  }
+
+  .options {
+    gap: var(--spacing-xs);
+  }
+
+  .option {
+    padding:
+      var(--spacing-2xs)
+      var(--spacing-xs);
+
+    font-size: var(--font-size-label-small);
+  }
+}

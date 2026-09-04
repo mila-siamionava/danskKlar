@@ -1,7 +1,9 @@
 "use client";
+
 import BackLink from "@/components/navigation/BackLink/BackLink";
 import ExerciseHeader from "@/components/exercises/ExerciseHeader/ExerciseHeader";
 import ExerciseProgress from "@/components/exercises/ExerciseProgress/ExerciseProgress";
+import ExerciseFilter from "@/components/exercises/ExerciseFilter/ExerciseFilter";
 
 import { useMemo, useEffect, useState } from "react";
 
@@ -157,7 +159,6 @@ export default function MultipleChoiceClient({ vocabulary }) {
 
   function nextQuestion() {
     setSelectedAnswer(null);
-
     next();
   }
 
@@ -186,67 +187,29 @@ export default function MultipleChoiceClient({ vocabulary }) {
       {/* PROGRESS */}
 
       <ExerciseProgress current={currentIndex + 1} total={items.length} />
+
       {/* PRACTICE TYPE */}
 
-      <div className={styles.practiceCard}>
-        <span className={styles.filterLabel}>Practice</span>
-
-        <div className={styles.filterOptions}>
-          <label
-            className={`${styles.filterOption} ${
-              selectedType === "definition"
-                ? styles.filterSelected
-                : styles.filterFaded
-            }`}
-          >
-            <input
-              type="radio"
-              name="practiceType"
-              value="definition"
-              checked={selectedType === "definition"}
-              onChange={() => selectType("definition")}
-            />
-
-            <span>Danish definition</span>
-          </label>
-
-          <label
-            className={`${styles.filterOption} ${
-              selectedType === "english"
-                ? styles.filterSelected
-                : styles.filterFaded
-            }`}
-          >
-            <input
-              type="radio"
-              name="practiceType"
-              value="english"
-              checked={selectedType === "english"}
-              onChange={() => selectType("english")}
-            />
-
-            <span>English</span>
-          </label>
-
-          <label
-            className={`${styles.filterOption} ${
-              selectedType === "russian"
-                ? styles.filterSelected
-                : styles.filterFaded
-            }`}
-          >
-            <input
-              type="radio"
-              name="practiceType"
-              value="russian"
-              checked={selectedType === "russian"}
-              onChange={() => selectType("russian")}
-            />
-
-            <span>Russian</span>
-          </label>
-        </div>
-      </div>
+      <ExerciseFilter
+        label="Practice"
+        name="practiceType"
+        options={[
+          {
+            value: "definition",
+            label: "Danish definition",
+          },
+          {
+            value: "english",
+            label: "English",
+          },
+          {
+            value: "russian",
+            label: "Russian",
+          },
+        ]}
+        value={selectedType}
+        onChange={selectType}
+      />
 
       {/* QUESTION */}
 
