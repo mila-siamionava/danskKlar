@@ -1,101 +1,107 @@
 .page {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 32px 20px 60px;
+  width: min(100%, var(--reading-max-width));
+  margin-inline: auto;
 }
 
 .questionCard {
-  margin-top: 28px;
-  padding: 30px;
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
 
-  border: 1px solid #ddd;
-  border-radius: 20px;
+  border: var(--surface-border);
+  border-radius: var(--surface-radius);
 
-  background: white;
+  background: var(--surface-background);
 
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.04),
-    0 12px 28px rgba(0, 0, 0, 0.07);
+  box-shadow: var(--surface-shadow);
 }
 
 .questionLabel {
-  margin: 0 0 20px;
+  margin: 0 0 var(--spacing-md);
 
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--font-size-label-medium);
+  line-height: var(--line-height-label-medium);
+  font-weight: var(--font-weight-label-medium);
 
-  color: #777;
+  color: var(--color-text-muted);
 }
 
 .sentence {
   margin: 0;
 
-  font-size: 22px;
-  line-height: 1.65;
+  font-size: var(--font-size-body-medium);
+  line-height: 1.7;
   font-weight: 500;
+
+  color: var(--color-text-primary);
 }
 
 .gap {
   display: inline-block;
-  min-width: 120px;
 
-  margin: 0 8px;
-  padding: 2px 8px;
+  min-width: 9rem;
 
-  border-bottom: 2px solid #333;
+  margin: 0 var(--spacing-xs);
+  padding: var(--spacing-3xs) var(--spacing-xs);
+
+  border-bottom: 2px solid var(--color-text-primary);
 
   text-align: center;
   font-weight: 700;
 }
 
 .hint {
-  margin-top: 22px;
-  padding: 14px 16px;
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
 
-  border-radius: 14px;
+  border-radius: var(--border-radius-sm);
 
-  background: #f7f7f7;
+  background: var(--color-background-soft);
 }
 
 .hint p {
-  margin: 4px 0;
+  margin: var(--spacing-2xs) 0;
 
-  font-size: 15px;
-  line-height: 1.45;
+  font-size: var(--font-size-body-small);
+  line-height: var(--line-height-body-small);
+
+  color: var(--color-text-secondary);
 }
 
 .options {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: 1fr;
 
-  margin-top: 24px;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
 }
 
 .option {
-  min-height: 64px;
-  padding: 14px 18px;
+  min-height: 5.6rem;
 
-  border: 1px solid #ddd;
-  border-radius: 14px;
+  padding: var(--spacing-sm) var(--spacing-md);
 
-  background: white;
+  border: 1px solid var(--answer-border);
+  border-radius: var(--border-radius-sm);
 
-  font-size: 17px;
+  background: var(--answer-background);
+  color: var(--answer-text);
+
+  font-size: var(--font-size-body-medium);
   line-height: 1.35;
   font-weight: 600;
 
   cursor: pointer;
 
   transition:
-    border-color 0.15s ease,
-    background 0.15s ease,
-    transform 0.15s ease;
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .option:hover:not(:disabled) {
-  border-color: #999;
-  background: #fafafa;
+  border-color: var(--color-border-secondary);
+  background: var(--color-background-soft);
+
   transform: translateY(-1px);
 }
 
@@ -104,103 +110,112 @@
 }
 
 .correct {
-  border-color: #2f7d32;
-  background: #eef8ef;
+  border-color: var(--answer-correct-border);
+  background: var(--answer-correct-background);
+  color: var(--answer-correct-text);
 }
 
 .wrong {
-  border-color: #b33a3a;
-  background: #fff0f0;
+  border-color: var(--answer-wrong-border);
+  background: var(--answer-wrong-background);
+  color: var(--answer-wrong-text);
 }
 
 .feedback {
-  margin-top: 26px;
-  padding-top: 22px;
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
 
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--color-border-primary);
 }
 
 .feedbackCorrect {
   margin: 0;
 
-  font-size: 17px;
+  font-size: var(--font-size-body-medium);
   font-weight: 700;
 
-  color: #2f7d32;
+  color: var(--color-success);
 }
 
 .feedbackWrong {
   margin: 0;
 
-  font-size: 16px;
+  font-size: var(--font-size-body-medium);
 
-  color: #9c2f2f;
+  color: var(--color-error);
 }
 
 .explanation {
-  margin-top: 18px;
-  padding: 16px 18px;
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
 
-  border-radius: 14px;
+  border-radius: var(--border-radius-sm);
 
-  background: #f7f7f7;
+  background: var(--color-background-soft);
 }
 
 .explanation p {
-  margin: 6px 0;
+  margin: var(--spacing-2xs) 0;
 
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: var(--font-size-body-small);
+  line-height: var(--line-height-body-small);
+
+  color: var(--color-text-secondary);
 }
 
 .nextButton {
-  min-height: 48px;
-  margin-top: 18px;
-  padding: 12px 22px;
+  min-height: var(--button-height);
 
-  border: 1px solid #222;
-  border-radius: 12px;
+  margin-top: var(--spacing-md);
+  padding-inline: var(--button-padding-inline);
 
-  background: #222;
-  color: white;
+  border: 1px solid var(--button-primary-background);
+  border-radius: var(--button-radius);
 
-  font-size: 15px;
-  font-weight: 650;
+  background: var(--button-primary-background);
+  color: var(--button-primary-text);
+
+  font-size: var(--font-size-label-medium);
+  font-weight: 700;
 
   cursor: pointer;
+
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
 .nextButton:hover {
-  background: #333;
+  border-color: var(--button-primary-background-hover);
+  background: var(--button-primary-background-hover);
 }
 
 .complete {
-  padding: 70px 20px;
+  padding: var(--spacing-3xl) var(--spacing-md);
+
   text-align: center;
+  color: var(--color-text-primary);
 }
 
-@media (max-width: 560px) {
-  .page {
-    padding: 24px 16px 40px;
-  }
+@media (min-width: 37.5em) {
   .questionCard {
-    padding: 22px 18px;
+    padding: var(--spacing-xl);
   }
 
   .sentence {
-    font-size: 19px;
+    font-size: var(--font-size-body-large);
   }
 
   .gap {
-    min-width: 90px;
+    min-width: 12rem;
   }
 
   .options {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .option {
-    min-height: 56px;
-    font-size: 16px;
+    min-height: 6.4rem;
+    font-size: var(--font-size-body-large);
   }
 }
