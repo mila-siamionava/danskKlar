@@ -1,54 +1,62 @@
 :root {
   /* ============================================================
-     COLORS
+     COLORS — BASE PALETTE
      ============================================================ */
 
-  /* Base */
   --color-white: #ffffff;
   --color-black: #1d1d1d;
 
-  /* Brand / palette */
+  /* Warm palette */
   --color-cream: #f7f4ee;
   --color-cream-soft: #fbf9f5;
   --color-beige: #d8c7a6;
   --color-beige-dark: #bda57a;
 
+  /* ============================================================
+     COLORS — SEMANTIC / THEME TOKENS
+     ============================================================ */
+
   /* Text */
-  --color-text-primary: #1d1d1d;
+  --color-text-primary: var(--color-black);
   --color-text-secondary: #4e4a45;
   --color-text-muted: #78736c;
-  --color-text-inverse: #ffffff;
+  --color-text-inverse: var(--color-white);
   --color-text-accent: #8a6e43;
+  --color-text-on-accent: var(--color-black);
 
   /* Backgrounds */
-  --color-background-page: #f7f4ee;
-  --color-background-surface: #ffffff;
-  --color-background-soft: #fbf9f5;
-  --color-background-accent: #d8c7a6;
+  --color-background-page: var(--color-cream);
+  --color-background-surface: var(--color-white);
+  --color-background-soft: var(--color-cream-soft);
+
+  /* Accent */
+  --color-accent: var(--color-beige);
+  --color-accent-hover: var(--color-beige-dark);
 
   /* Borders */
   --color-border-primary: #e7e1d7;
   --color-border-secondary: #d7cfc2;
-  --color-border-accent: #d8c7a6;
+  --color-border-accent: var(--color-accent);
 
   /* Focus */
---color-focus: #765c32;
+  --color-focus: #765c32;
 
   /* Success */
   --color-success: #48735a;
   --color-success-background: #eaf3ed;
   --color-success-border: #bdd3c4;
-  --color-text-success: #48735a;
 
   /* Error */
   --color-error: #a84c4c;
   --color-error-background: #f8eaea;
   --color-error-border: #e2bcbc;
-  --color-text-error: #a84c4c;
 
   /* Warning */
   --color-warning: #b27d32;
   --color-warning-background: #f8f0df;
+
+  /* Progress */
+  --color-progress-track: #e8e2d8;
 
   /* ============================================================
      TYPOGRAPHY
@@ -100,9 +108,10 @@
   --line-height-label-small: 1.6rem;
   --font-weight-label-small: 500;
 
-    --font-size-label-xsmall: 0.8rem;
+  --font-size-label-xsmall: 0.8rem;
   --line-height-label-xsmall: 1.3rem;
   --font-weight-label-xsmall: 400;
+
   /* ============================================================
      SPACING
      ============================================================ */
@@ -132,14 +141,11 @@
      SHADOWS
      ============================================================ */
 
-  --shadow-small:
-    0 2px 8px rgba(29, 29, 29, 0.05);
+  --shadow-small: 0 2px 8px rgba(29, 29, 29, 0.05);
 
-  --shadow-card:
-    0 6px 20px rgba(29, 29, 29, 0.07);
+  --shadow-card: 0 6px 20px rgba(29, 29, 29, 0.07);
 
-  --shadow-elevated:
-    0 10px 30px rgba(29, 29, 29, 0.1);
+  --shadow-elevated: 0 10px 30px rgba(29, 29, 29, 0.1);
 
   /* ============================================================
      LAYOUT
@@ -150,7 +156,6 @@
   --page-max-width: 118rem;
   --content-max-width: 104rem;
   --reading-max-width: 72rem;
-
 
   --app-header-height: 6.4rem;
   --bottom-nav-height: 7.2rem;
@@ -171,15 +176,15 @@
      BUTTONS
      ============================================================ */
 
-  --button-primary-background: var(--color-beige);
-  --button-primary-background-hover: var(--color-beige-dark);
-  --button-primary-text: var(--color-black);
+  --button-primary-background: var(--color-accent);
+  --button-primary-background-hover: var(--color-accent-hover);
+  --button-primary-text: var(--color-text-on-accent);
 
-  --button-secondary-background: var(--color-white);
-  --button-secondary-text: var(--color-black);
+  --button-secondary-background: var(--color-background-surface);
+  --button-secondary-text: var(--color-text-primary);
   --button-secondary-border: var(--color-border-primary);
 
-  --button-height: 5.2rem;
+  --button-height: var(--control-height-lg);
   --button-padding-inline: 2rem;
   --button-radius: var(--border-radius-sm);
 
@@ -196,20 +201,24 @@
      EXERCISE UI
      ============================================================ */
 
-  --gap-background: var(--color-white);
-  --gap-border: var(--color-border-primary);
-  --gap-text: var(--color-text-primary);
+  /* Neutral answer */
+  --answer-background: var(--color-background-surface);
+  --answer-border: var(--color-border-primary);
+  --answer-text: var(--color-text-primary);
 
-  --gap-correct-background: var(--color-success-background);
-  --gap-correct-border: var(--color-success-border);
-  --gap-correct-text: var(--color-text-success);
+  /* Correct answer */
+  --answer-correct-background: var(--color-success-background);
+  --answer-correct-border: var(--color-success-border);
+  --answer-correct-text: var(--color-success);
 
-  --gap-wrong-background: var(--color-error-background);
-  --gap-wrong-border: var(--color-error-border);
-  --gap-wrong-text: var(--color-text-error);
+  /* Wrong answer */
+  --answer-wrong-background: var(--color-error-background);
+  --answer-wrong-border: var(--color-error-border);
+  --answer-wrong-text: var(--color-error);
 
-  --progress-track: #e8e2d8;
-  --progress-fill: var(--color-beige);
+  /* Progress */
+  --progress-track: var(--color-progress-track);
+  --progress-fill: var(--color-accent);
   --progress-height: 0.6rem;
 
   /* ============================================================
@@ -226,7 +235,6 @@
 
   --opacity-disabled: 0.4;
 
-
   /* ============================================================
      Z-INDEX
      ============================================================ */
@@ -234,5 +242,59 @@
   --z-header: 20;
   --z-bottom-nav: 30;
   --z-overlay: 100;
-  
+}
+
+/* ==============================================================
+   WARM PALETTE — DARK APPEARANCE
+   ============================================================== */
+
+[data-theme="warm"][data-appearance="dark"] {
+  /* Text */
+  --color-text-primary: #f3eee6;
+  --color-text-secondary: #d0c7bb;
+  --color-text-muted: #a99f92;
+  --color-text-inverse: #201d19;
+  --color-text-accent: #dcc49d;
+  --color-text-on-accent: #211d18;
+
+  /* Backgrounds */
+  --color-background-page: #1c1a17;
+  --color-background-surface: #26221e;
+  --color-background-soft: #302a24;
+
+  /* Accent */
+  --color-accent: #d8c7a6;
+  --color-accent-hover: #e3d3b4;
+
+  /* Borders */
+  --color-border-primary: #403930;
+  --color-border-secondary: #51483d;
+  --color-border-accent: var(--color-accent);
+
+  /* Focus */
+  --color-focus: #e2cda8;
+
+  /* Success */
+  --color-success: #9fc9ad;
+  --color-success-background: #24352a;
+  --color-success-border: #3d5a47;
+
+  /* Error */
+  --color-error: #e1a1a1;
+  --color-error-background: #3a2424;
+  --color-error-border: #654040;
+
+  /* Warning */
+  --color-warning: #dfb36f;
+  --color-warning-background: #3a3020;
+
+  /* Progress */
+  --color-progress-track: #403930;
+
+  /* Shadows */
+  --shadow-small: 0 2px 8px rgba(0, 0, 0, 0.22);
+
+  --shadow-card: 0 6px 20px rgba(0, 0, 0, 0.28);
+
+  --shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.34);
 }

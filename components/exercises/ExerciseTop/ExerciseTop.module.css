@@ -9,14 +9,13 @@
 
 .instructions {
   margin:
-    var(--spacing-md)
+    var(--spacing-sm)
     0
     var(--spacing-lg);
 
   color: var(--color-text-muted);
 
-  font-size:
-    var(--font-size-body-small);
-
-  line-height: 1.5;
+  font-size: var(--font-size-label-small);
+  font-weight: 400;
+  line-height: 1.45;
 }
