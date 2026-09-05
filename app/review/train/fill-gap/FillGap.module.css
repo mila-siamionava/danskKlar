@@ -18,21 +18,21 @@
 .questionLabel {
   margin: 0 0 var(--spacing-md);
 
+  color: var(--color-text-muted);
+
   font-size: var(--font-size-label-medium);
   line-height: var(--line-height-label-medium);
   font-weight: var(--font-weight-label-medium);
-
-  color: var(--color-text-muted);
 }
 
 .sentence {
   margin: 0;
 
+  color: var(--color-text-primary);
+
   font-size: var(--font-size-body-medium);
   line-height: 1.7;
   font-weight: 500;
-
-  color: var(--color-text-primary);
 }
 
 .gap {
@@ -40,7 +40,7 @@
 
   min-width: 9rem;
 
-  margin: 0 var(--spacing-xs);
+  margin-inline: var(--spacing-xs);
   padding: var(--spacing-3xs) var(--spacing-xs);
 
   border-bottom: 2px solid var(--color-text-primary);
@@ -61,10 +61,10 @@
 .hint p {
   margin: var(--spacing-2xs) 0;
 
+  color: var(--color-text-secondary);
+
   font-size: var(--font-size-body-small);
   line-height: var(--line-height-body-small);
-
-  color: var(--color-text-secondary);
 }
 
 .options {
@@ -72,6 +72,7 @@
   grid-template-columns: 1fr;
 
   gap: var(--spacing-sm);
+
   margin-top: var(--spacing-lg);
 }
 
@@ -111,12 +112,14 @@
 
 .correct {
   border-color: var(--answer-correct-border);
+
   background: var(--answer-correct-background);
   color: var(--answer-correct-text);
 }
 
 .wrong {
   border-color: var(--answer-wrong-border);
+
   background: var(--answer-wrong-background);
   color: var(--answer-wrong-text);
 }
@@ -131,18 +134,18 @@
 .feedbackCorrect {
   margin: 0;
 
+  color: var(--color-success);
+
   font-size: var(--font-size-body-medium);
   font-weight: 700;
-
-  color: var(--color-success);
 }
 
 .feedbackWrong {
   margin: 0;
 
-  font-size: var(--font-size-body-medium);
-
   color: var(--color-error);
+
+  font-size: var(--font-size-body-medium);
 }
 
 .explanation {
@@ -157,10 +160,10 @@
 .explanation p {
   margin: var(--spacing-2xs) 0;
 
+  color: var(--color-text-secondary);
+
   font-size: var(--font-size-body-small);
   line-height: var(--line-height-body-small);
-
-  color: var(--color-text-secondary);
 }
 
 .nextButton {
@@ -193,8 +196,9 @@
 .complete {
   padding: var(--spacing-3xl) var(--spacing-md);
 
-  text-align: center;
   color: var(--color-text-primary);
+
+  text-align: center;
 }
 
 @media (min-width: 37.5em) {
