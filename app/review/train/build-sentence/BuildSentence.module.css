@@ -1,36 +1,33 @@
 .page {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 32px 20px 60px;
+  width: min(100%, var(--reading-max-width));
+  margin-inline: auto;
 }
 
-
-
 .questionCard {
-  padding: 28px;
+  padding: var(--spacing-md);
 
-  border: 1px solid #ddd;
-  border-radius: 20px;
+  border: var(--surface-border);
+  border-radius: var(--surface-radius);
 
-  background: white;
+  background: var(--surface-background);
 
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.04),
-    0 12px 28px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--surface-shadow);
 }
 
 .words {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
 
-  min-height: 120px;
-  padding: 18px;
+  gap: var(--spacing-xs);
 
-  border: 1px dashed #ccc;
-  border-radius: 14px;
+  min-height: 12rem;
 
-  background: #fafafa;
+  padding: var(--spacing-sm);
+
+  border: 1px dashed var(--color-border-secondary);
+  border-radius: var(--border-radius-sm);
+
+  background: var(--color-background-soft);
 }
 
 .word {
@@ -38,18 +35,18 @@
   align-items: center;
   justify-content: center;
 
-  min-height: 44px;
+  min-height: var(--control-height-md);
 
-  padding: 9px 14px;
+  padding: var(--spacing-xs) var(--spacing-sm);
 
-  border: 1px solid #d7d7d7;
-  border-radius: 10px;
+  border: 1px solid var(--answer-border);
+  border-radius: var(--border-radius-xs);
 
-  background: white;
-  color: inherit;
+  background: var(--answer-background);
+  color: var(--answer-text);
 
-  font-family: inherit;
-  font-size: 16px;
+  font-size: var(--font-size-body-small);
+  line-height: var(--line-height-body-small);
   font-weight: 600;
 
   cursor: grab;
@@ -57,22 +54,20 @@
   user-select: none;
   touch-action: none;
 
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-small);
 
   transition:
-    transform 0.15s ease,
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
+    transform var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .word:hover {
-  border-color: #999;
+  border-color: var(--color-border-secondary);
 
   transform: translateY(-1px);
 
-  box-shadow:
-    0 3px 8px rgba(0, 0, 0, 0.07);
+  box-shadow: var(--shadow-card);
 }
 
 .word:active {
@@ -80,125 +75,131 @@
 
   transform: scale(0.98);
 }
+
 .dragging {
   opacity: 0.7;
+
   cursor: grabbing;
+
   z-index: 2;
 }
-.checkButton {
-  min-height: 46px;
-  margin-top: 20px;
-  padding: 10px 20px;
 
-  border: 1px solid #222;
-  border-radius: 12px;
+.checkButton,
+.nextButton {
+  width: 100%;
+  min-height: var(--button-height);
 
-  background: #222;
-  color: white;
+  padding-inline: var(--button-padding-inline);
 
-  font-size: 14px;
+  border: 1px solid var(--button-primary-background);
+  border-radius: var(--button-radius);
+
+  background: var(--button-primary-background);
+  color: var(--button-primary-text);
+
+  font-size: var(--font-size-label-medium);
   font-weight: 700;
 
   cursor: pointer;
+
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
-.checkButton:hover {
-  background: #333;
+.checkButton {
+  margin-top: var(--spacing-lg);
+}
+
+.nextButton {
+  margin-top: var(--spacing-md);
+}
+
+.checkButton:hover:not(:disabled),
+.nextButton:hover {
+  border-color: var(--button-primary-background-hover);
+  background: var(--button-primary-background-hover);
 }
 
 .checkButton:disabled {
-  opacity: 0.4;
+  opacity: var(--opacity-disabled);
+
   cursor: default;
 }
 
 .feedback {
-  margin-top: 22px;
-  padding-top: 18px;
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
 
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--color-border-primary);
 }
 
 .correct {
   margin: 0;
 
-  font-size: 17px;
-  font-weight: 700;
+  color: var(--color-success);
 
-  color: #2f7d32;
+  font-size: var(--font-size-body-medium);
+  font-weight: 700;
 }
 
 .wrong {
-  padding: 14px 16px;
+  padding: var(--spacing-sm) var(--spacing-md);
 
-  border-radius: 12px;
+  border: 1px solid var(--answer-wrong-border);
+  border-radius: var(--border-radius-sm);
 
-  background: #fff2f2;
+  background: var(--answer-wrong-background);
+  color: var(--answer-wrong-text);
 }
 
 .wrong p {
-  margin: 0 0 5px;
+  margin: 0 0 var(--spacing-2xs);
 
-  color: #9c2f2f;
+  color: var(--answer-wrong-text);
+
+  font-size: var(--font-size-body-small);
+  line-height: var(--line-height-body-small);
 }
 
 .wrong strong {
+  color: var(--color-text-primary);
+
   line-height: 1.5;
 }
 
-.nextButton {
-  min-height: 46px;
-  margin-top: 18px;
-  padding: 10px 20px;
-
-  border: 1px solid #222;
-  border-radius: 12px;
-
-  background: #222;
-  color: white;
-
-  font-size: 14px;
-  font-weight: 700;
-
-  cursor: pointer;
-}
-
-.nextButton:hover {
-  background: #333;
-}
-
 .complete {
-  padding: 70px 20px;
+  padding: var(--spacing-3xl) var(--spacing-md);
+
+  color: var(--color-text-primary);
 
   text-align: center;
 }
 
 .complete h1 {
-  margin-bottom: 10px;
+  margin-bottom: var(--spacing-xs);
 }
 
 .complete p {
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
-@media (max-width: 560px) {
-  .page {
-    padding: 24px 16px 40px;
-  }
-
+@media (min-width: 37.5em) {
   .questionCard {
-    padding: 22px 18px;
+    padding: var(--spacing-xl);
   }
 
   .words {
-    padding: 14px;
+    padding: var(--spacing-md);
   }
 
   .word {
-    font-size: 15px;
+    font-size: var(--font-size-body-medium);
+    line-height: var(--line-height-body-medium);
   }
 
   .checkButton,
   .nextButton {
-    width: 100%;
+    width: auto;
   }
 }

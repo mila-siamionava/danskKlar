@@ -1,10 +1,6 @@
 .page {
-  width: 100%;
-  max-width: var(--reading-max-width);
-
-  margin: 0 auto;
-
-  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-xl);
+  width: min(100%, var(--reading-max-width));
+  margin-inline: auto;
 }
 
 /* ============================================================
@@ -13,15 +9,14 @@
 
 .questionCard {
   margin-top: var(--spacing-lg);
-
   padding: var(--spacing-md);
 
   border: var(--surface-border);
-  border-radius: var(--border-radius-md);
+  border-radius: var(--surface-radius);
 
   background: var(--surface-background);
 
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--surface-shadow);
 }
 
 .questionTop {
@@ -39,8 +34,9 @@
 
   color: var(--color-text-accent);
 
-  font-size: var(--font-size-label-xsmall);
-  font-weight: 700;
+  font-size: var(--font-size-label-small);
+  line-height: var(--line-height-label-small);
+  font-weight: var(--font-weight-label-small);
 
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -51,8 +47,9 @@
 
   color: var(--color-text-accent);
 
-  font-size: var(--font-size-label-xsmall);
-  font-weight: var(--font-weight-label-medium);
+  font-size: var(--font-size-label-small);
+  line-height: var(--line-height-label-small);
+  font-weight: var(--font-weight-label-small);
 
   text-transform: lowercase;
 }
@@ -63,10 +60,9 @@
   color: var(--color-text-primary);
 
   font-family: var(--font-family-heading);
-
-  font-size: clamp(2rem, 9vw, var(--font-size-headline-large));
-
-  line-height: 1.1;
+  font-size: var(--font-size-headline-small);
+  line-height: var(--line-height-headline-small);
+  font-weight: var(--font-weight-headline-small);
 }
 
 /* ============================================================
@@ -84,19 +80,15 @@
 
 /* ============================================================
    ANSWER GRID
-
-   MOBILE FIRST:
-   ALWAYS 2 COLUMNS → 4 OPTIONS = 2 × 2
    ============================================================ */
 
 .options {
   display: grid;
+  grid-template-columns: 1fr;
 
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-sm);
 
-  gap: var(--spacing-xs);
-
-  margin-top: var(--spacing-md);
+  margin-top: var(--spacing-lg);
 }
 
 .option {
@@ -104,18 +96,17 @@
   align-items: center;
   justify-content: center;
 
-  min-width: 0;
   width: 100%;
+  min-width: 0;
+  min-height: 5.6rem;
 
-  min-height: 7rem;
+  padding: var(--spacing-sm) var(--spacing-md);
 
-  padding: var(--spacing-sm);
-
-  border: 1px solid var(--color-border-primary);
+  border: 1px solid var(--answer-border);
   border-radius: var(--border-radius-sm);
 
-  background: var(--color-background-surface);
-  color: var(--color-text-primary);
+  background: var(--answer-background);
+  color: var(--answer-text);
 
   text-align: center;
 
@@ -128,9 +119,10 @@
 }
 
 .option:hover:not(:disabled) {
-  border-color: var(--color-border-accent);
-
+  border-color: var(--color-border-secondary);
   background: var(--color-background-soft);
+
+  transform: translateY(-1px);
 }
 
 .option:active:not(:disabled) {
@@ -146,9 +138,8 @@
   overflow-wrap: anywhere;
 
   font-size: var(--font-size-body-small);
-  font-weight: 600;
-
   line-height: var(--line-height-body-small);
+  font-weight: 600;
 }
 
 .optionRussian {
@@ -163,15 +154,17 @@
    ============================================================ */
 
 .correct {
-  border-color: var(--color-success-border);
+  border-color: var(--answer-correct-border);
 
-  background: var(--color-success-background);
+  background: var(--answer-correct-background);
+  color: var(--answer-correct-text);
 }
 
 .wrong {
-  border-color: var(--color-error-border);
+  border-color: var(--answer-wrong-border);
 
-  background: var(--color-error-background);
+  background: var(--answer-wrong-background);
+  color: var(--answer-wrong-text);
 }
 
 /* ============================================================
@@ -180,13 +173,11 @@
 
 .noAnswer {
   margin-top: var(--spacing-md);
-
   padding: var(--spacing-sm);
 
   border-radius: var(--border-radius-sm);
 
   background: var(--color-background-soft);
-
   color: var(--color-text-muted);
 
   font-size: var(--font-size-body-small);
@@ -198,8 +189,7 @@
    ============================================================ */
 
 .feedback {
-  margin-top: var(--spacing-md);
-
+  margin-top: var(--spacing-lg);
   padding-top: var(--spacing-md);
 
   border-top: 1px solid var(--color-border-primary);
@@ -210,14 +200,14 @@
 
   color: var(--color-success);
 
-  font-size: var(--font-size-body-small);
+  font-size: var(--font-size-body-medium);
   font-weight: 700;
 }
 
 .feedbackWrong {
   color: var(--color-error);
 
-  font-size: var(--font-size-body-small);
+  font-size: var(--font-size-body-medium);
   font-weight: 600;
 }
 
@@ -231,26 +221,19 @@
 
 .nextButton {
   width: 100%;
-
-  min-height: var(--control-height-md);
+  min-height: var(--button-height);
 
   margin-top: var(--spacing-md);
-
-  padding: var(--spacing-xs) var(--button-padding-inline);
+  padding-inline: var(--button-padding-inline);
 
   border: 1px solid var(--button-primary-background);
-
   border-radius: var(--button-radius);
 
   background: var(--button-primary-background);
-
   color: var(--button-primary-text);
 
-  font-family: var(--font-family-body);
-
   font-size: var(--font-size-label-medium);
-
-  font-weight: var(--font-weight-label-large);
+  font-weight: 700;
 
   cursor: pointer;
 
@@ -261,7 +244,6 @@
 
 .nextButton:hover {
   border-color: var(--button-primary-background-hover);
-
   background: var(--button-primary-background-hover);
 }
 
@@ -270,7 +252,7 @@
    ============================================================ */
 
 .complete {
-  padding: var(--spacing-2xl) var(--spacing-md);
+  padding: var(--spacing-3xl) var(--spacing-md);
 
   color: var(--color-text-primary);
 
@@ -282,43 +264,21 @@
    ============================================================ */
 
 @media (min-width: 37.5em) {
-  .page {
-    padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-2xl);
-  }
-
   .questionCard {
-    margin-top: var(--spacing-xl);
-
     padding: var(--spacing-xl);
-
-    border-radius: var(--border-radius-lg);
-  }
-
-  .questionLabel,
-  .partOfSpeech {
-    font-size: var(--font-size-label-small);
   }
 
   .word {
-    font-size: clamp(
-      var(--font-size-headline-small),
-      6vw,
-      var(--font-size-headline-xl)
-    );
+    font-size: var(--font-size-headline-medium);
+    line-height: var(--line-height-headline-medium);
   }
 
   .options {
-    gap: var(--spacing-sm);
-
-    margin-top: var(--spacing-lg);
+    grid-template-columns: 1fr 1fr;
   }
 
   .option {
-    min-height: 8rem;
-
-    padding: var(--spacing-md);
-
-    border-radius: var(--border-radius-md);
+    min-height: 6.4rem;
   }
 
   .optionDefinition {

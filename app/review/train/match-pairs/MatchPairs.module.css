@@ -1,7 +1,6 @@
 .page {
-  max-width: 920px;
-  margin: 0 auto;
-  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-2xl);
+  width: min(100%, 92rem);
+  margin-inline: auto;
 }
 
 .instructions {
@@ -10,7 +9,7 @@
   color: var(--color-text-muted);
 
   font-size: var(--font-size-body-small);
-  line-height: 1.5;
+  line-height: var(--line-height-body-small);
 
   text-align: center;
 }
@@ -18,12 +17,14 @@
 .game {
   display: grid;
   grid-template-columns: 1fr;
+
   gap: var(--spacing-lg);
 }
 
 .column {
   display: flex;
   flex-direction: column;
+
   gap: var(--spacing-sm);
 }
 
@@ -33,7 +34,8 @@
   color: var(--color-text-muted);
 
   font-size: var(--font-size-label-medium);
-  font-weight: 700;
+  line-height: var(--line-height-label-medium);
+  font-weight: var(--font-weight-label-medium);
 
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -44,16 +46,15 @@
 
   padding: var(--spacing-md);
 
-  border: 1px solid var(--color-border-primary);
+  border: 1px solid var(--answer-border);
   border-radius: var(--border-radius-md);
 
-  background: var(--color-background-surface);
-  color: var(--color-text-primary);
+  background: var(--answer-background);
+  color: var(--answer-text);
 
-  font-family: inherit;
   font-size: var(--font-size-body-medium);
+  line-height: var(--line-height-body-medium);
   font-weight: 600;
-  line-height: 1.4;
 
   text-align: left;
 
@@ -67,21 +68,26 @@
 }
 
 .card:hover:not(:disabled) {
-  border-color: var(--color-border-accent);
+  border-color: var(--color-border-secondary);
   background: var(--color-background-soft);
+
   transform: translateY(-1px);
 }
 
 .selected {
   border-color: var(--color-border-accent);
+
   background: var(--color-background-soft);
+
   box-shadow: var(--shadow-small);
 }
 
 .matched {
-  border-color: var(--color-success-border);
-  background: var(--color-success-background);
-  color: var(--color-success);
+  border-color: var(--answer-correct-border);
+
+  background: var(--answer-correct-background);
+  color: var(--answer-correct-text);
+
   opacity: 1;
 }
 
@@ -92,43 +98,44 @@
 .translation {
   display: flex;
   flex-direction: column;
+
   gap: var(--spacing-2xs);
 }
 
 .english {
   font-size: var(--font-size-body-medium);
-  font-weight: 650;
-  line-height: 1.35;
+  line-height: var(--line-height-body-medium);
+  font-weight: 600;
 }
 
 .russian {
   color: var(--color-text-secondary);
 
   font-size: var(--font-size-body-small);
+  line-height: var(--line-height-body-small);
   font-weight: 500;
-  line-height: 1.35;
 }
 
 .wrong {
   margin: var(--spacing-lg) 0 0;
-
   padding: var(--spacing-sm) var(--spacing-md);
 
-  border: 1px solid var(--color-error-border);
+  border: 1px solid var(--answer-wrong-border);
   border-radius: var(--border-radius-sm);
 
-  background: var(--color-error-background);
-  color: var(--color-error);
+  background: var(--answer-wrong-background);
+  color: var(--answer-wrong-text);
 
+  font-size: var(--font-size-body-medium);
   font-weight: 700;
 }
 
 .nextButton {
-  min-height: var(--control-height-md);
+  width: 100%;
+  min-height: var(--button-height);
 
   margin-top: var(--spacing-lg);
-
-  padding: var(--spacing-sm) var(--spacing-lg);
+  padding-inline: var(--button-padding-inline);
 
   border: 1px solid var(--button-primary-background);
   border-radius: var(--button-radius);
@@ -136,7 +143,6 @@
   background: var(--button-primary-background);
   color: var(--button-primary-text);
 
-  font-family: inherit;
   font-size: var(--font-size-label-medium);
   font-weight: 700;
 
@@ -154,6 +160,9 @@
 
 .complete {
   padding: var(--spacing-3xl) var(--spacing-md);
+
+  color: var(--color-text-primary);
+
   text-align: center;
 }
 
@@ -166,15 +175,15 @@
 }
 
 @media (min-width: 37.5em) {
-  .page {
-    padding: var(--spacing-xl) var(--spacing-md) var(--spacing-3xl);
-  }
-
   .game {
     grid-template-columns: 1fr 1fr;
   }
 
   .card {
     min-height: 8.6rem;
+  }
+
+  .nextButton {
+    width: auto;
   }
 }
