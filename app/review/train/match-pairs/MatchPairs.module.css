@@ -81,7 +81,7 @@
 .matched {
   border-color: var(--color-success-border);
   background: var(--color-success-background);
-  color: var(--color-text-success);
+  color: var(--color-success);
   opacity: 1;
 }
 
@@ -118,7 +118,7 @@
   border-radius: var(--border-radius-sm);
 
   background: var(--color-error-background);
-  color: var(--color-text-error);
+  color: var(--color-error);
 
   font-weight: 700;
 }

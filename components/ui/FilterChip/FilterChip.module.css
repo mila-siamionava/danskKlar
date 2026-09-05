@@ -32,7 +32,7 @@
 }
 
 .active {
-  background: var(--color-background-accent);
+  background: var(--color-accent);
   border-color: var(--color-border-accent);
 
   color: var(--color-text-primary);

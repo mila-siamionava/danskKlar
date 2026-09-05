@@ -110,7 +110,7 @@
 .correct {
   margin: 0;
 
-  color: var(--color-text-success);
+  color: var(--color-success);
 
   font-size: var(--font-size-body-medium);
   font-weight: 700;
@@ -127,7 +127,7 @@
 .wrong p {
   margin: 0 0 var(--spacing-2xs);
 
-  color: var(--color-text-error);
+  color: var(--color-error);
 }
 
 .definition {

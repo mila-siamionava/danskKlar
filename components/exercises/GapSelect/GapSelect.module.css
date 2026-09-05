@@ -46,15 +46,15 @@
 }
 
 .correct {
-  background-color: var(--gap-correct-background);
-  color: var(--gap-correct-text);
-  border-color: var(--gap-correct-border);
+  background-color: var(--answer-correct-background);
+  color: var(--answer-correct-text);
+  border-color: var(--answer-correct-border);
 }
 
 .wrong {
-  background-color: var(--gap-wrong-background);
-  color: var(--gap-wrong-text);
-  border-color: var(--gap-wrong-border);
+  background-color: var(--answer-wrong-background);
+  color: var(--answer-wrong-text);
+  border-color: var(--answer-wrong-border);
 }
 
 .select:disabled {
