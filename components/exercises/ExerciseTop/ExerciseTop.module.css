@@ -1,7 +1,6 @@
 .top {
   width: min(100%, var(--reading-max-width));
-  margin-inline: auto;
-}
+  }
 
 .topRow {
   display: grid;

@@ -1,24 +1,36 @@
 "use client";
 
-import BackLink from "@/components/navigation/BackLink/BackLink";
+import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
 import ExerciseTop from "@/components/exercises/ExerciseTop/ExerciseTop";
+
 import { useEffect, useState } from "react";
 
-import { shuffle } from "../_lib/arrayUtils";
 import { useTrainingProgress } from "../_hooks/useTrainingProgress";
+import { shuffle } from "../_lib/arrayUtils";
 
 import styles from "./DefinitionWord.module.css";
 
-export default function DefinitionWordClient({ vocabulary }) {
+export default function DefinitionWordClient({
+  vocabulary,
+}) {
   const [items] = useState(vocabulary);
 
-  const { currentIndex, finished, next } = useTrainingProgress(items.length);
+  const {
+    currentIndex,
+    finished,
+    next,
+  } = useTrainingProgress(items.length);
 
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [
+    selectedAnswer,
+    setSelectedAnswer,
+  ] = useState(null);
 
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] =
+    useState([]);
 
-  const currentItem = items[currentIndex];
+  const currentItem =
+    items[currentIndex];
 
   const correctAnswer = currentItem
     ? {
@@ -28,61 +40,107 @@ export default function DefinitionWordClient({ vocabulary }) {
     : null;
 
   useEffect(() => {
-    if (!currentItem || !correctAnswer?.term) {
+    if (
+      !currentItem ||
+      !correctAnswer?.term
+    ) {
       setOptions([]);
       return;
     }
 
-    const wrongAnswers = vocabulary
-      .filter((item) => item.id !== currentItem.id)
-      .map((item) => ({
-        id: item.id,
-        term: item.term,
-      }))
-      .filter((answer) => answer.term);
+    const wrongAnswers =
+      vocabulary
+        .filter(
+          (item) =>
+            item.id !==
+            currentItem.id,
+        )
+        .map((item) => ({
+          id: item.id,
+          term: item.term,
+        }))
+        .filter(
+          (answer) =>
+            answer.term,
+        );
 
-    const uniqueWrongAnswers = wrongAnswers.filter(
-      (answer, index, array) =>
-        index === array.findIndex((item) => item.term === answer.term),
+    const uniqueWrongAnswers =
+      wrongAnswers.filter(
+        (
+          answer,
+          index,
+          array,
+        ) =>
+          index ===
+          array.findIndex(
+            (item) =>
+              item.term ===
+              answer.term,
+          ),
+      );
+
+    const selectedWrongAnswers =
+      shuffle(
+        uniqueWrongAnswers,
+      ).slice(0, 3);
+
+    setOptions(
+      shuffle([
+        correctAnswer,
+        ...selectedWrongAnswers,
+      ]),
     );
-
-    const selectedWrongAnswers = shuffle(uniqueWrongAnswers).slice(0, 3);
-
-    setOptions(shuffle([correctAnswer, ...selectedWrongAnswers]));
-  }, [currentItem, correctAnswer?.term, vocabulary]);
+  }, [
+    currentItem,
+    correctAnswer?.term,
+    vocabulary,
+  ]);
 
   if (items.length === 0) {
     return (
-      <main className={styles.page}>
-        <BackLink href="/review/train" label="Back to training" />
-
-        <h1>Definition → Word</h1>
-
-        <p>No vocabulary available.</p>
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Definition → Word"
+          title="No vocabulary available"
+          message="Choose some words in Review before starting this exercise."
+          actionLabel="Back to training"
+          actionHref="/review/train"
+        />
       </main>
     );
   }
 
   if (finished) {
     return (
-      <main className={styles.page}>
-        <BackLink href="/review/train" label="Back to training" />
-
-        <div className={styles.complete}>
-          <h1>Practice complete</h1>
-
-          <p>
-            You reviewed {items.length} {items.length === 1 ? "word" : "words"}.
-          </p>
-        </div>
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Definition → Word"
+          title="Practice complete"
+          message={`You reviewed ${
+            items.length
+          } ${
+            items.length === 1
+              ? "word"
+              : "words"
+          }.`}
+          actionLabel="Back to training"
+          actionHref="/review/train"
+        />
       </main>
     );
   }
 
-  const isAnswered = selectedAnswer !== null;
+  const isAnswered =
+    selectedAnswer !== null;
 
-  function isSameAnswer(answerA, answerB) {
-    return answerA?.id === answerB?.id;
+  function isSameAnswer(
+    answerA,
+    answerB,
+  ) {
+    return (
+      answerA?.id ===
+      answerB?.id
+    );
   }
 
   function chooseAnswer(answer) {
@@ -99,7 +157,7 @@ export default function DefinitionWordClient({ vocabulary }) {
   }
 
   return (
-    <main className={styles.page}>
+    <main className="mobilePage">
       <ExerciseTop
         eyebrow="Definition → Word"
         title="Choose the word that matches the definition"
@@ -107,61 +165,147 @@ export default function DefinitionWordClient({ vocabulary }) {
         total={items.length}
         instructions="Choose the correct Danish word or expression."
       />
-      <section className={styles.questionCard}>
-        <p className={styles.questionLabel}>Danish definition</p>
 
-        <p className={styles.definition}>{currentItem.definition_da}</p>
+      <section
+        className={
+          styles.questionCard
+        }
+      >
+        <p
+          className={
+            styles.questionLabel
+          }
+        >
+          Danish definition
+        </p>
 
-        <div className={styles.options}>
-          {options.map((option) => {
-            const isCorrect = isSameAnswer(option, correctAnswer);
+        <p
+          className={
+            styles.definition
+          }
+        >
+          {
+            currentItem.definition_da
+          }
+        </p>
 
-            const isSelected = isSameAnswer(option, selectedAnswer);
+        <div
+          className={
+            styles.options
+          }
+        >
+          {options.map(
+            (option) => {
+              const isCorrect =
+                isSameAnswer(
+                  option,
+                  correctAnswer,
+                );
 
-            let optionClass = styles.option;
+              const isSelected =
+                isSameAnswer(
+                  option,
+                  selectedAnswer,
+                );
 
-            if (isAnswered && isCorrect) {
-              optionClass += ` ${styles.correct}`;
-            }
+              let optionClass =
+                styles.option;
 
-            if (isAnswered && isSelected && !isCorrect) {
-              optionClass += ` ${styles.wrong}`;
-            }
+              if (
+                isAnswered &&
+                isCorrect
+              ) {
+                optionClass +=
+                  ` ${styles.correct}`;
+              }
 
-            return (
-              <button
-                key={option.id}
-                type="button"
-                className={optionClass}
-                onClick={() => chooseAnswer(option)}
-                disabled={isAnswered}
-              >
-                {option.term}
-              </button>
-            );
-          })}
+              if (
+                isAnswered &&
+                isSelected &&
+                !isCorrect
+              ) {
+                optionClass +=
+                  ` ${styles.wrong}`;
+              }
+
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  className={
+                    optionClass
+                  }
+                  onClick={() =>
+                    chooseAnswer(
+                      option,
+                    )
+                  }
+                  disabled={
+                    isAnswered
+                  }
+                >
+                  {option.term}
+                </button>
+              );
+            },
+          )}
         </div>
 
         {isAnswered && (
-          <div className={styles.feedback}>
-            {isSameAnswer(selectedAnswer, correctAnswer) ? (
-              <p className={styles.feedbackCorrect}>✓ Correct</p>
+          <div
+            className={
+              styles.feedback
+            }
+          >
+            {isSameAnswer(
+              selectedAnswer,
+              correctAnswer,
+            ) ? (
+              <p
+                className={
+                  styles.feedbackCorrect
+                }
+              >
+                ✓ Correct
+              </p>
             ) : (
-              <div className={styles.feedbackWrong}>
-                <p>Correct answer:</p>
+              <div
+                className={
+                  styles.feedbackWrong
+                }
+              >
+                <p>
+                  Correct answer:
+                </p>
 
-                <strong>{correctAnswer?.term}</strong>
+                <strong>
+                  {
+                    correctAnswer?.term
+                  }
+                </strong>
               </div>
             )}
 
             {currentItem.example && (
-              <p className={styles.example}>{currentItem.example}</p>
+              <p
+                className={
+                  styles.example
+                }
+              >
+                {
+                  currentItem.example
+                }
+              </p>
             )}
 
             <button
               type="button"
-              className={styles.nextButton}
-              onClick={nextQuestion}
+              className={
+                styles.nextButton
+              }
+              onClick={
+                nextQuestion
+              }
             >
               Next →
             </button>
