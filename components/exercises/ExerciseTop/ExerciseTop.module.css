@@ -44,7 +44,7 @@
 }
 
 .title {
-  margin: var(--spacing-lg) 0 var(--spacing-sm);
+  margin: var(--spacing-sm) 0 var(--spacing-sm);
 
   color: var(--color-text-primary);
 
