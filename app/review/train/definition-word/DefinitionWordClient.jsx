@@ -1,7 +1,8 @@
 "use client";
 
+import ExerciseQuestionCard from "@/components/exercises/ExerciseQuestionCard/ExerciseQuestionCard";
+import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
 import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
-import ExerciseTop from "@/components/exercises/ExerciseTop/ExerciseTop";
 
 import { useEffect, useState } from "react";
 
@@ -157,20 +158,14 @@ export default function DefinitionWordClient({
   }
 
   return (
-    <main className="mobilePage">
-      <ExerciseTop
-        eyebrow="Definition → Word"
-        title="Choose the word that matches the definition"
-        current={currentIndex + 1}
-        total={items.length}
-        instructions="Choose the correct Danish word or expression."
-      />
-
-      <section
-        className={
-          styles.questionCard
-        }
-      >
+    <ExerciseShell
+      eyebrow="Definition → Word"
+      title="Choose the word that matches the definition"
+      current={currentIndex + 1}
+      total={items.length}
+      instructions="Choose the correct Danish word or expression."
+    >
+      <ExerciseQuestionCard>
         <p
           className={
             styles.questionLabel
@@ -311,7 +306,7 @@ export default function DefinitionWordClient({
             </button>
           </div>
         )}
-      </section>
-    </main>
+      </ExerciseQuestionCard>
+    </ExerciseShell>
   );
 }

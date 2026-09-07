@@ -1,6 +1,6 @@
 .top {
-   width: 100%;
-  }
+  width: 100%;
+}
 
 .topRow {
   display: grid;
@@ -43,27 +43,20 @@
 }
 
 .title {
-  margin: var(--spacing-sm) 0 var(--spacing-sm);
+  margin: var(--spacing-sm) 0;
 
   color: var(--color-text-primary);
 
   font-size: var(--font-size-headline-small);
   line-height: var(--line-height-headline-small);
   font-weight: var(--font-weight-headline-small);
-}
-
-.instructions {
-  margin: var(--spacing-sm) 0 var(--spacing-lg);
-
-  color: var(--color-text-muted);
-
-  font-size: var(--font-size-body-small);
-  line-height: var(--line-height-body-small);
+    text-align: center;
 }
 
 @media (min-width: 37.5em) {
   .title {
     font-size: var(--font-size-headline-medium);
     line-height: var(--line-height-headline-medium);
+      text-align: center;
   }
 }

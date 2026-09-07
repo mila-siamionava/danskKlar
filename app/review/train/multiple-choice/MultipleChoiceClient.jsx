@@ -1,8 +1,8 @@
 "use client";
 
-import ExerciseFilter from "@/components/exercises/ExerciseFilter/ExerciseFilter";
+import ExerciseQuestionCard from "@/components/exercises/ExerciseQuestionCard/ExerciseQuestionCard";
+import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
 import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
-import ExerciseTop from "@/components/exercises/ExerciseTop/ExerciseTop";
 
 import { useEffect, useMemo, useState } from "react";
 
@@ -12,29 +12,13 @@ import { shuffle } from "../_lib/arrayUtils";
 
 import styles from "./MultipleChoice.module.css";
 
-const ANSWER_TYPES = {
-  definition: {
-    label: "Danish definition",
-    field: "definition_da",
-    prompt: "Choose the correct Danish definition.",
-  },
-  english: {
-    label: "English",
-    field: "english",
-    prompt: "Choose the correct English translation.",
-  },
-  russian: {
-    label: "Russian",
-    field: "russian",
-    prompt: "Choose the correct Russian translation.",
-  },
-};
-
 export default function MultipleChoiceClient({
   vocabulary,
 }) {
-  const { items, isLoading } =
-    useSelectedReviewItems();
+  const {
+    items,
+    isLoading,
+  } = useSelectedReviewItems();
 
   const {
     currentIndex,
@@ -47,52 +31,35 @@ export default function MultipleChoiceClient({
     setSelectedAnswer,
   ] = useState(null);
 
-  const [options, setOptions] =
-    useState([]);
-
   const [
-    selectedType,
-    setSelectedType,
-  ] = useState("definition");
+    options,
+    setOptions,
+  ] = useState([]);
 
   const currentItem =
     items[currentIndex];
 
-  const answerConfig =
-    ANSWER_TYPES[selectedType];
-
   const correctAnswer = useMemo(() => {
     if (
       !currentItem ||
-      !answerConfig
+      !currentItem.english
     ) {
       return null;
     }
 
-    const value =
-      currentItem[answerConfig.field];
-
-    if (!value) {
-      return null;
-    }
-
     return {
-      value,
+      value: currentItem.english,
     };
-  }, [currentItem, answerConfig]);
+  }, [currentItem]);
 
   useEffect(() => {
     if (
       !currentItem ||
-      !answerConfig ||
       !correctAnswer
     ) {
       setOptions([]);
       return;
     }
-
-    const field =
-      answerConfig.field;
 
     const wrongAnswers =
       vocabulary
@@ -100,12 +67,12 @@ export default function MultipleChoiceClient({
           (item) =>
             item.term !==
               currentItem.term &&
-            item[field] &&
-            item[field] !==
+            item.english &&
+            item.english !==
               correctAnswer.value,
         )
         .map((item) => ({
-          value: item[field],
+          value: item.english,
         }));
 
     const uniqueWrongAnswers =
@@ -136,7 +103,6 @@ export default function MultipleChoiceClient({
     );
   }, [
     currentItem,
-    answerConfig,
     correctAnswer,
     vocabulary,
   ]);
@@ -212,92 +178,20 @@ export default function MultipleChoiceClient({
     next();
   }
 
-  function selectType(type) {
-    if (
-      type === selectedType
-    ) {
-      return;
-    }
-
-    setSelectedType(type);
-    setSelectedAnswer(null);
-  }
-
   return (
-    <main className="mobilePage">
-      <ExerciseTop
-        eyebrow="Multiple choice"
-        title="Choose the correct meaning"
-        current={currentIndex + 1}
-        total={items.length}
-      />
-
-      <ExerciseFilter
-        name="practiceType"
-        options={[
-          {
-            value: "definition",
-            label:
-              "Danish definition",
-          },
-          {
-            value: "english",
-            label: "English",
-          },
-          {
-            value: "russian",
-            label: "Russian",
-          },
-        ]}
-        value={selectedType}
-        onChange={selectType}
-      />
-
-      <section
-        className={
-          styles.questionCard
-        }
-      >
-        <div
-          className={
-            styles.questionTop
-          }
-        >
-          <span
-            className={
-              styles.questionLabel
-            }
-          >
-            Danish
-          </span>
-
-          {currentItem.part_of_speech && (
-            <span
-              className={
-                styles.partOfSpeech
-              }
-            >
-              {
-                currentItem.part_of_speech
-              }
-            </span>
-          )}
-        </div>
-
+    <ExerciseShell
+      eyebrow="Multiple choice"
+      title="Choose the correct English translation"
+      current={currentIndex + 1}
+      total={items.length}
+    >
+      <ExerciseQuestionCard>
         <h2 className={styles.word}>
           {currentItem.term?.toLowerCase()}
         </h2>
 
-        <p className={styles.prompt}>
-          {answerConfig.prompt}
-        </p>
-
         {correctAnswer ? (
-          <div
-            className={
-              styles.options
-            }
-          >
+          <div className={styles.options}>
             {options.map(
               (
                 option,
@@ -339,26 +233,18 @@ export default function MultipleChoiceClient({
                   <button
                     key={`${option.value}-${index}`}
                     type="button"
-                    className={
-                      optionClass
-                    }
+                    className={optionClass}
                     onClick={() =>
-                      chooseAnswer(
-                        option,
-                      )
+                      chooseAnswer(option)
                     }
-                    disabled={
-                      isAnswered
-                    }
+                    disabled={isAnswered}
                   >
                     <span
                       className={
                         styles.optionDefinition
                       }
                     >
-                      {
-                        option.value
-                      }
+                      {option.value}
                     </span>
                   </button>
                 );
@@ -366,70 +252,43 @@ export default function MultipleChoiceClient({
             )}
           </div>
         ) : (
-          <p
-            className={
-              styles.noAnswer
-            }
-          >
-            No{" "}
-            {answerConfig.label.toLowerCase()}{" "}
+          <p className={styles.noAnswer}>
+            No English translation
             is available for this word.
           </p>
         )}
 
         {isAnswered && (
-          <div
-            className={
-              styles.feedback
-            }
-          >
+          <div className={styles.feedback}>
             {isSameAnswer(
               selectedAnswer,
               correctAnswer,
             ) ? (
-              <p
-                className={
-                  styles.feedbackCorrect
-                }
-              >
+              <p className={styles.feedbackCorrect}>
                 ✓ Correct
               </p>
             ) : (
-              <div
-                className={
-                  styles.feedbackWrong
-                }
-              >
+              <div className={styles.feedbackWrong}>
                 <p>
-                  Correct{" "}
-                  {
-                    answerConfig.label
-                  }
-                  :
+                  Correct answer:
                 </p>
 
                 <strong>
-                  {
-                    correctAnswer?.value
-                  }
+                  {correctAnswer?.value}
                 </strong>
               </div>
             )}
 
             <button
               type="button"
-              className={
-                styles.nextButton
-              }
-              onClick={
-                nextQuestion
-              }
+              className={styles.nextButton}
+              onClick={nextQuestion}
             >
               Next →
             </button>
           </div>
         )}
-      </section>
-    </main>
+      </ExerciseQuestionCard>
+    </ExerciseShell>
   );
 }

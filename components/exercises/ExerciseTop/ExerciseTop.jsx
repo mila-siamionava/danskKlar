@@ -8,7 +8,7 @@ export default function ExerciseTop({
   title,
   current,
   total,
- }) {
+}) {
   return (
     <div className={styles.top}>
       <div className={styles.topRow}>
@@ -43,7 +43,6 @@ export default function ExerciseTop({
         current={current}
         total={total}
       />
-
-        </div>
+    </div>
   );
 }

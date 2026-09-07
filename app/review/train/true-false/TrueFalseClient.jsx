@@ -1,8 +1,8 @@
 "use client";
 
-import BackLink from "@/components/navigation/BackLink/BackLink";
-import ExerciseHeader from "@/components/exercises/ExerciseHeader/ExerciseHeader";
-import ExerciseProgress from "@/components/exercises/ExerciseProgress/ExerciseProgress";
+import ExerciseQuestionCard from "@/components/exercises/ExerciseQuestionCard/ExerciseQuestionCard";
+import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
+import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
 
 import {
   useEffect,
@@ -22,9 +22,9 @@ export default function TrueFalseClient({
       vocabulary.filter(
         (item) =>
           item.term &&
-          (item.english || item.russian)
+          item.english,
       ),
-    [vocabulary]
+    [vocabulary],
   );
 
   const {
@@ -32,14 +32,18 @@ export default function TrueFalseClient({
     finished,
     next,
   } = useTrainingProgress(
-    usableVocabulary.length
+    usableVocabulary.length,
   );
 
-  const [selectedAnswer, setSelectedAnswer] =
-    useState(null);
+  const [
+    selectedAnswer,
+    setSelectedAnswer,
+  ] = useState(null);
 
-  const [statement, setStatement] =
-    useState(null);
+  const [
+    statement,
+    setStatement,
+  ] = useState(null);
 
   const currentItem =
     usableVocabulary[currentIndex];
@@ -55,8 +59,8 @@ export default function TrueFalseClient({
 
     if (shouldBeCorrect) {
       setStatement({
-        english: currentItem.english,
-        russian: currentItem.russian,
+        english:
+          currentItem.english,
         isCorrect: true,
       });
 
@@ -66,14 +70,15 @@ export default function TrueFalseClient({
     const wrongItems =
       usableVocabulary.filter(
         (item) =>
-          item.id !== currentItem.id &&
-          (item.english || item.russian)
+          item.id !==
+            currentItem.id &&
+          item.english,
       );
 
     if (wrongItems.length === 0) {
       setStatement({
-        english: currentItem.english,
-        russian: currentItem.russian,
+        english:
+          currentItem.english,
         isCorrect: true,
       });
 
@@ -84,13 +89,13 @@ export default function TrueFalseClient({
       wrongItems[
         Math.floor(
           Math.random() *
-            wrongItems.length
+            wrongItems.length,
         )
       ];
 
     setStatement({
-      english: wrongItem.english,
-      russian: wrongItem.russian,
+      english:
+        wrongItem.english,
       isCorrect: false,
     });
   }, [
@@ -100,37 +105,34 @@ export default function TrueFalseClient({
 
   if (usableVocabulary.length === 0) {
     return (
-      <main className={styles.page}>
-        <h1>True or false</h1>
-
-        <p>
-          No vocabulary items available.
-        </p>
-
-    <BackLink
-  href="/review/train"
-  label="Back to training"
-/>
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="True / False"
+          title="No vocabulary available"
+          message="Choose some words in Review before starting this exercise."
+          actionLabel="Back to training"
+          actionHref="/review/train"
+        />
       </main>
     );
   }
 
   if (finished) {
     return (
-      <main className={styles.page}>
-        <div className={styles.complete}>
-          <h1>Practice complete</h1>
-
-          <p>
-            You reviewed{" "}
-            {usableVocabulary.length} words.
-          </p>
-
-          <BackLink
-  href="/review/train"
-  label="Back to training"
-/>
-        </div>
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="True / False"
+          title="Practice complete"
+          message={`You reviewed ${
+            usableVocabulary.length
+          } ${
+            usableVocabulary.length === 1
+              ? "word"
+              : "words"
+          }.`}
+          actionLabel="Back to training"
+          actionHref="/review/train"
+        />
       </main>
     );
   }
@@ -154,33 +156,20 @@ export default function TrueFalseClient({
     setSelectedAnswer(answer);
   }
 
- function nextQuestion() {
-  setSelectedAnswer(null);
-  setStatement(null);
-  next();
-}
+  function nextQuestion() {
+    setSelectedAnswer(null);
+    setStatement(null);
+    next();
+  }
 
   return (
-    <main className={styles.page}>
-      <BackLink
-  href="/review/train"
-  label="Back to training"
-/>
-
-      <ExerciseHeader
-  eyebrow="True / False"
-  title="Decide if the meaning is correct"
-  current={currentIndex + 1}
-  total={usableVocabulary.length}
-/>
-
-<ExerciseProgress
-  current={currentIndex + 1}
-  total={usableVocabulary.length}
-/>
-      <section
-        className={styles.questionCard}
-      >
+    <ExerciseShell
+      eyebrow="True / False"
+      title="Is this English meaning correct?"
+      current={currentIndex + 1}
+      total={usableVocabulary.length}
+    >
+      <ExerciseQuestionCard>
         <p className={styles.term}>
           {currentItem.term}
         </p>
@@ -189,70 +178,44 @@ export default function TrueFalseClient({
           means
         </span>
 
-        <div
-          className={styles.translation}
-        >
-          {statement.english && (
-            <p
-              className={styles.english}
-            >
-              🇬🇧 {statement.english}
-            </p>
-          )}
-
-          {statement.russian && (
-            <p
-              className={styles.russian}
-            >
-              🇷🇺 {statement.russian}
-            </p>
-          )}
+        <div className={styles.translation}>
+          <p className={styles.english}>
+            {statement.english}
+          </p>
         </div>
 
-        <div
-          className={styles.answers}
-        >
-          <button
-            type="button"
-            className={
-              styles.answerButton
-            }
-            onClick={() =>
-              chooseAnswer(true)
-            }
-            disabled={isAnswered}
-          >
-            True
-          </button>
+       <div className={styles.answers}>
+  <button
+    type="button"
+    className={`${styles.answerButton} ${styles.trueButton}`}
+    onClick={() =>
+      chooseAnswer(true)
+    }
+    disabled={isAnswered}
+  >
+    True
+  </button>
 
-          <button
-            type="button"
-            className={
-              styles.answerButton
-            }
-            onClick={() =>
-              chooseAnswer(false)
-            }
-            disabled={isAnswered}
-          >
-            False
-          </button>
-        </div>
+  <button
+    type="button"
+    className={`${styles.answerButton} ${styles.falseButton}`}
+    onClick={() =>
+      chooseAnswer(false)
+    }
+    disabled={isAnswered}
+  >
+    False
+  </button>
+</div>
 
         {isAnswered && (
-          <div
-            className={styles.feedback}
-          >
+          <div className={styles.feedback}>
             {isUserCorrect ? (
-              <p
-                className={styles.correct}
-              >
+              <p className={styles.correct}>
                 ✓ Correct
               </p>
             ) : (
-              <p
-                className={styles.wrong}
-              >
+              <p className={styles.wrong}>
                 ✕ Not quite
               </p>
             )}
@@ -266,19 +229,9 @@ export default function TrueFalseClient({
                 Correct meaning:
               </strong>
 
-              {currentItem.english && (
-                <p>
-                  🇬🇧{" "}
-                  {currentItem.english}
-                </p>
-              )}
-
-              {currentItem.russian && (
-                <p>
-                  🇷🇺{" "}
-                  {currentItem.russian}
-                </p>
-              )}
+              <p>
+                {currentItem.english}
+              </p>
             </div>
 
             <button
@@ -292,7 +245,7 @@ export default function TrueFalseClient({
             </button>
           </div>
         )}
-      </section>
-    </main>
+      </ExerciseQuestionCard>
+    </ExerciseShell>
   );
 }
