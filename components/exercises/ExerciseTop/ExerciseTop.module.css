@@ -1,5 +1,5 @@
 .top {
-  width: min(100%, var(--reading-max-width));
+   width: 100%;
   }
 
 .topRow {

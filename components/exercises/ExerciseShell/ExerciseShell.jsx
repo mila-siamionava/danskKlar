@@ -1,3 +1,4 @@
+import ExerciseInstructions from "@/components/exercises/ExerciseInstructions/ExerciseInstructions";
 import ExerciseTop from "@/components/exercises/ExerciseTop/ExerciseTop";
 
 import styles from "./ExerciseShell.module.css";
@@ -19,8 +20,15 @@ export default function ExerciseShell({
           title={title}
           current={current}
           total={total}
-          instructions={instructions}
         />
+
+        {instructions && (
+          <div className={styles.instructions}>
+            <ExerciseInstructions>
+              {instructions}
+            </ExerciseInstructions>
+          </div>
+        )}
 
         {controls && (
           <div className={styles.controls}>

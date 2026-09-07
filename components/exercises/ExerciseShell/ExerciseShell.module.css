@@ -19,6 +19,10 @@
     );
 }
 
+.instructions {
+  margin-top: var(--spacing-sm);
+}
+
 .controls {
   margin-top: var(--spacing-md);
 }

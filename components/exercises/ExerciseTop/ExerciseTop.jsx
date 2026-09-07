@@ -8,8 +8,7 @@ export default function ExerciseTop({
   title,
   current,
   total,
-  instructions,
-}) {
+ }) {
   return (
     <div className={styles.top}>
       <div className={styles.topRow}>
@@ -45,11 +44,6 @@ export default function ExerciseTop({
         total={total}
       />
 
-      {instructions && (
-        <div className={styles.instructions}>
-          {instructions}
         </div>
-      )}
-    </div>
   );
 }
