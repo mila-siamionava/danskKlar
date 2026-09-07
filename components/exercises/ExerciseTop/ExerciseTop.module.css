@@ -1,21 +1,70 @@
 .top {
-  width: min(
-    100%,
-    var(--reading-max-width)
-  );
-
+  width: min(100%, var(--reading-max-width));
   margin-inline: auto;
 }
 
+.topRow {
+  display: grid;
+  grid-template-columns: 3.6rem minmax(0, 1fr) 3.6rem;
+  align-items: center;
+
+  gap: var(--spacing-sm);
+}
+
+.exerciseName {
+  min-width: 0;
+
+  color: var(--color-text-accent);
+
+  font-size: var(--font-size-label-medium);
+  line-height: var(--line-height-label-medium);
+  font-weight: 700;
+
+  text-align: center;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.counter {
+  justify-self: end;
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-label-small);
+  line-height: var(--line-height-label-small);
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.counterSpacer {
+  width: 3.6rem;
+}
+
+.title {
+  margin: var(--spacing-lg) 0 var(--spacing-sm);
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-headline-small);
+  line-height: var(--line-height-headline-small);
+  font-weight: var(--font-weight-headline-small);
+}
+
 .instructions {
-  margin:
-    var(--spacing-sm)
-    0
-    var(--spacing-lg);
+  margin: var(--spacing-sm) 0 var(--spacing-lg);
 
   color: var(--color-text-muted);
 
-  font-size: var(--font-size-label-small);
-  font-weight: 400;
-  line-height: 1.45;
+  font-size: var(--font-size-body-small);
+  line-height: var(--line-height-body-small);
+}
+
+@media (min-width: 37.5em) {
+  .title {
+    font-size: var(--font-size-headline-medium);
+    line-height: var(--line-height-headline-medium);
+  }
 }

@@ -1,8 +1,7 @@
 "use client";
 
 import BackLink from "@/components/navigation/BackLink/BackLink";
-import ExerciseHeader from "@/components/exercises/ExerciseHeader/ExerciseHeader";
-import ExerciseProgress from "@/components/exercises/ExerciseProgress/ExerciseProgress";
+import ExerciseTop from "@/components/exercises/ExerciseTop/ExerciseTop";
 import ExerciseFilter from "@/components/exercises/ExerciseFilter/ExerciseFilter";
 
 import { useMemo, useEffect, useState } from "react";
@@ -173,21 +172,12 @@ export default function MultipleChoiceClient({ vocabulary }) {
 
   return (
     <main className={styles.page}>
-      <BackLink href="/review/train" label="Back to training" />
-
-      {/* HEADER */}
-
-      <ExerciseHeader
-        eyebrow="Multiple choice"
-        title="Choose the correct meaning"
-        current={currentIndex + 1}
-        total={items.length}
-      />
-
-      {/* PROGRESS */}
-
-      <ExerciseProgress current={currentIndex + 1} total={items.length} />
-
+    <ExerciseTop
+  eyebrow="Multiple choice"
+  title="Choose the correct meaning"
+  current={currentIndex + 1}
+  total={items.length}
+/>
       {/* PRACTICE TYPE */}
 
       <ExerciseFilter

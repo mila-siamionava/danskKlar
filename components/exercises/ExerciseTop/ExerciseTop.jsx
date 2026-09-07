@@ -1,5 +1,4 @@
 import BackLink from "@/components/navigation/BackLink/BackLink";
-import ExerciseHeader from "@/components/exercises/ExerciseHeader/ExerciseHeader";
 import ExerciseProgress from "@/components/exercises/ExerciseProgress/ExerciseProgress";
 
 import styles from "./ExerciseTop.module.css";
@@ -13,17 +12,33 @@ export default function ExerciseTop({
 }) {
   return (
     <div className={styles.top}>
-      <BackLink
-        href="/review/train"
-        label="Back to training"
-      />
+      <div className={styles.topRow}>
+        <BackLink
+          href="/review/train"
+          label="Back to training"
+        />
 
-      <ExerciseHeader
-        eyebrow={eyebrow}
-        title={title}
-        current={current}
-        total={total}
-      />
+        <span className={styles.exerciseName}>
+          {eyebrow}
+        </span>
+
+        {current && total ? (
+          <span
+            className={styles.counter}
+            aria-label={`Question ${current} of ${total}`}
+          >
+            {current} / {total}
+          </span>
+        ) : (
+          <span className={styles.counterSpacer} />
+        )}
+      </div>
+
+      {title && (
+        <h1 className={styles.title}>
+          {title}
+        </h1>
+      )}
 
       <ExerciseProgress
         current={current}
