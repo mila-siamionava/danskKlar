@@ -1,19 +1,3 @@
-.page {
-  width: min(100%, var(--reading-max-width));
-  margin-inline: auto;
-}
-
-.questionCard {
-  padding: var(--spacing-md);
-
-  border: var(--surface-border);
-  border-radius: var(--surface-radius);
-
-  background: var(--surface-background);
-
-  box-shadow: var(--surface-shadow);
-}
-
 .words {
   display: flex;
   flex-wrap: wrap;
@@ -62,7 +46,7 @@
     box-shadow var(--transition-fast);
 }
 
-.word:hover {
+.word:hover:not(:disabled) {
   border-color: var(--color-border-secondary);
 
   transform: translateY(-1px);
@@ -70,10 +54,15 @@
   box-shadow: var(--shadow-card);
 }
 
-.word:active {
+.word:active:not(:disabled) {
   cursor: grabbing;
 
   transform: scale(0.98);
+}
+
+.word:disabled {
+  cursor: default;
+  opacity: 1;
 }
 
 .dragging {
@@ -104,7 +93,8 @@
 
   transition:
     background var(--transition-fast),
-    border-color var(--transition-fast);
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .checkButton {
@@ -119,11 +109,17 @@
 .nextButton:hover {
   border-color: var(--button-primary-background-hover);
   background: var(--button-primary-background-hover);
+
+  transform: translateY(-1px);
+}
+
+.checkButton:active:not(:disabled),
+.nextButton:active {
+  transform: scale(0.98);
 }
 
 .checkButton:disabled {
   opacity: var(--opacity-disabled);
-
   cursor: default;
 }
 
@@ -168,27 +164,7 @@
   line-height: 1.5;
 }
 
-.complete {
-  padding: var(--spacing-3xl) var(--spacing-md);
-
-  color: var(--color-text-primary);
-
-  text-align: center;
-}
-
-.complete h1 {
-  margin-bottom: var(--spacing-xs);
-}
-
-.complete p {
-  color: var(--color-text-secondary);
-}
-
 @media (min-width: 37.5em) {
-  .questionCard {
-    padding: var(--spacing-xl);
-  }
-
   .words {
     padding: var(--spacing-md);
   }

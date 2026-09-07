@@ -1,12 +1,3 @@
-.page {
-  width: min(100%, var(--reading-max-width));
-  margin-inline: auto;
-}
-
-/* ============================================================
-   INSTRUCTIONS
-   ============================================================ */
-
 .instructions {
   display: flex;
   align-items: center;
@@ -15,7 +6,7 @@
 
   gap: var(--spacing-xs);
 
-  margin: var(--spacing-lg) 0;
+  margin: 0 0 var(--spacing-lg);
 
   color: var(--color-text-muted);
 
@@ -28,10 +19,6 @@
 .instructions span {
   color: var(--color-text-accent);
 }
-
-/* ============================================================
-   FLIP AREA
-   ============================================================ */
 
 .cardArea {
   perspective: 1400px;
@@ -56,7 +43,8 @@
 
   transform-style: preserve-3d;
 
-  transition: transform var(--transition-slow);
+  transition:
+    transform var(--transition-slow);
 }
 
 .flipped .cardInner {
@@ -85,32 +73,12 @@
   box-shadow: var(--surface-shadow);
 }
 
-/* ============================================================
-   FRONT
-   ============================================================ */
-
 .cardFront {
   display: flex;
   align-items: center;
   justify-content: center;
 
   text-align: center;
-}
-
-.cardLabel {
-  position: absolute;
-
-  top: var(--spacing-lg);
-  left: var(--spacing-lg);
-
-  color: var(--color-text-accent);
-
-  font-size: var(--font-size-label-small);
-  line-height: var(--line-height-label-small);
-  font-weight: 700;
-
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
 }
 
 .frontContent {
@@ -134,11 +102,13 @@
   color: var(--color-text-primary);
 
   font-family: var(--font-family-heading);
+
   font-size: clamp(
     var(--font-size-headline-large),
     10vw,
     4.8rem
   );
+
   line-height: 1.08;
   font-weight: 700;
 }
@@ -160,10 +130,6 @@
   text-transform: lowercase;
 }
 
-/* ============================================================
-   BACK
-   ============================================================ */
-
 .cardBack {
   display: flex;
   flex-direction: column;
@@ -172,39 +138,6 @@
 
   text-align: left;
 }
-
-.backTop {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: var(--spacing-md);
-}
-
-.backWord {
-  margin: 0;
-
-  max-width: 78%;
-
-  color: var(--color-text-primary);
-
-  font-family: var(--font-family-heading);
-  font-size: var(--font-size-headline-small);
-  line-height: var(--line-height-headline-small);
-  font-weight: 600;
-}
-
-.separator {
-  height: 1px;
-
-  margin: var(--spacing-md) 0 var(--spacing-lg);
-
-  background: var(--color-border-primary);
-}
-
-/* ============================================================
-   MEANING
-   ============================================================ */
 
 .meaning {
   margin-bottom: var(--spacing-lg);
@@ -231,12 +164,9 @@
   line-height: var(--line-height-body-medium);
 }
 
-/* ============================================================
-   TRANSLATIONS
-   ============================================================ */
-
 .translationRows {
-  border-top: 1px solid var(--color-border-primary);
+  border-top: 1px solid
+    var(--color-border-primary);
 }
 
 .translationRow {
@@ -247,7 +177,8 @@
 
   padding: var(--spacing-md) 0;
 
-  border-bottom: 1px solid var(--color-border-primary);
+  border-bottom: 1px solid
+    var(--color-border-primary);
 }
 
 .translationValue {
@@ -257,12 +188,9 @@
   line-height: var(--line-height-body-small);
 }
 
-/* ============================================================
-   EXAMPLES
-   ============================================================ */
-
 .infoRow {
-  border-bottom: 1px solid var(--color-border-primary);
+  border-bottom: 1px solid
+    var(--color-border-primary);
 }
 
 .infoSummary {
@@ -288,7 +216,8 @@
 .chevron {
   flex-shrink: 0;
 
-  transition: transform var(--transition-base);
+  transition:
+    transform var(--transition-base);
 }
 
 .infoRow[open] .chevron {
@@ -308,9 +237,11 @@
   margin: 0;
 }
 
-/* ============================================================
-   TAP / ROTATE HINT
-   ============================================================ */
+.exampleEnglish {
+  margin-top: var(--spacing-xs) !important;
+
+  color: var(--color-text-secondary);
+}
 
 .tapHint {
   position: absolute;
@@ -332,10 +263,6 @@
   font-weight: 500;
 }
 
-/* ============================================================
-   ACTIONS
-   ============================================================ */
-
 .actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -354,11 +281,15 @@
 
   min-height: var(--button-height);
 
-  padding-inline: var(--button-padding-inline);
+  padding-inline:
+    var(--button-padding-inline);
 
-  border-radius: var(--button-radius);
+  border-radius:
+    var(--button-radius);
 
-  font-size: var(--font-size-label-medium);
+  font-size:
+    var(--font-size-label-medium);
+
   font-weight: 600;
 
   cursor: pointer;
@@ -369,50 +300,51 @@
     transform var(--transition-fast);
 }
 
+.actions button:hover {
+  transform: translateY(-1px);
+}
+
 .actions button:active {
   transform: scale(0.98);
 }
 
 .againButton {
-  border: 1px solid var(--button-secondary-border);
+  border: 1px solid
+    var(--button-secondary-border);
 
-  background: var(--button-secondary-background);
-  color: var(--button-secondary-text);
+  background:
+    var(--button-secondary-background);
+
+  color:
+    var(--button-secondary-text);
 }
 
 .againButton:hover {
-  border-color: var(--color-border-secondary);
-  background: var(--color-background-soft);
+  border-color:
+    var(--color-border-secondary);
+
+  background:
+    var(--color-background-soft);
 }
 
 .knowButton {
-  border: 1px solid var(--button-primary-background);
+  border: 1px solid
+    var(--button-primary-background);
 
-  background: var(--button-primary-background);
-  color: var(--button-primary-text);
+  background:
+    var(--button-primary-background);
+
+  color:
+    var(--button-primary-text);
 }
 
 .knowButton:hover {
-  border-color: var(--button-primary-background-hover);
-  background: var(--button-primary-background-hover);
+  border-color:
+    var(--button-primary-background-hover);
+
+  background:
+    var(--button-primary-background-hover);
 }
-
-/* ============================================================
-   STATES
-   ============================================================ */
-
-.complete,
-.loading {
-  padding: var(--spacing-3xl) var(--spacing-md);
-
-  color: var(--color-text-primary);
-
-  text-align: center;
-}
-
-/* ============================================================
-   TABLET / DESKTOP
-   ============================================================ */
 
 @media (min-width: 37.5em) {
   .card,
@@ -428,27 +360,26 @@
       7rem;
   }
 
-  .cardLabel {
-    top: var(--spacing-xl);
-    left: var(--spacing-xl);
-  }
-
   .word {
-    font-size: clamp(3.8rem, 6vw, 5.4rem);
-  }
-
-  .backWord {
-    font-size: var(--font-size-headline-medium);
-    line-height: var(--line-height-headline-medium);
+    font-size:
+      clamp(
+        3.8rem,
+        6vw,
+        5.4rem
+      );
   }
 
   .definition {
-    font-size: var(--font-size-body-large);
-    line-height: var(--line-height-body-large);
+    font-size:
+      var(--font-size-body-large);
+
+    line-height:
+      var(--line-height-body-large);
   }
 
   .translationRow {
-    grid-template-columns: 11rem 1fr;
+    grid-template-columns:
+      11rem 1fr;
 
     gap: var(--spacing-lg);
 
@@ -457,7 +388,10 @@
 
   .translationValue,
   .infoContent {
-    font-size: var(--font-size-body-medium);
-    line-height: var(--line-height-body-medium);
+    font-size:
+      var(--font-size-body-medium);
+
+    line-height:
+      var(--line-height-body-medium);
   }
 }

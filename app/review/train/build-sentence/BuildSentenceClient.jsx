@@ -1,8 +1,8 @@
 "use client";
 
-import BackLink from "@/components/navigation/BackLink/BackLink";
-import ExerciseHeader from "@/components/exercises/ExerciseHeader/ExerciseHeader";
-import ExerciseProgress from "@/components/exercises/ExerciseProgress/ExerciseProgress";
+import ExerciseQuestionCard from "@/components/exercises/ExerciseQuestionCard/ExerciseQuestionCard";
+import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
+import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
 
 import {
   DndContext,
@@ -86,9 +86,9 @@ export default function BuildSentenceClient({
           item.example &&
           item.example
             .trim()
-            .split(/\s+/).length >= 3
+            .split(/\s+/).length >= 3,
       ),
-    [vocabulary]
+    [vocabulary],
   );
 
   const {
@@ -96,7 +96,7 @@ export default function BuildSentenceClient({
     finished,
     next,
   } = useTrainingProgress(
-    usableItems.length
+    usableItems.length,
   );
 
   const [words, setWords] =
@@ -129,7 +129,7 @@ export default function BuildSentenceClient({
     useSensor(KeyboardSensor, {
       coordinateGetter:
         sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   useEffect(() => {
@@ -138,23 +138,16 @@ export default function BuildSentenceClient({
       return;
     }
 
-    /*
-      Give every word a unique id.
-
-      This is important because the same
-      word can appear more than once in
-      one sentence.
-    */
     const wordItems =
       originalWords.map(
         (text, index) => ({
           id: `${index}-${text}`,
           text,
-        })
+        }),
       );
 
     setWords(
-      shuffle(wordItems)
+      shuffle(wordItems),
     );
   }, [originalWords]);
 
@@ -182,13 +175,13 @@ export default function BuildSentenceClient({
       const oldIndex =
         currentWords.findIndex(
           (item) =>
-            item.id === active.id
+            item.id === active.id,
         );
 
       const newIndex =
         currentWords.findIndex(
           (item) =>
-            item.id === over.id
+            item.id === over.id,
         );
 
       if (
@@ -201,7 +194,7 @@ export default function BuildSentenceClient({
       return arrayMove(
         currentWords,
         oldIndex,
-        newIndex
+        newIndex,
       );
     });
   }
@@ -217,71 +210,46 @@ export default function BuildSentenceClient({
 
   if (usableItems.length === 0) {
     return (
-      <main className={styles.page}>
-        <BackLink
-          href="/review/train"
-          label="Back to training"
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Build sentence"
+          title="No usable examples"
+          message="No usable example sentences were found."
+          actionLabel="Back to training"
+          actionHref="/review/train"
         />
-
-        <h1>Build a sentence</h1>
-
-        <p>
-          No usable example sentences
-          found.
-        </p>
       </main>
     );
   }
 
   if (finished) {
     return (
-      <main className={styles.page}>
-        <BackLink
-          href="/review/train"
-          label="Back to training"
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Build sentence"
+          title="Practice complete"
+          message={`You completed ${
+            usableItems.length
+          } ${
+            usableItems.length === 1
+              ? "sentence"
+              : "sentences"
+          }.`}
+          actionLabel="Back to training"
+          actionHref="/review/train"
         />
-
-        <div
-          className={styles.complete}
-        >
-          <h1>
-            Practice complete
-          </h1>
-
-          <p>
-            You completed{" "}
-            {usableItems.length}{" "}
-            sentences.
-          </p>
-        </div>
       </main>
     );
   }
 
   return (
-    <main className={styles.page}>
-      <BackLink
-        href="/review/train"
-        label="Back to training"
-      />
-
-      <ExerciseHeader
-        eyebrow="Build sentence"
-        title="Put the words in the correct order"
-        current={currentIndex + 1}
-        total={usableItems.length}
-      />
-
-      <ExerciseProgress
-        current={currentIndex + 1}
-        total={usableItems.length}
-      />
-
-      <section
-        className={
-          styles.questionCard
-        }
-      >
+    <ExerciseShell
+      eyebrow="Build sentence"
+      title="Put the words in the correct order"
+      current={currentIndex + 1}
+      total={usableItems.length}
+    >
+      <ExerciseQuestionCard>
         <DndContext
           sensors={sensors}
           collisionDetection={
@@ -291,14 +259,16 @@ export default function BuildSentenceClient({
         >
           <SortableContext
             items={words.map(
-              (item) => item.id
+              (item) => item.id,
             )}
             strategy={
               horizontalListSortingStrategy
             }
           >
             <div
-              className={styles.words}
+              className={
+                styles.words
+              }
             >
               {words.map((item) => (
                 <SortableWord
@@ -317,7 +287,9 @@ export default function BuildSentenceClient({
             className={
               styles.checkButton
             }
-            onClick={checkSentence}
+            onClick={
+              checkSentence
+            }
           >
             Check
           </button>
@@ -368,7 +340,7 @@ export default function BuildSentenceClient({
             </button>
           </div>
         )}
-      </section>
-    </main>
+      </ExerciseQuestionCard>
+    </ExerciseShell>
   );
 }

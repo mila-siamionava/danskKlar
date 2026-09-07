@@ -1,8 +1,7 @@
 "use client";
 
-import BackLink from "@/components/navigation/BackLink/BackLink";
-import ExerciseHeader from "@/components/exercises/ExerciseHeader/ExerciseHeader";
-import ExerciseProgress from "@/components/exercises/ExerciseProgress/ExerciseProgress";
+import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
+import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
 
 import {
   useEffect,
@@ -22,12 +21,13 @@ export default function MatchPairsClient({
       vocabulary.filter(
         (item) =>
           item.term &&
-          (item.english || item.russian)
+          item.english,
       ),
-    [vocabulary]
+    [vocabulary],
   );
 
-  const [round, setRound] = useState(0);
+  const [round, setRound] =
+    useState(0);
 
   const [
     selectedTerm,
@@ -59,17 +59,20 @@ export default function MatchPairsClient({
 
     return usableVocabulary.slice(
       start,
-      start + 5
+      start + 5,
     );
-  }, [usableVocabulary, round]);
+  }, [
+    usableVocabulary,
+    round,
+  ]);
 
   const totalRounds = Math.ceil(
-    usableVocabulary.length / 5
+    usableVocabulary.length / 5,
   );
 
   useEffect(() => {
     setTranslations(
-      shuffle(roundItems)
+      shuffle(roundItems),
     );
   }, [roundItems]);
 
@@ -86,7 +89,7 @@ export default function MatchPairsClient({
     if (selectedTranslation) {
       checkPair(
         item,
-        selectedTranslation
+        selectedTranslation,
       );
     }
   }
@@ -104,14 +107,14 @@ export default function MatchPairsClient({
     if (selectedTerm) {
       checkPair(
         selectedTerm,
-        item
+        item,
       );
     }
   }
 
   function checkPair(
     termItem,
-    translationItem
+    translationItem,
   ) {
     if (
       termItem.id ===
@@ -141,14 +144,14 @@ export default function MatchPairsClient({
   const roundComplete =
     roundItems.length > 0 &&
     roundItems.every((item) =>
-      matchedIds.includes(item.id)
+      matchedIds.includes(item.id),
     );
 
   function nextRound() {
     setTranslations([]);
 
     setRound(
-      (current) => current + 1
+      (current) => current + 1,
     );
 
     setMatchedIds([]);
@@ -161,200 +164,121 @@ export default function MatchPairsClient({
     usableVocabulary.length === 0
   ) {
     return (
-      <main className={styles.page}>
-        <BackLink
-          href="/review/train"
-          label="Back to training"
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Match pairs"
+          title="No usable vocabulary"
+          message="Choose some words with English translations before starting this exercise."
+          actionLabel="Back to training"
+          actionHref="/review/train"
         />
-
-        <div
-          className={
-            styles.complete
-          }
-        >
-          <h1>Match pairs</h1>
-
-          <p>
-            No usable vocabulary found.
-          </p>
-        </div>
       </main>
     );
   }
 
   if (roundItems.length === 0) {
     return (
-      <main className={styles.page}>
-        <BackLink
-          href="/review/train"
-          label="Back to training"
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Match pairs"
+          title="Practice complete"
+          message="You matched all available words."
+          actionLabel="Back to training"
+          actionHref="/review/train"
         />
-
-        <div
-          className={
-            styles.complete
-          }
-        >
-          <h1>
-            Practice complete
-          </h1>
-
-          <p>
-            You matched all available
-            words.
-          </p>
-        </div>
       </main>
     );
   }
 
   return (
-    <main className={styles.page}>
-      <BackLink
-        href="/review/train"
-        label="Back to training"
-      />
+    <ExerciseShell
+      eyebrow="Match pairs"
+      title="Match each word with its meaning"
+      current={round + 1}
+      total={totalRounds}
+    >
+      <div className={styles.game}>
+        <div className={styles.column}>
+          <h2 className={styles.columnTitle}>
+            Danish
+          </h2>
 
-      <ExerciseHeader
-        eyebrow="Match pairs"
-        title="Match each word with its meaning"
-        current={round + 1}
-        total={totalRounds}
-      />
-
-      <ExerciseProgress
-        current={round + 1}
-        total={totalRounds}
-      />
-
-      <p
-        className={
-          styles.instructions
-        }
-      >
-        Match each Danish expression
-        with its English and Russian
-        translation.
-      </p>
-
-      <div
-        className={styles.game}
-      >
-        <div
-          className={styles.column}
-        >
-          <h2>Expression</h2>
-
-          {roundItems.map(
-            (item) => {
-              const matched =
-                matchedIds.includes(
-                  item.id
-                );
-
-              const selected =
-                selectedTerm?.id ===
-                item.id;
-
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={`${styles.card} ${
-                    matched
-                      ? styles.matched
-                      : ""
-                  } ${
-                    selected
-                      ? styles.selected
-                      : ""
-                  }`}
-                  onClick={() =>
-                    chooseTerm(item)
-                  }
-                  disabled={matched}
-                >
-                  {item.term}
-                </button>
+          {roundItems.map((item) => {
+            const matched =
+              matchedIds.includes(
+                item.id,
               );
-            }
-          )}
+
+            const selected =
+              selectedTerm?.id ===
+              item.id;
+
+            return (
+              <button
+                key={item.id}
+                type="button"
+                className={`${styles.card} ${
+                  matched
+                    ? styles.matched
+                    : ""
+                } ${
+                  selected
+                    ? styles.selected
+                    : ""
+                }`}
+                onClick={() =>
+                  chooseTerm(item)
+                }
+                disabled={matched}
+              >
+                {item.term}
+              </button>
+            );
+          })}
         </div>
 
-        <div
-          className={styles.column}
-        >
-          <h2>Translation</h2>
+        <div className={styles.column}>
+          <h2 className={styles.columnTitle}>
+            English
+          </h2>
 
-          {translations.map(
-            (item) => {
-              const matched =
-                matchedIds.includes(
-                  item.id
-                );
-
-              const selected =
-                selectedTranslation?.id ===
-                item.id;
-
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={`${styles.card} ${
-                    matched
-                      ? styles.matched
-                      : ""
-                  } ${
-                    selected
-                      ? styles.selected
-                      : ""
-                  }`}
-                  onClick={() =>
-                    chooseTranslation(
-                      item
-                    )
-                  }
-                  disabled={matched}
-                >
-                  <div
-                    className={
-                      styles.translation
-                    }
-                  >
-                    {item.english && (
-                      <span
-                        className={
-                          styles.english
-                        }
-                      >
-                        🇬🇧{" "}
-                        {item.english}
-                      </span>
-                    )}
-
-                    {item.russian && (
-                      <span
-                        className={
-                          styles.russian
-                        }
-                      >
-                        🇷🇺{" "}
-                        {item.russian}
-                      </span>
-                    )}
-                  </div>
-                </button>
+          {translations.map((item) => {
+            const matched =
+              matchedIds.includes(
+                item.id,
               );
-            }
-          )}
+
+            const selected =
+              selectedTranslation?.id ===
+              item.id;
+
+            return (
+              <button
+                key={item.id}
+                type="button"
+                className={`${styles.card} ${
+                  matched
+                    ? styles.matched
+                    : ""
+                } ${
+                  selected
+                    ? styles.selected
+                    : ""
+                }`}
+                onClick={() =>
+                  chooseTranslation(item)
+                }
+                disabled={matched}
+              >
+                {item.english}
+              </button>
+            );
+          })}
         </div>
       </div>
 
       {wrongPair && (
-        <p
-          className={styles.wrong}
-        >
+        <p className={styles.wrong}>
           Not a match — try again.
         </p>
       )}
@@ -370,6 +294,6 @@ export default function MatchPairsClient({
           Next round →
         </button>
       )}
-    </main>
+    </ExerciseShell>
   );
 }
