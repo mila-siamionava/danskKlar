@@ -1,8 +1,9 @@
 "use client";
 
-import BackLink from "@/components/navigation/BackLink/BackLink";
-import ExerciseHeader from "@/components/exercises/ExerciseHeader/ExerciseHeader";
-import ExerciseProgress from "@/components/exercises/ExerciseProgress/ExerciseProgress";
+import ExerciseQuestionCard from "@/components/exercises/ExerciseQuestionCard/ExerciseQuestionCard";
+import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
+import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
+
 import { useEffect, useState } from "react";
 
 import {
@@ -15,7 +16,9 @@ import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 
 import styles from "./FillGap.module.css";
 
-export default function FillGapClient({ vocabulary }) {
+export default function FillGapClient({
+  vocabulary,
+}) {
   const [items] = useState(() =>
     vocabulary
       .map((item) => {
@@ -32,7 +35,7 @@ export default function FillGapClient({ vocabulary }) {
             createDoubleGapSentence(
               item.example,
               item.example_target_1,
-              item.example_target_2
+              item.example_target_2,
             );
 
           if (!trainingSentence) {
@@ -48,7 +51,8 @@ export default function FillGapClient({ vocabulary }) {
           };
         }
 
-        const target = item.example_target;
+        const target =
+          item.example_target;
 
         if (!target) {
           return null;
@@ -57,7 +61,7 @@ export default function FillGapClient({ vocabulary }) {
         const trainingSentence =
           createGapSentence(
             item.example,
-            target
+            target,
           );
 
         if (!trainingSentence) {
@@ -71,30 +75,49 @@ export default function FillGapClient({ vocabulary }) {
           trainingSentence,
         };
       })
-      .filter(Boolean)
+      .filter(Boolean),
   );
 
   const {
     currentIndex,
     finished,
     next,
-  } = useTrainingProgress(items.length);
+  } = useTrainingProgress(
+    items.length,
+  );
 
-  const currentItem = items[currentIndex];
+  const currentItem =
+    items[currentIndex];
 
-  const [selectedAnswer, setSelectedAnswer] =
-    useState(null);
+  const [
+    selectedAnswer,
+    setSelectedAnswer,
+  ] = useState(null);
 
-  const [selectedAnswer1, setSelectedAnswer1] =
-    useState(null);
+  const [
+    selectedAnswer1,
+    setSelectedAnswer1,
+  ] = useState(null);
 
-  const [selectedAnswer2, setSelectedAnswer2] =
-    useState(null);
+  const [
+    selectedAnswer2,
+    setSelectedAnswer2,
+  ] = useState(null);
 
-  const [options, setOptions] = useState([]);
+  const [
+    options,
+    setOptions,
+  ] = useState([]);
 
-  const [options1, setOptions1] = useState([]);
-  const [options2, setOptions2] = useState([]);
+  const [
+    options1,
+    setOptions1,
+  ] = useState([]);
+
+  const [
+    options2,
+    setOptions2,
+  ] = useState([]);
 
   useEffect(() => {
     if (!currentItem) {
@@ -104,37 +127,46 @@ export default function FillGapClient({ vocabulary }) {
       return;
     }
 
-    if (currentItem.targetMode === "single") {
+    if (
+      currentItem.targetMode ===
+      "single"
+    ) {
       const correctAnswer =
         currentItem.target.toLowerCase();
 
-      const wrongAnswers = items
-        .filter(
-          (item) =>
-            item.id !== currentItem.id &&
-            item.targetMode === "single"
-        )
-        .map((item) =>
-          item.target?.toLowerCase()
-        )
-        .filter(Boolean)
-        .filter(
-          (answer) =>
-            answer !== correctAnswer
-        );
+      const wrongAnswers =
+        items
+          .filter(
+            (item) =>
+              item.id !==
+                currentItem.id &&
+              item.targetMode ===
+                "single",
+          )
+          .map((item) =>
+            item.target?.toLowerCase(),
+          )
+          .filter(Boolean)
+          .filter(
+            (answer) =>
+              answer !==
+              correctAnswer,
+          );
 
       const uniqueWrongAnswers = [
         ...new Set(wrongAnswers),
       ];
 
       const selectedWrongAnswers =
-        shuffle(uniqueWrongAnswers).slice(0, 3);
+        shuffle(
+          uniqueWrongAnswers,
+        ).slice(0, 3);
 
       setOptions(
         shuffle([
           correctAnswer,
           ...selectedWrongAnswers,
-        ])
+        ]),
       );
 
       setOptions1([]);
@@ -149,25 +181,29 @@ export default function FillGapClient({ vocabulary }) {
     const correctAnswer2 =
       currentItem.target2.toLowerCase();
 
-    const firstTargetOptions = items
-      .filter(
-        (item) =>
-          item.targetMode === "double"
-      )
-      .map((item) =>
-        item.target1?.toLowerCase()
-      )
-      .filter(Boolean);
+    const firstTargetOptions =
+      items
+        .filter(
+          (item) =>
+            item.targetMode ===
+            "double",
+        )
+        .map((item) =>
+          item.target1?.toLowerCase(),
+        )
+        .filter(Boolean);
 
-    const secondTargetOptions = items
-      .filter(
-        (item) =>
-          item.targetMode === "double"
-      )
-      .map((item) =>
-        item.target2?.toLowerCase()
-      )
-      .filter(Boolean);
+    const secondTargetOptions =
+      items
+        .filter(
+          (item) =>
+            item.targetMode ===
+            "double",
+        )
+        .map((item) =>
+          item.target2?.toLowerCase(),
+        )
+        .filter(Boolean);
 
     const uniqueFirstTargets = [
       ...new Set(firstTargetOptions),
@@ -183,10 +219,11 @@ export default function FillGapClient({ vocabulary }) {
         ...shuffle(
           uniqueFirstTargets.filter(
             (answer) =>
-              answer !== correctAnswer1
-          )
+              answer !==
+              correctAnswer1,
+          ),
         ).slice(0, 3),
-      ])
+      ]),
     );
 
     setOptions2(
@@ -195,56 +232,56 @@ export default function FillGapClient({ vocabulary }) {
         ...shuffle(
           uniqueSecondTargets.filter(
             (answer) =>
-              answer !== correctAnswer2
-          )
+              answer !==
+              correctAnswer2,
+          ),
         ).slice(0, 3),
-      ])
+      ]),
     );
 
     setOptions([]);
-  }, [currentItem, items]);
+  }, [
+    currentItem,
+    items,
+  ]);
 
   if (items.length === 0) {
     return (
-      <main className={styles.page}>
-        <h1>Fill in the gap</h1>
-
-        <p>
-          No vocabulary items with usable example
-          sentences were found.
-        </p>
-
-    <BackLink
-  href="/review/train"
-  label="Back to training"
-/>
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Fill the gap"
+          title="No usable examples"
+          message="No vocabulary items with usable example sentences were found."
+          actionLabel="Back to training"
+          actionHref="/review/train"
+        />
       </main>
     );
   }
 
   if (finished) {
     return (
-      <main className={styles.page}>
-        <div className={styles.complete}>
-          <h1>Practice complete</h1>
-
-          <p>
-            You completed {items.length}{" "}
-            {items.length === 1
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Fill the gap"
+          title="Practice complete"
+          message={`You completed ${
+            items.length
+          } ${
+            items.length === 1
               ? "gap"
-              : "gaps"}.
-          </p>
-<BackLink
-  href="/review/train"
-  label="Back to training"
-/>
-        </div>
+              : "gaps"
+          }.`}
+          actionLabel="Back to training"
+          actionHref="/review/train"
+        />
       </main>
     );
   }
 
   const isDouble =
-    currentItem.targetMode === "double";
+    currentItem.targetMode ===
+    "double";
 
   const correctAnswer =
     !isDouble
@@ -268,25 +305,28 @@ export default function FillGapClient({ vocabulary }) {
     selectedAnswer1 !== null &&
     selectedAnswer2 !== null;
 
-  const isAnswered = isDouble
-    ? isDoubleAnswered
-    : isSingleAnswered;
+  const isAnswered =
+    isDouble
+      ? isDoubleAnswered
+      : isSingleAnswered;
 
   const isDoubleCorrect =
-    selectedAnswer1 === correctAnswer1 &&
-    selectedAnswer2 === correctAnswer2;
+    selectedAnswer1 ===
+      correctAnswer1 &&
+    selectedAnswer2 ===
+      correctAnswer2;
 
   const singleSentenceParts =
     !isDouble
       ? currentItem.trainingSentence.split(
-          "{{gap}}"
+          "{{gap}}",
         )
       : [];
 
   const doubleSentenceParts =
     isDouble
       ? currentItem.trainingSentence.split(
-          /{{gap1}}|{{gap2}}/
+          /{{gap1}}|{{gap2}}/,
         )
       : [];
 
@@ -299,7 +339,9 @@ export default function FillGapClient({ vocabulary }) {
   }
 
   function chooseAnswer1(answer) {
-    if (selectedAnswer1 !== null) {
+    if (
+      selectedAnswer1 !== null
+    ) {
       return;
     }
 
@@ -307,7 +349,9 @@ export default function FillGapClient({ vocabulary }) {
   }
 
   function chooseAnswer2(answer) {
-    if (selectedAnswer2 !== null) {
+    if (
+      selectedAnswer2 !== null
+    ) {
       return;
     }
 
@@ -323,30 +367,13 @@ export default function FillGapClient({ vocabulary }) {
   }
 
   return (
-    <main className={styles.page}>
-     <BackLink
-  href="/review/train"
-  label="Back to training"
-/>
-      <ExerciseHeader
-  eyebrow="Fill the gap"
-  title="Choose the expression that fits the sentence"
-  current={currentIndex + 1}
-  total={items.length}
-/>
-
-<ExerciseProgress
-  current={currentIndex + 1}
-  total={items.length}
-/>
-
-      <section className={styles.questionCard}>
-        <p className={styles.questionLabel}>
-          {isDouble
-            ? "Choose the two expressions that complete the sentence."
-            : "Choose the word or expression that fits the gap."}
-        </p>
-
+    <ExerciseShell
+      eyebrow="Fill the gap"
+      title="Complete the sentence"
+      current={currentIndex + 1}
+      total={items.length}
+    >
+      <ExerciseQuestionCard>
         {!isDouble && (
           <p className={styles.sentence}>
             {singleSentenceParts[0]}
@@ -395,24 +422,16 @@ export default function FillGapClient({ vocabulary }) {
           </p>
         )}
 
-        <div className={styles.hint}>
-          {currentItem.english && (
-            <p>🇬🇧 {currentItem.english}</p>
-          )}
-
-          {currentItem.russian && (
-            <p>🇷🇺 {currentItem.russian}</p>
-          )}
-        </div>
-
         {!isDouble && (
           <div className={styles.options}>
             {options.map((option) => {
               const isCorrect =
-                option === correctAnswer;
+                option ===
+                correctAnswer;
 
               const isSelected =
-                option === selectedAnswer;
+                option ===
+                selectedAnswer;
 
               let optionClass =
                 styles.option;
@@ -421,7 +440,8 @@ export default function FillGapClient({ vocabulary }) {
                 isAnswered &&
                 isCorrect
               ) {
-                optionClass += ` ${styles.correct}`;
+                optionClass +=
+                  ` ${styles.correct}`;
               }
 
               if (
@@ -429,18 +449,25 @@ export default function FillGapClient({ vocabulary }) {
                 isSelected &&
                 !isCorrect
               ) {
-                optionClass += ` ${styles.wrong}`;
+                optionClass +=
+                  ` ${styles.wrong}`;
               }
 
               return (
                 <button
                   key={option}
                   type="button"
-                  className={optionClass}
-                  onClick={() =>
-                    chooseAnswer(option)
+                  className={
+                    optionClass
                   }
-                  disabled={isAnswered}
+                  onClick={() =>
+                    chooseAnswer(
+                      option,
+                    )
+                  }
+                  disabled={
+                    isAnswered
+                  }
                 >
                   {option}
                 </button>
@@ -452,101 +479,117 @@ export default function FillGapClient({ vocabulary }) {
         {isDouble && (
           <>
             <div className={styles.options}>
-              {options1.map((option) => {
-                const isCorrect =
-                  option ===
-                  correctAnswer1;
+              {options1.map(
+                (option) => {
+                  const isCorrect =
+                    option ===
+                    correctAnswer1;
 
-                const isSelected =
-                  option ===
-                  selectedAnswer1;
+                  const isSelected =
+                    option ===
+                    selectedAnswer1;
 
-                let optionClass =
-                  styles.option;
+                  let optionClass =
+                    styles.option;
 
-                if (
-                  selectedAnswer1 !==
-                    null &&
-                  isCorrect
-                ) {
-                  optionClass += ` ${styles.correct}`;
-                }
+                  if (
+                    selectedAnswer1 !==
+                      null &&
+                    isCorrect
+                  ) {
+                    optionClass +=
+                      ` ${styles.correct}`;
+                  }
 
-                if (
-                  selectedAnswer1 !==
-                    null &&
-                  isSelected &&
-                  !isCorrect
-                ) {
-                  optionClass += ` ${styles.wrong}`;
-                }
+                  if (
+                    selectedAnswer1 !==
+                      null &&
+                    isSelected &&
+                    !isCorrect
+                  ) {
+                    optionClass +=
+                      ` ${styles.wrong}`;
+                  }
 
-                return (
-                  <button
-                    key={`first-${option}`}
-                    type="button"
-                    className={optionClass}
-                    onClick={() =>
-                      chooseAnswer1(option)
-                    }
-                    disabled={
-                      selectedAnswer1 !==
-                      null
-                    }
-                  >
-                    {option}
-                  </button>
-                );
-              })}
+                  return (
+                    <button
+                      key={`first-${option}`}
+                      type="button"
+                      className={
+                        optionClass
+                      }
+                      onClick={() =>
+                        chooseAnswer1(
+                          option,
+                        )
+                      }
+                      disabled={
+                        selectedAnswer1 !==
+                        null
+                      }
+                    >
+                      {option}
+                    </button>
+                  );
+                },
+              )}
             </div>
 
             <div className={styles.options}>
-              {options2.map((option) => {
-                const isCorrect =
-                  option ===
-                  correctAnswer2;
+              {options2.map(
+                (option) => {
+                  const isCorrect =
+                    option ===
+                    correctAnswer2;
 
-                const isSelected =
-                  option ===
-                  selectedAnswer2;
+                  const isSelected =
+                    option ===
+                    selectedAnswer2;
 
-                let optionClass =
-                  styles.option;
+                  let optionClass =
+                    styles.option;
 
-                if (
-                  selectedAnswer2 !==
-                    null &&
-                  isCorrect
-                ) {
-                  optionClass += ` ${styles.correct}`;
-                }
+                  if (
+                    selectedAnswer2 !==
+                      null &&
+                    isCorrect
+                  ) {
+                    optionClass +=
+                      ` ${styles.correct}`;
+                  }
 
-                if (
-                  selectedAnswer2 !==
-                    null &&
-                  isSelected &&
-                  !isCorrect
-                ) {
-                  optionClass += ` ${styles.wrong}`;
-                }
+                  if (
+                    selectedAnswer2 !==
+                      null &&
+                    isSelected &&
+                    !isCorrect
+                  ) {
+                    optionClass +=
+                      ` ${styles.wrong}`;
+                  }
 
-                return (
-                  <button
-                    key={`second-${option}`}
-                    type="button"
-                    className={optionClass}
-                    onClick={() =>
-                      chooseAnswer2(option)
-                    }
-                    disabled={
-                      selectedAnswer2 !==
-                      null
-                    }
-                  >
-                    {option}
-                  </button>
-                );
-              })}
+                  return (
+                    <button
+                      key={`second-${option}`}
+                      type="button"
+                      className={
+                        optionClass
+                      }
+                      onClick={() =>
+                        chooseAnswer2(
+                          option,
+                        )
+                      }
+                      disabled={
+                        selectedAnswer2 !==
+                        null
+                      }
+                    >
+                      {option}
+                    </button>
+                  );
+                },
+              )}
             </div>
           </>
         )}
@@ -593,51 +636,27 @@ export default function FillGapClient({ vocabulary }) {
                 >
                   Correct answer:{" "}
                   <strong>
-                    {correctAnswer1} ...{" "}
+                    {correctAnswer1}
+                    {" ... "}
                     {correctAnswer2}
                   </strong>
                 </p>
               ))}
 
-            <div
-              className={
-                styles.explanation
-              }
-            >
-              {currentItem.definition_da && (
-                <p>
-                  <strong>
-                    Definition:
-                  </strong>{" "}
-                  {
-                    currentItem.definition_da
-                  }
-                </p>
-              )}
-
-              {currentItem.english && (
-                <p>
-                  🇬🇧 {currentItem.english}
-                </p>
-              )}
-
-              {currentItem.russian && (
-                <p>
-                  🇷🇺 {currentItem.russian}
-                </p>
-              )}
-            </div>
-
             <button
               type="button"
-              className={styles.nextButton}
-              onClick={nextQuestion}
+              className={
+                styles.nextButton
+              }
+              onClick={
+                nextQuestion
+              }
             >
               Next →
             </button>
           </div>
         )}
-      </section>
-    </main>
+      </ExerciseQuestionCard>
+    </ExerciseShell>
   );
 }

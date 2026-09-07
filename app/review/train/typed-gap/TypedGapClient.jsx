@@ -1,8 +1,9 @@
 "use client";
 
-import BackLink from "@/components/navigation/BackLink/BackLink";
-import ExerciseHeader from "@/components/exercises/ExerciseHeader/ExerciseHeader";
-import ExerciseProgress from "@/components/exercises/ExerciseProgress/ExerciseProgress";
+import ExerciseQuestionCard from "@/components/exercises/ExerciseQuestionCard/ExerciseQuestionCard";
+import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
+import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
+
 import { useState } from "react";
 
 import { createGapSentence } from "../_lib/sentenceUtils";
@@ -10,7 +11,9 @@ import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 
 import styles from "./TypedGap.module.css";
 
-export default function TypedGapClient({ vocabulary }) {
+export default function TypedGapClient({
+  vocabulary,
+}) {
   const [items] = useState(() =>
     vocabulary
       .map((item) => {
@@ -18,13 +21,18 @@ export default function TypedGapClient({ vocabulary }) {
           return null;
         }
 
-        const target = item.example_target;
+        const target =
+          item.example_target;
 
         if (!target) {
           return null;
         }
 
-        const trainingSentence = createGapSentence(item.example, target);
+        const trainingSentence =
+          createGapSentence(
+            item.example,
+            target,
+          );
 
         if (!trainingSentence) {
           return null;
@@ -39,50 +47,75 @@ export default function TypedGapClient({ vocabulary }) {
       .filter(Boolean),
   );
 
-  const [answer, setAnswer] = useState("");
-  const [checked, setChecked] = useState(false);
+  const [answer, setAnswer] =
+    useState("");
 
-  const { currentIndex, finished, next } = useTrainingProgress(items.length);
+  const [checked, setChecked] =
+    useState(false);
 
-  const currentItem = items[currentIndex];
+  const {
+    currentIndex,
+    finished,
+    next,
+  } = useTrainingProgress(
+    items.length,
+  );
+
+  const currentItem =
+    items[currentIndex];
 
   if (items.length === 0) {
     return (
-      <main>
-        <div className="mobilePage">
-          <BackLink href="/review/train" label="Back to training" />
-
-          <h1>Type the missing word</h1>
-
-          <p>No usable example sentences were found.</p>
-        </div>
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Typed gap"
+          title="No usable examples"
+          message="No usable example sentences were found."
+          actionLabel="Back to training"
+          actionHref="/review/train"
+        />
       </main>
     );
   }
 
   if (finished) {
     return (
-      <main>
-        <div className="mobilePage">
-          <BackLink href="/review/train" label="Back to training" />
-
-          <h1>Practice complete</h1>
-
-          <p>
-            You completed {items.length} {items.length === 1 ? "gap" : "gaps"}.
-          </p>
-        </div>
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Typed gap"
+          title="Practice complete"
+          message={`You completed ${
+            items.length
+          } ${
+            items.length === 1
+              ? "gap"
+              : "gaps"
+          }.`}
+          actionLabel="Back to training"
+          actionHref="/review/train"
+        />
       </main>
     );
   }
 
-  const correctAnswer = currentItem.target.trim().toLowerCase();
+  const correctAnswer =
+    currentItem.target
+      .trim()
+      .toLowerCase();
 
-  const normalizedAnswer = answer.trim().toLowerCase();
+  const normalizedAnswer =
+    answer
+      .trim()
+      .toLowerCase();
 
-  const isCorrect = normalizedAnswer === correctAnswer;
+  const isCorrect =
+    normalizedAnswer ===
+    correctAnswer;
 
-  const sentenceParts = currentItem.trainingSentence.split("{{gap}}");
+  const sentenceParts =
+    currentItem.trainingSentence.split(
+      "{{gap}}",
+    );
 
   function checkAnswer(event) {
     event.preventDefault();
@@ -101,75 +134,96 @@ export default function TypedGapClient({ vocabulary }) {
   }
 
   return (
-    <main>
-      <div className="mobilePage">
-        <BackLink href="/review/train" label="Back to training" />
+    <ExerciseShell
+      eyebrow="Typed gap"
+      title="Complete the sentence"
+      current={currentIndex + 1}
+      total={items.length}
+    >
+      <ExerciseQuestionCard>
+        <p className={styles.sentence}>
+          {sentenceParts[0]}
 
-        <ExerciseHeader
-          eyebrow="Typed gap"
-          title="Type the missing expression"
-          current={currentIndex + 1}
-          total={items.length}
-        />
+          <span
+            className={styles.gap}
+            aria-hidden="true"
+          />
 
-        <ExerciseProgress current={currentIndex + 1} total={items.length} />
-        <section className={styles.questionCard}>
-          <p className={styles.sentence}>
-            {sentenceParts[0]}
+          {sentenceParts[1]}
+        </p>
 
-            <span className={styles.gap} aria-hidden="true" />
+        <form
+          className={styles.form}
+          onSubmit={checkAnswer}
+        >
+          <label
+            className={
+              styles.inputLabel
+            }
+            htmlFor="typed-answer"
+          >
+            Your answer
+          </label>
 
-            {sentenceParts[1]}
-          </p>
+          <input
+            id="typed-answer"
+            className={styles.input}
+            value={answer}
+            onChange={(event) =>
+              setAnswer(
+                event.target.value,
+              )
+            }
+            disabled={checked}
+            autoComplete="off"
+          />
 
-          <form className={styles.form} onSubmit={checkAnswer}>
-            <label className={styles.inputLabel} htmlFor="typed-answer">
-              Your answer
-            </label>
-
-            <input
-              id="typed-answer"
-              className={styles.input}
-              value={answer}
-              onChange={(event) => setAnswer(event.target.value)}
-              disabled={checked}
-              autoComplete="off"
-            />
-
-            {!checked && (
-              <button type="submit" className={styles.checkButton}>
-                Check
-              </button>
-            )}
-          </form>
-
-          {checked && (
-            <div className={styles.feedback}>
-              {isCorrect ? (
-                <p className={styles.correct}>✓ Correct</p>
-              ) : (
-                <div className={styles.wrong}>
-                  <p>Correct answer:</p>
-
-                  <strong>{currentItem.target}</strong>
-                </div>
-              )}
-
-              {currentItem.definition_da && (
-                <p className={styles.definition}>{currentItem.definition_da}</p>
-              )}
-
-              <button
-                type="button"
-                className={styles.nextButton}
-                onClick={nextQuestion}
-              >
-                Next →
-              </button>
-            </div>
+          {!checked && (
+            <button
+              type="submit"
+              className={
+                styles.checkButton
+              }
+            >
+              Check
+            </button>
           )}
-        </section>
-      </div>
-    </main>
+        </form>
+
+        {checked && (
+          <div className={styles.feedback}>
+            {isCorrect ? (
+              <p className={styles.correct}>
+                ✓ Correct
+              </p>
+            ) : (
+              <div className={styles.wrong}>
+                <p>
+                  Correct answer:
+                </p>
+
+                <strong>
+                  {
+                    currentItem.target
+                  }
+                </strong>
+              </div>
+            )}
+
+            <button
+              type="button"
+              className={
+                styles.nextButton
+              }
+              onClick={
+                nextQuestion
+              }
+            >
+              Next →
+            </button>
+          </div>
+        )}
+      </ExerciseQuestionCard>
+    </ExerciseShell>
   );
 }
