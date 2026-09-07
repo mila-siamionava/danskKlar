@@ -1,14 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import styles from "./ExercisePage.module.css";
+
 import AppHeader from "@/components/navigation/AppHeader/AppHeader";
 import BottomNavigation from "@/components/navigation/BottomNavigation/BottomNavigation";
+import BackLink from "@/components/navigation/BackLink/BackLink";
+
 import GapExercise from "@/components/exercises/GapExercise/GapExercise";
 import Button from "@/components/ui/Button/Button";
 import Badge from "@/components/ui/Badge/Badge";
 
 import { navItems } from "@/data/navigation";
 import { getExercise } from "@/lib/exercises/getExercise";
+
+import styles from "./ExercisePage.module.css";
 
 export default async function ExercisePage({
   params,
@@ -24,7 +28,7 @@ export default async function ExercisePage({
 
   const exercise = await getExercise(
     slug,
-    exerciseType
+    exerciseType,
   );
 
   if (!exercise) {
@@ -35,71 +39,77 @@ export default async function ExercisePage({
     <main>
       <AppHeader title="Dansk Trainer" />
 
-      <div className="mainPageContainer">
-        <div className="readingContainer">
+      <div className={styles.page}>
+        <div className={styles.topRow}>
+          <BackLink
+            href="/exercises"
+            label="Back to exercises"
+          />
 
-         <div className={styles.topRow}>
-  <Link href="/exercises">
-    <Button variant="ghost" size="sm">
-      ← Back to exercises
-    </Button>
-  </Link>
+          <div className={styles.badges}>
+            <Badge
+              variant="neutral"
+              size="sm"
+            >
+              {exercise.level}
+            </Badge>
 
-  <div className={styles.badges}>
-    <Badge variant="neutral" size="sm">
-      {exercise.level}
-    </Badge>
+            <Badge
+              variant="accent"
+              size="sm"
+            >
+              {exercise.category}
+            </Badge>
 
-    <Badge variant="accent" size="sm">
-      {exercise.category}
-    </Badge>
+            <Badge
+              variant="neutral"
+              size="sm"
+            >
+              {exercise.questions.length} questions
+            </Badge>
+          </div>
+        </div>
 
-    <Badge variant="neutral" size="sm">
-      {exercise.questions.length} questions
-    </Badge>
-  </div>
-</div>
-
-          <div className={styles.exerciseSection}>
-            <div className={styles.exerciseTabs}>
-              <Link
-                href={`/exercises/${slug}?type=vocabulary_gap`}
+        <div className={styles.exerciseSection}>
+          <div className={styles.exerciseTabs}>
+            <Link
+              href={`/exercises/${slug}?type=vocabulary_gap`}
+            >
+              <Button
+                variant={
+                  exerciseType === "vocabulary_gap"
+                    ? "primary"
+                    : "secondary"
+                }
+                size="md"
               >
-                <Button
-                  variant={
-                    exerciseType === "vocabulary_gap"
-                      ? "primary"
-                      : "secondary"
-                  }
-                  size="md"
-                >
-                  Vocabulary
-                </Button>
-              </Link>
+                Vocabulary
+              </Button>
+            </Link>
 
-              <Link
-                href={`/exercises/${slug}?type=connector_gap`}
+            <Link
+              href={`/exercises/${slug}?type=connector_gap`}
+            >
+              <Button
+                variant={
+                  exerciseType === "connector_gap"
+                    ? "primary"
+                    : "secondary"
+                }
+                size="md"
               >
-                <Button
-                  variant={
-                    exerciseType === "connector_gap"
-                      ? "primary"
-                      : "secondary"
-                  }
-                  size="md"
-                >
-                  Bindeord
-                </Button>
-              </Link>
-            </div>
-
-            <GapExercise exercise={exercise} />
+                Bindeord
+              </Button>
+            </Link>
           </div>
 
+          <GapExercise exercise={exercise} />
         </div>
       </div>
 
-      <BottomNavigation items={navItems} />
+      <BottomNavigation
+        items={navItems}
+      />
     </main>
   );
 }
