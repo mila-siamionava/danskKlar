@@ -7,7 +7,8 @@ import {
   Settings,
 } from "lucide-react";
 import styles from "./Home.module.css";
-
+import DenmarkLine from "@/components/ui/AarhusSketch/AarhusSketch";
+import AarhusSketch from "@/components/ui/AarhusSketch/AarhusSketch";
 export default function Home() {
   return (
     <main className={styles.page}>
@@ -61,7 +62,12 @@ export default function Home() {
         />
       </nav>
 
-      <div className={styles.illustration} aria-hidden="true" />
+     <div className={styles.illustration}>
+  <AarhusSketch
+    className={styles.aarhusSketch}
+    title="Aarhus sketch"
+  />
+</div>
     </main>
   );
 }
