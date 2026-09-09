@@ -9,10 +9,10 @@
     var(--spacing-xs)
     var(--spacing-sm);
 
-  background-color: #2b2722;
-  color: #f7f4ee;
+  background-color: var(--color-surface-subtle);
+  color: var(--color-text);
 
-  border: 1px solid #5a5147;
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-sm);
 
   font-family: var(--font-family-body);
@@ -22,27 +22,33 @@
 
   cursor: pointer;
 
-  color-scheme: dark;
-
   transition:
     background-color var(--transition-fast),
     border-color var(--transition-fast),
-    color var(--transition-fast);
+    box-shadow var(--transition-fast);
 }
 
 .select option {
-  background-color: #2b2722;
-  color: #f7f4ee;
+  background-color: var(--color-surface);
+  color: var(--color-text);
 }
 
 .select:hover:not(:disabled) {
-  background-color: #35302a;
-  border-color: #8a6e43;
+  background-color: var(--color-surface);
+  border-color: var(--color-primary-hover);
 }
 
 .select:focus-visible {
-  outline: 2px solid #d8c7a6;
-  outline-offset: 2px;
+  outline: none;
+  border-color: var(--color-primary-hover);
+
+  box-shadow:
+    0 0 0 3px
+    color-mix(
+      in srgb,
+      var(--color-primary) 30%,
+      transparent
+    );
 }
 
 .correct {
