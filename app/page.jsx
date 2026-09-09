@@ -1,38 +1,120 @@
-import HomeNavigationCard from "@/components/navigation/HomeNavigationCard/HomeNavigationCard";
+import Link from "next/link";
+
 import {
   BookOpen,
   RotateCcw,
   Dumbbell,
   ClipboardList,
+  UserRound,
+  LogOut,
   Settings,
 } from "lucide-react";
-import styles from "./Home.module.css";
-import DenmarkLine from "@/components/ui/AarhusSketch/AarhusSketch";
+
+import HomeNavigationCard from "@/components/navigation/HomeNavigationCard/HomeNavigationCard";
 import AarhusSketch from "@/components/ui/AarhusSketch/AarhusSketch";
-export default function Home() {
+import { createClient } from "@/lib/supabase/server";
+
+import styles from "./Home.module.css";
+
+export default async function Home() {
+  const supabase = await createClient();
+
+  const { data } =
+    await supabase.auth.getClaims();
+
+  const user = data?.claims ?? null;
+
   return (
     <main className={styles.page}>
       <div className={styles.topBar}>
-        <span className={styles.logo} aria-label="DanskKlar">
+        <span
+          className={styles.logo}
+          aria-label="DanskKlar"
+        >
           DK
         </span>
 
-        <button
-          type="button"
-          className={styles.settingsButton}
-          aria-label="Open settings"
-        >
-          <Settings size={20} strokeWidth={1.7} aria-hidden="true" />
-        </button>
+        <div className={styles.authActions}>
+          {user ? (
+            <details className={styles.accountMenu}>
+              <summary
+                className={styles.accountButton}
+                aria-label="Open account menu"
+              >
+                <UserRound
+                  size={20}
+                  strokeWidth={1.8}
+                  aria-hidden="true"
+                />
+              </summary>
+
+              <div className={styles.accountDropdown}>
+                <div className={styles.accountInfo}>
+                  <span className={styles.accountLabel}>
+                    Signed in as
+                  </span>
+
+                  <span className={styles.accountEmail}>
+                    {user.email}
+                  </span>
+                </div>
+
+                <div className={styles.accountDivider} />
+
+                <div className={styles.futureItem}>
+                  <Settings
+                    size={17}
+                    strokeWidth={1.7}
+                    aria-hidden="true"
+                  />
+
+                  <div>
+                    <span>Settings</span>
+                    <small>Coming later</small>
+                  </div>
+                </div>
+
+                <div className={styles.accountDivider} />
+
+                <form
+                  action="/auth/signout"
+                  method="post"
+                >
+                  <button
+                    type="submit"
+                    className={styles.menuItem}
+                  >
+                    <LogOut
+                      size={17}
+                      strokeWidth={1.7}
+                      aria-hidden="true"
+                    />
+
+                    Sign out
+                  </button>
+                </form>
+              </div>
+            </details>
+          ) : (
+            <Link
+              href="/login"
+              className={styles.authButton}
+            >
+              Sign in
+            </Link>
+          )}
+        </div>
       </div>
 
       <header className={styles.header}>
         <h1>DanskKlar</h1>
-
         <p>Get ready for PD3.5</p>
       </header>
 
-      <nav className={styles.navigation} aria-label="Main navigation">
+      <nav
+        className={styles.navigation}
+        aria-label="Main navigation"
+      >
         <HomeNavigationCard
           href="/exercises"
           icon={BookOpen}
@@ -62,12 +144,12 @@ export default function Home() {
         />
       </nav>
 
-     <div className={styles.illustration}>
-  <AarhusSketch
-    className={styles.aarhusSketch}
-    title="Aarhus sketch"
-  />
-</div>
+      <div className={styles.illustration}>
+        <AarhusSketch
+          className={styles.aarhusSketch}
+          title="Aarhus sketch"
+        />
+      </div>
     </main>
   );
 }
