@@ -25,12 +25,12 @@ export default function ExerciseModeGroup({
       </div>
 
       <div className={styles.list}>
-        {modes.map((mode) => (
-          <ExerciseModeCard
-            key={mode.href}
-            {...mode}
-          />
-        ))}
+       {modes.map(({ key: resourceKey, ...mode }) => (
+  <ExerciseModeCard
+    key={mode.href}
+    {...mode}
+  />
+))}
       </div>
     </section>
   );
