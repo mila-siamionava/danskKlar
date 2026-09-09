@@ -12,18 +12,17 @@ import styles from "./Login.module.css";
 export default async function LoginPage({
   searchParams,
 }) {
-  const params =
-    await searchParams;
+  const params = await searchParams;
 
-  const error =
-    params?.error;
+  const isSignup =
+    params?.mode === "signup";
 
-  const message =
-    params?.message;
+  const error = params?.error;
+  const message = params?.message;
 
   return (
     <main className={styles.page}>
-      <div className={styles.auth}>
+      <section className={styles.auth}>
         <Link
           href="/"
           className={styles.logo}
@@ -33,12 +32,36 @@ export default async function LoginPage({
         </Link>
 
         <header className={styles.header}>
-          <h1>Welcome to DanskKlar</h1>
+          <h1>
+            {isSignup
+              ? "Create your account"
+              : "Welcome back"}
+          </h1>
 
           <p>
-            Sign in to save your words and continue your Danish practice.
+            {isSignup
+              ? "Save your words and keep your Danish practice in one place."
+              : "Sign in to continue your Danish practice."}
           </p>
         </header>
+
+        {error && (
+          <p
+            className={styles.error}
+            role="alert"
+          >
+            {error}
+          </p>
+        )}
+
+        {message && (
+          <p
+            className={styles.message}
+            role="status"
+          >
+            {message}
+          </p>
+        )}
 
         <form className={styles.form}>
           <div className={styles.field}>
@@ -64,56 +87,68 @@ export default async function LoginPage({
               id="password"
               name="password"
               type="password"
-              autoComplete="current-password"
-              minLength={6}
+              autoComplete={
+                isSignup
+                  ? "new-password"
+                  : "current-password"
+              }
+              minLength={8}
               required
             />
+
+            {isSignup && (
+              <span className={styles.hint}>
+                At least 8 characters
+              </span>
+            )}
           </div>
 
-          {error && (
-            <p
-              className={styles.error}
-              role="alert"
-            >
-              {error}
-            </p>
-          )}
-
-          {message && (
-            <p
-              className={styles.message}
-              role="status"
-            >
-              {message}
-            </p>
-          )}
-
-          <div className={styles.actions}>
-            <Button
-              type="submit"
-              fullWidth
-              formAction={login}
-            >
-              Sign in
-            </Button>
-
-            <button
-              type="submit"
-              formAction={signup}
-              className={styles.signup}
-            >
-              Create account
-            </button>
-          </div>
+          <Button
+            type="submit"
+            fullWidth
+            formAction={
+              isSignup
+                ? signup
+                : login
+            }
+          >
+            {isSignup
+              ? "Create account"
+              : "Sign in"}
+          </Button>
         </form>
+
+        <div className={styles.switch}>
+          <span>
+            {isSignup
+              ? "Already have an account?"
+              : "New to DanskKlar?"}
+          </span>
+
+          <Link
+            href={
+              isSignup
+                ? "/login"
+                : "/login?mode=signup"
+            }
+          >
+            {isSignup
+              ? "Sign in"
+              : "Create an account"}
+          </Link>
+        </div>
+
+        <div className={styles.divider}>
+          <span>or</span>
+        </div>
 
         <Link
           href="/"
-          className={styles.back}
+          className={styles.guest}
         >
           Continue without signing in
         </Link>
-      </div>
+      </section>
     </main>
   );
 }
