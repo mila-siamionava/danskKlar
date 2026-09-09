@@ -7,23 +7,22 @@ import ReadingPracticeClient from "./_components/ReadingPracticeClient/ReadingPr
 import styles from "./Exercises.module.css";
 
 import { navItems } from "@/data/navigation";
-import { getTexts } from "@/lib/exercises/getTexts";
-import { createClient } from "@/lib/supabase/server";
 
-const GUEST_TEXT_SLUG =
-  "frivilligt-arbejde";
+import { canAccessResource } from "@/lib/access/canAccessResource";
+import { getCurrentAccess } from "@/lib/access/getCurrentAccess";
+import { getTexts } from "@/lib/exercises/getTexts";
 
 const readingImages = {
   "fleksibelt-arbejde":
     "https://images.unsplash.com/photo-1758691737124-05c5bffe46f0?auto=format&fit=crop&w=500&q=80",
 
-  "flere-udenlandske-medarbejdere-i-danmark":
+  "udenlandsk-arbejdskraft":
     "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=500&q=80",
 
   "frivilligt-arbejde":
     "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=500&q=80",
 
-  "hvorfor-skifter-mange-danskere-job":
+  jobskifte:
     "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=500&q=80",
 
   "stress-paa-arbejdspladsen":
@@ -34,23 +33,44 @@ const readingImages = {
 };
 
 export default async function ExercisesPage() {
-  const texts = await getTexts();
+  const [texts, access] = await Promise.all([
+    getTexts(),
+    getCurrentAccess(),
+  ]);
 
-  const supabase = await createClient();
+  const canUseVocabulary =
+    canAccessResource(
+      access.resources,
+      "reading_exercise",
+      "vocabulary_gap",
+    );
 
-  const { data } =
-    await supabase.auth.getClaims();
+  const canUseConjunctions =
+    canAccessResource(
+      access.resources,
+      "reading_exercise",
+      "connector_gap",
+    );
 
-  const user =
-    data?.claims ?? null;
+  const visibleTexts = texts
+    .filter((text) =>
+      canAccessResource(
+        access.resources,
+        "text",
+        text.slug,
+      ),
+    )
+    .map((text) => ({
+      ...text,
 
-  const visibleTexts = user
-    ? texts
-    : texts.filter(
-        (text) =>
-          text.slug ===
-          GUEST_TEXT_SLUG,
-      );
+      hasVocabulary:
+        text.hasVocabulary &&
+        canUseVocabulary,
+
+      hasConjunctions:
+        text.hasConjunctions &&
+        canUseConjunctions,
+    }));
 
   return (
     <main>
@@ -64,9 +84,8 @@ export default async function ExercisesPage() {
           />
 
           <p className={styles.instruction}>
-            {user
-              ? "Choose a text to practice vocabulary or conjunctions."
-              : "Try Frivilligt arbejde. Sign in to unlock all texts."}
+            Choose a text to practice vocabulary
+            or conjunctions.
           </p>
         </div>
 
