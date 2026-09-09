@@ -8,13 +8,16 @@ export default function Button({
   disabled = false,
   type = "button",
   onClick,
+  formAction,
   className = "",
 }) {
   const classes = [
     styles.button,
     styles[variant],
     styles[size],
-    fullWidth ? styles.fullWidth : "",
+    fullWidth
+      ? styles.fullWidth
+      : "",
     className,
   ]
     .filter(Boolean)
@@ -26,6 +29,7 @@ export default function Button({
       className={classes}
       disabled={disabled}
       onClick={onClick}
+      formAction={formAction}
     >
       {children}
     </button>
