@@ -8,6 +8,10 @@ import styles from "./Exercises.module.css";
 
 import { navItems } from "@/data/navigation";
 import { getTexts } from "@/lib/exercises/getTexts";
+import { createClient } from "@/lib/supabase/server";
+
+const GUEST_TEXT_SLUG =
+  "frivilligt-arbejde";
 
 const readingImages = {
   "fleksibelt-arbejde":
@@ -32,25 +36,42 @@ const readingImages = {
 export default async function ExercisesPage() {
   const texts = await getTexts();
 
+  const supabase = await createClient();
+
+  const { data } =
+    await supabase.auth.getClaims();
+
+  const user =
+    data?.claims ?? null;
+
+  const visibleTexts = user
+    ? texts
+    : texts.filter(
+        (text) =>
+          text.slug ===
+          GUEST_TEXT_SLUG,
+      );
+
   return (
     <main>
-      <AppHeader title="Dansk Trainer" />
+      <AppHeader title="DanskKlar" />
 
       <div className={styles.page}>
         <div className={styles.introRow}>
           <BackLink
-            href="/review"
-            label="Back to review"
+            href="/"
+            label="Back to home"
           />
 
           <p className={styles.instruction}>
-            Choose a text to practice vocabulary
-            or conjunctions.
+            {user
+              ? "Choose a text to practice vocabulary or conjunctions."
+              : "Try Frivilligt arbejde. Sign in to unlock all texts."}
           </p>
         </div>
 
         <ReadingPracticeClient
-          texts={texts}
+          texts={visibleTexts}
           readingImages={readingImages}
         />
       </div>
