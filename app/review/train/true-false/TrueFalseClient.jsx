@@ -1,36 +1,90 @@
 "use client";
 
-import ExerciseQuestionCard from "@/components/exercises/ExerciseQuestionCard/ExerciseQuestionCard";
-import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
-import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
-
 import {
   useEffect,
   useMemo,
   useState,
 } from "react";
 
+import ExerciseQuestionCard from "@/components/exercises/ExerciseQuestionCard/ExerciseQuestionCard";
+import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
+import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
+
+import { useSelectedReviewItems } from "../_hooks/useSelectedReviewItems";
 import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 
 import styles from "./TrueFalse.module.css";
 
-export default function TrueFalseClient({
-  vocabulary,
-}) {
-  const usableVocabulary = useMemo(
-    () =>
-      vocabulary.filter(
+const MODES = [
+  {
+    key: "english",
+    label: "EN",
+    title: "English",
+    field: "english",
+  },
+  {
+    key: "russian",
+    label: "RU",
+    title: "Russian",
+    field: "russian",
+  },
+  {
+    key: "definition",
+    label: "Definition",
+    title: "Danish definition",
+    field: "definition_da",
+  },
+];
+
+function normalizePartOfSpeech(
+  value = "",
+) {
+  return value
+    .trim()
+    .toLowerCase();
+}
+
+export default function TrueFalseClient() {
+  const {
+    items,
+    isLoading,
+  } = useSelectedReviewItems();
+
+  const [
+    trainingMode,
+    setTrainingMode,
+  ] = useState("english");
+
+  const usableVocabulary =
+    useMemo(() => {
+      const activeMode =
+        MODES.find(
+          (mode) =>
+            mode.key ===
+            trainingMode,
+        );
+
+      if (!activeMode) {
+        return [];
+      }
+
+      return items.filter(
         (item) =>
           item.term &&
-          item.english,
-      ),
-    [vocabulary],
-  );
+          item[
+            activeMode.field
+          ],
+      );
+    }, [
+      items,
+      trainingMode,
+    ]);
 
   const {
     currentIndex,
     finished,
     next,
+    reset,
   } = useTrainingProgress(
     usableVocabulary.length,
   );
@@ -46,7 +100,20 @@ export default function TrueFalseClient({
   ] = useState(null);
 
   const currentItem =
-    usableVocabulary[currentIndex];
+    usableVocabulary[
+      currentIndex
+    ];
+
+  const activeMode =
+    MODES.find(
+      (mode) =>
+        mode.key ===
+        trainingMode,
+    );
+
+  const activeField =
+    activeMode?.field ??
+    "english";
 
   useEffect(() => {
     if (!currentItem) {
@@ -59,26 +126,40 @@ export default function TrueFalseClient({
 
     if (shouldBeCorrect) {
       setStatement({
-        english:
-          currentItem.english,
+        text:
+          currentItem[
+            activeField
+          ],
         isCorrect: true,
       });
 
       return;
     }
 
+    const currentCategory =
+      normalizePartOfSpeech(
+        currentItem.part_of_speech,
+      );
+
     const wrongItems =
       usableVocabulary.filter(
         (item) =>
           item.id !==
             currentItem.id &&
-          item.english,
+          item[activeField] &&
+          normalizePartOfSpeech(
+            item.part_of_speech,
+          ) === currentCategory,
       );
 
-    if (wrongItems.length === 0) {
+    if (
+      wrongItems.length === 0
+    ) {
       setStatement({
-        english:
-          currentItem.english,
+        text:
+          currentItem[
+            activeField
+          ],
         isCorrect: true,
       });
 
@@ -94,24 +175,60 @@ export default function TrueFalseClient({
       ];
 
     setStatement({
-      english:
-        wrongItem.english,
+      text:
+        wrongItem[
+          activeField
+        ],
       isCorrect: false,
     });
   }, [
     currentItem,
     usableVocabulary,
+    activeField,
   ]);
 
-  if (usableVocabulary.length === 0) {
+  function changeMode(mode) {
+    if (
+      mode === trainingMode
+    ) {
+      return;
+    }
+
+    setTrainingMode(mode);
+    setSelectedAnswer(null);
+    setStatement(null);
+
+    if (reset) {
+      reset();
+    }
+  }
+
+  if (isLoading) {
     return (
       <main className="mobilePage">
         <ExerciseState
           eyebrow="True / False"
-          title="No vocabulary available"
-          message="Choose some words in Review before starting this exercise."
-          actionLabel="Back to training"
-          actionHref="/review/train"
+          title="Loading words"
+          message="Preparing your selected review words…"
+        />
+      </main>
+    );
+  }
+
+  if (
+    usableVocabulary.length === 0
+  ) {
+    return (
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="True / False"
+          title="No usable vocabulary"
+          message={`Your selected review words do not have ${
+            activeMode?.title ??
+            "the required information"
+          } yet.`}
+          actionLabel="Back to review"
+          actionHref="/review"
         />
       </main>
     );
@@ -126,7 +243,8 @@ export default function TrueFalseClient({
           message={`You reviewed ${
             usableVocabulary.length
           } ${
-            usableVocabulary.length === 1
+            usableVocabulary.length ===
+            1
               ? "word"
               : "words"
           }.`}
@@ -165,57 +283,143 @@ export default function TrueFalseClient({
   return (
     <ExerciseShell
       eyebrow="True / False"
-      title="Is this English meaning correct?"
-      current={currentIndex + 1}
-      total={usableVocabulary.length}
+      title="Is this meaning correct?"
+      current={
+        currentIndex + 1
+      }
+      total={
+        usableVocabulary.length
+      }
     >
+      <div
+        className={
+          styles.modeSelector
+        }
+      >
+        <span
+          className={
+            styles.modeLabel
+          }
+        >
+          Train with
+        </span>
+
+        <div
+          className={
+            styles.modeButtons
+          }
+          role="group"
+          aria-label="Choose training language"
+        >
+          {MODES.map((mode) => (
+            <button
+              key={mode.key}
+              type="button"
+              className={`${styles.modeButton} ${
+                trainingMode ===
+                mode.key
+                  ? styles.modeButtonActive
+                  : ""
+              }`}
+              onClick={() =>
+                changeMode(
+                  mode.key,
+                )
+              }
+              aria-pressed={
+                trainingMode ===
+                mode.key
+              }
+            >
+              {mode.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <ExerciseQuestionCard>
-        <p className={styles.term}>
+        <p
+          className={
+            styles.term
+          }
+        >
           {currentItem.term}
         </p>
 
-        <span className={styles.means}>
+        <span
+          className={
+            styles.means
+          }
+        >
           means
         </span>
 
-        <div className={styles.translation}>
-          <p className={styles.english}>
-            {statement.english}
+        <div
+          className={
+            styles.translation
+          }
+        >
+          <p
+            className={
+              styles.english
+            }
+          >
+            {statement.text}
           </p>
         </div>
 
-       <div className={styles.answers}>
-  <button
-    type="button"
-    className={`${styles.answerButton} ${styles.trueButton}`}
-    onClick={() =>
-      chooseAnswer(true)
-    }
-    disabled={isAnswered}
-  >
-    True
-  </button>
+        <div
+          className={
+            styles.answers
+          }
+        >
+          <button
+            type="button"
+            className={`${styles.answerButton} ${styles.trueButton}`}
+            onClick={() =>
+              chooseAnswer(true)
+            }
+            disabled={
+              isAnswered
+            }
+          >
+            True
+          </button>
 
-  <button
-    type="button"
-    className={`${styles.answerButton} ${styles.falseButton}`}
-    onClick={() =>
-      chooseAnswer(false)
-    }
-    disabled={isAnswered}
-  >
-    False
-  </button>
-</div>
+          <button
+            type="button"
+            className={`${styles.answerButton} ${styles.falseButton}`}
+            onClick={() =>
+              chooseAnswer(false)
+            }
+            disabled={
+              isAnswered
+            }
+          >
+            False
+          </button>
+        </div>
 
         {isAnswered && (
-          <div className={styles.feedback}>
+          <div
+            className={
+              styles.feedback
+            }
+          >
             {isUserCorrect ? (
-              <p className={styles.correct}>
+              <p
+                className={
+                  styles.correct
+                }
+              >
                 ✓ Correct
               </p>
             ) : (
-              <p className={styles.wrong}>
+              <p
+                className={
+                  styles.wrong
+                }
+              >
                 ✕ Not quite
               </p>
             )}
@@ -230,7 +434,11 @@ export default function TrueFalseClient({
               </strong>
 
               <p>
-                {currentItem.english}
+                {
+                  currentItem[
+                    activeField
+                  ]
+                }
               </p>
             </div>
 
@@ -239,7 +447,9 @@ export default function TrueFalseClient({
               className={
                 styles.nextButton
               }
-              onClick={nextQuestion}
+              onClick={
+                nextQuestion
+              }
             >
               Next →
             </button>
