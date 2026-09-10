@@ -13,23 +13,29 @@ import { navItems } from "@/data/navigation";
 import { getExercise } from "@/lib/exercises/getExercise";
 
 import styles from "./ExercisePage.module.css";
+import { canAccessResource } from "@/lib/access/canAccessResource";
+import { getCurrentAccess } from "@/lib/access/getCurrentAccess";
 
-export default async function ExercisePage({
-  params,
-  searchParams,
-}) {
+export default async function ExercisePage({ params, searchParams }) {
   const { slug } = await params;
   const query = await searchParams;
 
   const exerciseType =
-    query?.type === "connector_gap"
-      ? "connector_gap"
-      : "vocabulary_gap";
+    query?.type === "connector_gap" ? "connector_gap" : "vocabulary_gap";
+  const access = await getCurrentAccess();
 
-  const exercise = await getExercise(
-    slug,
+  const canAccessText = canAccessResource(access.resources, "text", slug);
+
+  const canAccessExerciseType = canAccessResource(
+    access.resources,
+    "reading_exercise",
     exerciseType,
   );
+
+  if (!canAccessText || !canAccessExerciseType) {
+    notFound();
+  }
+  const exercise = await getExercise(slug, exerciseType);
 
   if (!exercise) {
     notFound();
@@ -41,30 +47,18 @@ export default async function ExercisePage({
 
       <div className={styles.page}>
         <div className={styles.topRow}>
-          <BackLink
-            href="/exercises"
-            label="Back to exercises"
-          />
+          <BackLink href="/exercises" label="Back to exercises" />
 
           <div className={styles.badges}>
-            <Badge
-              variant="neutral"
-              size="sm"
-            >
+            <Badge variant="neutral" size="sm">
               {exercise.level}
             </Badge>
 
-            <Badge
-              variant="accent"
-              size="sm"
-            >
+            <Badge variant="accent" size="sm">
               {exercise.category}
             </Badge>
 
-            <Badge
-              variant="neutral"
-              size="sm"
-            >
+            <Badge variant="neutral" size="sm">
               {exercise.questions.length} questions
             </Badge>
           </div>
@@ -72,14 +66,10 @@ export default async function ExercisePage({
 
         <div className={styles.exerciseSection}>
           <div className={styles.exerciseTabs}>
-            <Link
-              href={`/exercises/${slug}?type=vocabulary_gap`}
-            >
+            <Link href={`/exercises/${slug}?type=vocabulary_gap`}>
               <Button
                 variant={
-                  exerciseType === "vocabulary_gap"
-                    ? "primary"
-                    : "secondary"
+                  exerciseType === "vocabulary_gap" ? "primary" : "secondary"
                 }
                 size="md"
               >
@@ -87,14 +77,10 @@ export default async function ExercisePage({
               </Button>
             </Link>
 
-            <Link
-              href={`/exercises/${slug}?type=connector_gap`}
-            >
+            <Link href={`/exercises/${slug}?type=connector_gap`}>
               <Button
                 variant={
-                  exerciseType === "connector_gap"
-                    ? "primary"
-                    : "secondary"
+                  exerciseType === "connector_gap" ? "primary" : "secondary"
                 }
                 size="md"
               >
@@ -107,9 +93,7 @@ export default async function ExercisePage({
         </div>
       </div>
 
-      <BottomNavigation
-        items={navItems}
-      />
+      <BottomNavigation items={navItems} />
     </main>
   );
 }
