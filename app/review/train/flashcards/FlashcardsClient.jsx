@@ -1,14 +1,13 @@
 "use client";
 
-import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
-import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
-
 import { useState } from "react";
-
 import {
   ChevronDown,
   RotateCcw,
 } from "lucide-react";
+
+import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
+import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
 
 import { useSelectedReviewItems } from "../_hooks/useSelectedReviewItems";
 
@@ -73,9 +72,7 @@ export default function FlashcardsClient() {
         <ExerciseState
           eyebrow="Flashcards"
           title="Review complete"
-          message={`You reviewed ${
-            items.length
-          } ${
+          message={`You reviewed ${items.length} ${
             items.length === 1
               ? "word"
               : "words"
@@ -213,6 +210,10 @@ export default function FlashcardsClient() {
     }
   }
 
+  function stopDetailsClick(event) {
+    event.stopPropagation();
+  }
+
   return (
     <ExerciseShell
       eyebrow="Flashcards"
@@ -220,7 +221,11 @@ export default function FlashcardsClient() {
       current={currentIndex + 1}
       total={items.length}
     >
-        <div className={styles.cardArea}>
+      <div
+        className={
+          styles.cardArea
+        }
+      >
         <div
           className={`${styles.card} ${
             flipped
@@ -265,9 +270,7 @@ export default function FlashcardsClient() {
                         styles.partOfSpeech
                       }
                     >
-                      {
-                        partOfSpeech
-                      }
+                      {partOfSpeech}
                     </span>
                   )}
 
@@ -287,7 +290,7 @@ export default function FlashcardsClient() {
                 }
               >
                 <RotateCcw
-                  size={22}
+                  size={20}
                   strokeWidth={1.8}
                 />
 
@@ -328,62 +331,104 @@ export default function FlashcardsClient() {
 
               <div
                 className={
-                  styles.translationRows
+                  styles.detailsList
                 }
               >
-                <div
+                <details
                   className={
-                    styles.translationRow
+                    styles.infoRow
+                  }
+                  onClick={
+                    stopDetailsClick
                   }
                 >
-                  <span
+                  <summary
                     className={
-                      styles.infoLabel
+                      styles.infoSummary
                     }
                   >
-                    English
-                  </span>
+                    <span
+                      className={
+                        styles.infoLabel
+                      }
+                    >
+                      English
+                    </span>
 
-                  <span
+                    <ChevronDown
+                      size={18}
+                      className={
+                        styles.chevron
+                      }
+                    />
+                  </summary>
+
+                  <div
                     className={
-                      styles.translationValue
+                      styles.infoContent
                     }
                   >
-                    {english}
-                  </span>
-                </div>
+                    <p
+                      className={
+                        styles.translationValue
+                      }
+                    >
+                      {english}
+                    </p>
+                  </div>
+                </details>
 
-                <div
+                <details
                   className={
-                    styles.translationRow
+                    styles.infoRow
+                  }
+                  onClick={
+                    stopDetailsClick
                   }
                 >
-                  <span
+                  <summary
                     className={
-                      styles.infoLabel
+                      styles.infoSummary
                     }
                   >
-                    Russian
-                  </span>
+                    <span
+                      className={
+                        styles.infoLabel
+                      }
+                    >
+                      Russian
+                    </span>
 
-                  <span
+                    <ChevronDown
+                      size={18}
+                      className={
+                        styles.chevron
+                      }
+                    />
+                  </summary>
+
+                  <div
                     className={
-                      styles.translationValue
+                      styles.infoContent
                     }
                   >
-                    {russian}
-                  </span>
-                </div>
+                    <p
+                      className={
+                        styles.translationValue
+                      }
+                    >
+                      {russian}
+                    </p>
+                  </div>
+                </details>
 
                 {currentItem.example && (
                   <details
                     className={
                       styles.infoRow
                     }
-                    onClick={(
-                      event,
-                    ) =>
-                      event.stopPropagation()
+                    onClick={
+                      stopDetailsClick
                     }
                   >
                     <summary
@@ -415,18 +460,6 @@ export default function FlashcardsClient() {
                           currentItem.example
                         }
                       </p>
-
-                      {currentItem.example_en && (
-                        <p
-                          className={
-                            styles.exampleEnglish
-                          }
-                        >
-                          {
-                            currentItem.example_en
-                          }
-                        </p>
-                      )}
                     </div>
                   </details>
                 )}
@@ -438,7 +471,7 @@ export default function FlashcardsClient() {
                 }
               >
                 <RotateCcw
-                  size={22}
+                  size={20}
                   strokeWidth={1.8}
                 />
 
@@ -451,7 +484,11 @@ export default function FlashcardsClient() {
         </div>
       </div>
 
-      <div className={styles.actions}>
+      <div
+        className={
+          styles.actions
+        }
+      >
         <button
           type="button"
           className={

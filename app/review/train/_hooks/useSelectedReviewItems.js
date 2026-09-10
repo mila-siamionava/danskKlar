@@ -1,36 +1,21 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 
-const SELECTED_REVIEW_KEY =
-  "danskTrainerSelectedReview";
-
-function normalizeTerm(term = "") {
-  return term
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ")
-    .replace(/^at\s+/, "");
-}
+const SELECTED_REVIEW_KEY = "danskTrainerSelectedReview";
 
 export function useSelectedReviewItems() {
-  const [items, setItems] =
-    useState([]);
+  const [items, setItems] = useState([]);
 
-  const [isLoading, setIsLoading] =
-    useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const supabase = createClient();
+
     async function loadSelectedItems() {
-      const storedSelection =
-        localStorage.getItem(
-          SELECTED_REVIEW_KEY
-        );
+      const storedSelection = localStorage.getItem(SELECTED_REVIEW_KEY);
 
       if (!storedSelection) {
         setItems([]);
@@ -39,96 +24,70 @@ export function useSelectedReviewItems() {
       }
 
       try {
-        const selectedItems =
-          JSON.parse(storedSelection);
+        const selectedItems = JSON.parse(storedSelection);
 
-        if (
-          !Array.isArray(selectedItems) ||
-          selectedItems.length === 0
-        ) {
+        if (!Array.isArray(selectedItems) || selectedItems.length === 0) {
           setItems([]);
           return;
         }
 
-        const { data, error } =
-          await supabase
-            .from("vocabulary")
-            .select(`
+        const vocabularyIds = selectedItems
+          .map((item) => item.vocabularyId ?? item.id)
+          .filter(Boolean);
+
+        if (vocabularyIds.length === 0) {
+          setItems(selectedItems);
+          return;
+        }
+
+        const uniqueVocabularyIds = [...new Set(vocabularyIds)];
+
+        const { data, error } = await supabase
+          .from("vocabulary")
+          .select(
+            `
               id,
               term,
               english,
               russian,
               definition_da,
               example,
-              part_of_speech
-            `);
+                           part_of_speech
+            `,
+          )
+          .in("id", uniqueVocabularyIds);
 
         if (error) {
-          console.error(
-            "Could not load vocabulary:",
-            error
-          );
+          console.error("Could not load selected vocabulary:", error);
 
           setItems(selectedItems);
           return;
         }
 
-        const vocabularyByTerm =
-          new Map(
-            data.map((item) => [
-              normalizeTerm(item.term),
-              item,
-            ])
-          );
+        const vocabularyById = new Map(data.map((item) => [item.id, item]));
 
-        const hydratedItems =
-          selectedItems.map(
-            (selectedItem) => {
-              const normalized =
-                normalizeTerm(
-                  selectedItem.term
-                );
+        const hydratedItems = selectedItems.map((selectedItem) => {
+          const vocabularyId = selectedItem.vocabularyId ?? selectedItem.id;
 
-              const databaseItem =
-                vocabularyByTerm.get(
-                  normalized
-                );
+          const databaseItem = vocabularyById.get(vocabularyId);
 
-              if (!databaseItem) {
-                console.warn(
-                  "No vocabulary match:",
-                  {
-                    original:
-                      selectedItem.term,
-                    normalized,
-                  }
-                );
+          if (!databaseItem) {
+            return selectedItem;
+          }
 
-                /*
-                  Keep the locally stored item
-                  instead of deleting the card.
-                */
-                return selectedItem;
-              }
+          return {
+            ...selectedItem,
+            ...databaseItem,
 
-              return {
-                ...selectedItem,
-                ...databaseItem,
-              };
-            }
-          );
+            id: databaseItem.id,
 
-        console.log(
-          "Selected review items:",
-          hydratedItems
-        );
+            vocabularyId: databaseItem.id,
+          };
+        });
 
         setItems(hydratedItems);
       } catch (error) {
-        console.error(
-          "Could not load selected review items:",
-          error
-        );
+        console.error("Could not load selected review items:", error);
 
         setItems([]);
       } finally {
