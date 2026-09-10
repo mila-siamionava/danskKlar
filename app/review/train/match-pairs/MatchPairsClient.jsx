@@ -1,30 +1,35 @@
 "use client";
 
-import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
-import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
-
 import {
   useEffect,
   useMemo,
   useState,
 } from "react";
 
+import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
+import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
+
+import { useSelectedReviewItems } from "../_hooks/useSelectedReviewItems";
 import { shuffle } from "../_lib/arrayUtils";
 
 import styles from "./MatchPairs.module.css";
 
-export default function MatchPairsClient({
-  vocabulary,
-}) {
-  const usableVocabulary = useMemo(
-    () =>
-      vocabulary.filter(
-        (item) =>
-          item.term &&
-          item.english,
-      ),
-    [vocabulary],
-  );
+export default function MatchPairsClient() {
+  const {
+    items,
+    isLoading,
+  } = useSelectedReviewItems();
+
+  const usableVocabulary =
+    useMemo(
+      () =>
+        items.filter(
+          (item) =>
+            item.term &&
+            item.english,
+        ),
+      [items],
+    );
 
   const [round, setRound] =
     useState(0);
@@ -54,21 +59,24 @@ export default function MatchPairsClient({
     setTranslations,
   ] = useState([]);
 
-  const roundItems = useMemo(() => {
-    const start = round * 5;
+  const roundItems =
+    useMemo(() => {
+      const start =
+        round * 5;
 
-    return usableVocabulary.slice(
-      start,
-      start + 5,
+      return usableVocabulary.slice(
+        start,
+        start + 5,
+      );
+    }, [
+      usableVocabulary,
+      round,
+    ]);
+
+  const totalRounds =
+    Math.ceil(
+      usableVocabulary.length / 5,
     );
-  }, [
-    usableVocabulary,
-    round,
-  ]);
-
-  const totalRounds = Math.ceil(
-    usableVocabulary.length / 5,
-  );
 
   useEffect(() => {
     setTranslations(
@@ -78,7 +86,9 @@ export default function MatchPairsClient({
 
   function chooseTerm(item) {
     if (
-      matchedIds.includes(item.id)
+      matchedIds.includes(
+        item.id,
+      )
     ) {
       return;
     }
@@ -94,14 +104,21 @@ export default function MatchPairsClient({
     }
   }
 
-  function chooseTranslation(item) {
+  function chooseTranslation(
+    item,
+  ) {
     if (
-      matchedIds.includes(item.id)
+      matchedIds.includes(
+        item.id,
+      )
     ) {
       return;
     }
 
-    setSelectedTranslation(item);
+    setSelectedTranslation(
+      item,
+    );
+
     setWrongPair(false);
 
     if (selectedTerm) {
@@ -120,13 +137,18 @@ export default function MatchPairsClient({
       termItem.id ===
       translationItem.id
     ) {
-      setMatchedIds((current) => [
-        ...current,
-        termItem.id,
-      ]);
+      setMatchedIds(
+        (current) => [
+          ...current,
+          termItem.id,
+        ],
+      );
 
       setSelectedTerm(null);
-      setSelectedTranslation(null);
+      setSelectedTranslation(
+        null,
+      );
+
       setWrongPair(false);
 
       return;
@@ -136,28 +158,50 @@ export default function MatchPairsClient({
 
     setTimeout(() => {
       setSelectedTerm(null);
-      setSelectedTranslation(null);
+
+      setSelectedTranslation(
+        null,
+      );
+
       setWrongPair(false);
     }, 700);
   }
 
   const roundComplete =
     roundItems.length > 0 &&
-    roundItems.every((item) =>
-      matchedIds.includes(item.id),
+    roundItems.every(
+      (item) =>
+        matchedIds.includes(
+          item.id,
+        ),
     );
 
   function nextRound() {
     setTranslations([]);
 
     setRound(
-      (current) => current + 1,
+      (current) =>
+        current + 1,
     );
 
     setMatchedIds([]);
     setSelectedTerm(null);
-    setSelectedTranslation(null);
+    setSelectedTranslation(
+      null,
+    );
     setWrongPair(false);
+  }
+
+  if (isLoading) {
+    return (
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Match pairs"
+          title="Loading words"
+          message="Preparing your selected review words…"
+        />
+      </main>
+    );
   }
 
   if (
@@ -168,21 +212,23 @@ export default function MatchPairsClient({
         <ExerciseState
           eyebrow="Match pairs"
           title="No usable vocabulary"
-          message="Choose some words with English translations before starting this exercise."
-          actionLabel="Back to training"
-          actionHref="/review/train"
+          message="Choose some words with English translations in Review before starting this exercise."
+          actionLabel="Back to review"
+          actionHref="/review"
         />
       </main>
     );
   }
 
-  if (roundItems.length === 0) {
+  if (
+    roundItems.length === 0
+  ) {
     return (
       <main className="mobilePage">
         <ExerciseState
           eyebrow="Match pairs"
           title="Practice complete"
-          message="You matched all available words."
+          message="You matched all selected review words."
           actionLabel="Back to training"
           actionHref="/review/train"
         />
@@ -197,89 +243,125 @@ export default function MatchPairsClient({
       current={round + 1}
       total={totalRounds}
     >
-      <div className={styles.game}>
-        <div className={styles.column}>
-          <h2 className={styles.columnTitle}>
+      <div
+        className={
+          styles.game
+        }
+      >
+        <div
+          className={
+            styles.column
+          }
+        >
+          <h2
+            className={
+              styles.columnTitle
+            }
+          >
             Danish
           </h2>
 
-          {roundItems.map((item) => {
-            const matched =
-              matchedIds.includes(
-                item.id,
+          {roundItems.map(
+            (item) => {
+              const matched =
+                matchedIds.includes(
+                  item.id,
+                );
+
+              const selected =
+                selectedTerm?.id ===
+                item.id;
+
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`${styles.card} ${
+                    matched
+                      ? styles.matched
+                      : ""
+                  } ${
+                    selected
+                      ? styles.selected
+                      : ""
+                  }`}
+                  onClick={() =>
+                    chooseTerm(item)
+                  }
+                  disabled={
+                    matched
+                  }
+                >
+                  {item.term}
+                </button>
               );
-
-            const selected =
-              selectedTerm?.id ===
-              item.id;
-
-            return (
-              <button
-                key={item.id}
-                type="button"
-                className={`${styles.card} ${
-                  matched
-                    ? styles.matched
-                    : ""
-                } ${
-                  selected
-                    ? styles.selected
-                    : ""
-                }`}
-                onClick={() =>
-                  chooseTerm(item)
-                }
-                disabled={matched}
-              >
-                {item.term}
-              </button>
-            );
-          })}
+            },
+          )}
         </div>
 
-        <div className={styles.column}>
-          <h2 className={styles.columnTitle}>
+        <div
+          className={
+            styles.column
+          }
+        >
+          <h2
+            className={
+              styles.columnTitle
+            }
+          >
             English
           </h2>
 
-          {translations.map((item) => {
-            const matched =
-              matchedIds.includes(
-                item.id,
+          {translations.map(
+            (item) => {
+              const matched =
+                matchedIds.includes(
+                  item.id,
+                );
+
+              const selected =
+                selectedTranslation
+                  ?.id ===
+                item.id;
+
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`${styles.card} ${
+                    matched
+                      ? styles.matched
+                      : ""
+                  } ${
+                    selected
+                      ? styles.selected
+                      : ""
+                  }`}
+                  onClick={() =>
+                    chooseTranslation(
+                      item,
+                    )
+                  }
+                  disabled={
+                    matched
+                  }
+                >
+                  {item.english}
+                </button>
               );
-
-            const selected =
-              selectedTranslation?.id ===
-              item.id;
-
-            return (
-              <button
-                key={item.id}
-                type="button"
-                className={`${styles.card} ${
-                  matched
-                    ? styles.matched
-                    : ""
-                } ${
-                  selected
-                    ? styles.selected
-                    : ""
-                }`}
-                onClick={() =>
-                  chooseTranslation(item)
-                }
-                disabled={matched}
-              >
-                {item.english}
-              </button>
-            );
-          })}
+            },
+          )}
         </div>
       </div>
 
       {wrongPair && (
-        <p className={styles.wrong}>
-          Not a match — try again.
+        <p
+          className={
+            styles.wrong
+          }
+        >
+          Not a match — try
+          again.
         </p>
       )}
 
@@ -289,7 +371,9 @@ export default function MatchPairsClient({
           className={
             styles.nextButton
           }
-          onClick={nextRound}
+          onClick={
+            nextRound
+          }
         >
           Next round →
         </button>
