@@ -5,38 +5,59 @@ import { Fragment, useState } from "react";
 
 import ExerciseHeader from "@/components/exercises/ExerciseHeader/ExerciseHeader";
 import GapSelect from "@/components/exercises/GapSelect/GapSelect";
-import ProgressBar from "@/components/ui/ProgressBar/ProgressBar";
 import AnswerFeedback from "@/components/exercises/AnswerFeedback/AnswerFeedback";
+import ProgressBar from "@/components/ui/ProgressBar/ProgressBar";
 import Button from "@/components/ui/Button/Button";
 
 import { addReviewItem } from "@/lib/reviewStorage";
 
 import styles from "./GapExercise.module.css";
 
-export default function GapExercise({ exercise }) {
-  const [answers, setAnswers] = useState({});
-const [activeFeedbackId, setActiveFeedbackId] =
-    useState(null);
-  
-  const totalQuestions = exercise.questions.length;
-  const answeredCount = Object.keys(answers).length;
+export default function GapExercise({
+  exercise,
+}) {
+  const [answers, setAnswers] =
+    useState({});
 
-  const score = exercise.questions.filter(
-    (question) =>
-      answers[question.id]?.firstIsCorrect === true
-  ).length;
+  const [
+    activeFeedbackId,
+    setActiveFeedbackId,
+  ] = useState(null);
 
-  function getGapContext(questionId) {
-    const placeholder = `{{${questionId}}}`;
+  const totalQuestions =
+    exercise.questions.length;
 
-    const paragraphs = exercise.content
-      .split("\n")
-      .map((paragraph) => paragraph.trim())
-      .filter(Boolean);
+  const answeredCount =
+    Object.keys(answers).length;
 
-    const paragraph = paragraphs.find((paragraph) =>
-      paragraph.includes(placeholder)
-    );
+  const score =
+    exercise.questions.filter(
+      (question) =>
+        answers[question.id]
+          ?.firstIsCorrect === true,
+    ).length;
+
+  function getGapContext(
+    questionId,
+  ) {
+    const placeholder =
+      `{{${questionId}}}`;
+
+    const paragraphs =
+      exercise.content
+        .split("\n")
+        .map((paragraph) =>
+          paragraph.trim(),
+        )
+        .filter(Boolean);
+
+    const paragraph =
+      paragraphs.find(
+        (paragraph) =>
+          paragraph.includes(
+            placeholder,
+          ),
+      );
 
     if (!paragraph) {
       return "";
@@ -44,183 +65,260 @@ const [activeFeedbackId, setActiveFeedbackId] =
 
     return paragraph.replace(
       placeholder,
-      "{{gap}}"
+      "{{gap}}",
     );
   }
 
-  function handleAnswer(questionId, optionId) {
-    const question = exercise.questions.find(
-      (item) => item.id === questionId
-    );
+  function addWrongVocabularyToReview(
+    question,
+    selectedOptionId,
+  ) {
+    const selectedOption =
+      question.options.find(
+        (option) =>
+          option.id ===
+          selectedOptionId,
+      );
+
+    if (
+      !selectedOption?.vocabularyId
+    ) {
+      return;
+    }
+
+    const gapContext =
+      getGapContext(question.id);
+
+    const correctOption =
+      question.options.find(
+        (option) =>
+          option.id ===
+          question.correctOptionId,
+      );
+
+    addReviewItem({
+      id: selectedOption.vocabularyId,
+
+      vocabularyId:
+        selectedOption.vocabularyId,
+
+      term:
+        selectedOption.text?.toLowerCase() ||
+        "",
+
+      exerciseTitle:
+        exercise.title,
+
+      exerciseId:
+        exercise.id,
+
+      questionId:
+        question.id,
+
+      sourceType: "text",
+
+      sourceKey:
+        exercise.slug,
+
+      exerciseType:
+        exercise.exerciseType,
+
+      reason:
+        "wrong_answer",
+
+      gapSentence:
+        gapContext,
+
+      originalCorrectAnswer:
+        correctOption?.text?.toLowerCase() ||
+        "",
+
+      options:
+        question.options,
+
+      correctOptionId:
+        question.correctOptionId,
+
+      explanation:
+        question.explanation,
+    });
+  }
+
+  function handleAnswer(
+    questionId,
+    optionId,
+  ) {
+    const question =
+      exercise.questions.find(
+        (item) =>
+          item.id === questionId,
+      );
 
     if (!question) {
       return;
     }
-    setActiveFeedbackId(questionId);
 
-    const previousAnswer = answers[questionId];
-    const isFirstAttempt = !previousAnswer;
+    const previousAnswer =
+      answers[questionId];
+
+    const isFirstAttempt =
+      !previousAnswer;
 
     const isCorrect =
-      optionId === question.correctOptionId;
+      optionId ===
+      question.correctOptionId;
 
-    if (isFirstAttempt && !isCorrect) {
-      const translations =
-        question.explanation?.translations || [];
-
-      const gapContext =
-        getGapContext(question.id);
-
-      const originalCorrectAnswer =
-        question.options
-          .find(
-            (option) =>
-              option.id ===
-              question.correctOptionId
-          )
-          ?.text?.toLowerCase() || "";
-
-      if (translations.length > 0) {
-        translations.forEach((translation, index) => {
-          addReviewItem({
-            id: `${exercise.title}-${question.id}-${index}-${translation.word}`,
-            exerciseTitle: exercise.title,
-            questionId: question.id,
-            term:
-              translation.word?.toLowerCase() || "",
-            english:
-              translation.english || "",
-            russian:
-              translation.russian || "",
-            gapSentence: gapContext,
-            originalCorrectAnswer,
-            options: question.options,
-            correctOptionId:
-              question.correctOptionId,
-            explanation:
-              question.explanation,
-          });
-        });
-      } else {
-        const correctOption = question.options.find(
-          (option) =>
-            option.id ===
-            question.correctOptionId
-        );
-
-        addReviewItem({
-          id: `${exercise.title}-${question.id}`,
-          exerciseTitle: exercise.title,
-          questionId: question.id,
-          term:
-            correctOption?.text?.toLowerCase() || "",
-          english: "",
-          russian: "",
-          gapSentence: gapContext,
-          originalCorrectAnswer,
-          options: question.options,
-          correctOptionId:
-            question.correctOptionId,
-          explanation:
-            question.explanation,
-        });
-      }
+    if (!isCorrect) {
+      setActiveFeedbackId(
+        questionId,
+      );
+    } else {
+      setActiveFeedbackId(null);
     }
 
-    setAnswers((previousAnswers) => {
-      const previousAnswer =
-        previousAnswers[questionId];
+    if (
+      !isCorrect &&
+      exercise.exerciseType ===
+        "vocabulary_gap"
+    ) {
+      addWrongVocabularyToReview(
+        question,
+        optionId,
+      );
+    }
 
-      if (!previousAnswer) {
+    setAnswers(
+      (previousAnswers) => {
+        const previousAnswer =
+          previousAnswers[
+            questionId
+          ];
+
+        if (!previousAnswer) {
+          return {
+            ...previousAnswers,
+
+            [questionId]: {
+              selectedOptionId:
+                optionId,
+
+              firstOptionId:
+                optionId,
+
+              firstIsCorrect:
+                isCorrect,
+            },
+          };
+        }
+
         return {
           ...previousAnswers,
+
           [questionId]: {
-            selectedOptionId: optionId,
-            firstOptionId: optionId,
-            firstIsCorrect:
-              optionId ===
-              question.correctOptionId,
+            ...previousAnswer,
+
+            selectedOptionId:
+              optionId,
           },
         };
-      }
-
-      return {
-        ...previousAnswers,
-        [questionId]: {
-          ...previousAnswer,
-          selectedOptionId: optionId,
-        },
-      };
-    });
+      },
+    );
   }
 
   function renderContent() {
-    const parts = exercise.content.split(
-      /(\{\{\d+\}\})/
+    const parts =
+      exercise.content.split(
+        /(\{\{\d+\}\})/,
+      );
+
+    return parts.map(
+      (part, index) => {
+        const match =
+          part.match(
+            /\{\{(\d+)\}\}/,
+          );
+
+        if (!match) {
+          return (
+            <Fragment key={index}>
+              {part}
+            </Fragment>
+          );
+        }
+
+        const questionId =
+          Number(match[1]);
+
+        const question =
+          exercise.questions.find(
+            (item) =>
+              item.id ===
+              questionId,
+          );
+
+        if (!question) {
+          return (
+            <Fragment key={index}>
+              {part}
+            </Fragment>
+          );
+        }
+
+        const answer =
+          answers[questionId];
+
+        const selectedOptionId =
+          answer
+            ?.selectedOptionId ||
+          "";
+
+        return (
+          <span
+            key={`${questionId}-${index}`}
+            className={
+              styles.gapWrapper
+            }
+          >
+            <GapSelect
+              question={question}
+              value={
+                selectedOptionId
+              }
+              checked={Boolean(
+                selectedOptionId,
+              )}
+              onChange={
+                handleAnswer
+              }
+            />
+
+            {activeFeedbackId ===
+              questionId && (
+              <AnswerFeedback
+                question={
+                  question
+                }
+                selectedOptionId={
+                  selectedOptionId
+                }
+              />
+            )}
+          </span>
+        );
+      },
     );
-
-    return parts.map((part, index) => {
-      const match = part.match(
-        /\{\{(\d+)\}\}/
-      );
-
-      if (!match) {
-        return (
-          <Fragment key={index}>
-            {part}
-          </Fragment>
-        );
-      }
-
-      const questionId = Number(match[1]);
-
-      const question = exercise.questions.find(
-        (item) =>
-          item.id === questionId
-      );
-
-      if (!question) {
-        return (
-          <Fragment key={index}>
-            {part}
-          </Fragment>
-        );
-      }
-
-      const answer = answers[questionId];
-
-      const selectedOptionId =
-        answer?.selectedOptionId || "";
-
-      return (
-        <span
-  key={`${questionId}-${index}`}
-  className={styles.gapWrapper}
->
-          <GapSelect
-            question={question}
-            value={selectedOptionId}
-            checked={Boolean(selectedOptionId)}
-            onChange={handleAnswer}
-          />
-
-         {activeFeedbackId === questionId && (
-  <AnswerFeedback
-    question={question}
-    selectedOptionId={selectedOptionId}
-  />
-)}
-        </span>
-      );
-    });
   }
 
   return (
-    <div className={styles.exercise}>
-     <ExerciseHeader
-  title={exercise.title}
-  instructions={exercise.instructions}
-/>
+    <div
+      className={styles.exercise}
+    >
+      <ExerciseHeader
+        title={exercise.title}
+        instructions={
+          exercise.instructions
+        }
+      />
 
       <ProgressBar
         value={answeredCount}
@@ -228,43 +326,75 @@ const [activeFeedbackId, setActiveFeedbackId] =
         label={`${answeredCount} of ${totalQuestions} answered`}
       />
 
-      <section className={styles.content}>
+      <section
+        className={styles.content}
+      >
         {renderContent()}
       </section>
 
-      {answeredCount === totalQuestions && (
+      {answeredCount ===
+        totalQuestions && (
         <>
           <section
-            className={styles.result}
+            className={
+              styles.result
+            }
             aria-live="polite"
           >
             <div>
-              <p className={styles.resultLabel}>
+              <p
+                className={
+                  styles.resultLabel
+                }
+              >
                 Exercise complete
               </p>
 
-              <p className={styles.resultScore}>
-                {score} of {totalQuestions} correct on the first attempt
+              <p
+                className={
+                  styles.resultScore
+                }
+              >
+                {score} of{" "}
+                {totalQuestions}{" "}
+                correct on the first
+                attempt
               </p>
             </div>
 
-            <p className={styles.resultPercentage}>
+            <p
+              className={
+                styles.resultPercentage
+              }
+            >
               {Math.round(
-                (score / totalQuestions) * 100
+                (score /
+                  totalQuestions) *
+                  100,
               )}
               %
             </p>
           </section>
 
-          <div className={styles.reviewActions}>
+          <div
+            className={
+              styles.reviewActions
+            }
+          >
             <Link href="/review">
-              <Button variant="secondary" size="md">
+              <Button
+                variant="secondary"
+                size="md"
+              >
                 Review wrong answers
               </Button>
             </Link>
 
             <Link href="/review/train">
-              <Button variant="primary" size="md">
+              <Button
+                variant="primary"
+                size="md"
+              >
                 Train review words
               </Button>
             </Link>
