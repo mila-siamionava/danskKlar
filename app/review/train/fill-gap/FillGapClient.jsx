@@ -1,10 +1,14 @@
 "use client";
 
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import ExerciseQuestionCard from "@/components/exercises/ExerciseQuestionCard/ExerciseQuestionCard";
 import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
 import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
-
-import { useEffect, useState } from "react";
 
 import {
   createGapSentence,
@@ -12,71 +16,142 @@ import {
 } from "../_lib/sentenceUtils";
 
 import { shuffle } from "../_lib/arrayUtils";
+import { useSelectedReviewItems } from "../_hooks/useSelectedReviewItems";
 import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 
 import styles from "./FillGap.module.css";
 
+function normalizePartOfSpeech(
+  value = "",
+) {
+  return value
+    .trim()
+    .toLowerCase();
+}
+
+function prepareTrainingItem(item) {
+  if (!item?.example) {
+    return null;
+  }
+
+  const hasDoubleTarget =
+    item.example_target_1 &&
+    item.example_target_2;
+
+  if (hasDoubleTarget) {
+    const trainingSentence =
+      createDoubleGapSentence(
+        item.example,
+        item.example_target_1,
+        item.example_target_2,
+      );
+
+    if (!trainingSentence) {
+      return null;
+    }
+
+    return {
+      ...item,
+      targetMode: "double",
+      target1:
+        item.example_target_1,
+      target2:
+        item.example_target_2,
+      trainingSentence,
+    };
+  }
+
+  const target =
+    item.example_target;
+
+  if (!target) {
+    return null;
+  }
+
+  const trainingSentence =
+    createGapSentence(
+      item.example,
+      target,
+    );
+
+  if (!trainingSentence) {
+    return null;
+  }
+
+  return {
+    ...item,
+    targetMode: "single",
+    target,
+    trainingSentence,
+  };
+}
+
 export default function FillGapClient({
   vocabulary,
 }) {
-  const [items] = useState(() =>
-    vocabulary
-      .map((item) => {
-        if (!item.example) {
+  const {
+    items: selectedItems,
+    isLoading,
+  } = useSelectedReviewItems();
+
+  /*
+   * The Review hook gives us the selected
+   * vocabulary IDs.
+   *
+   * Fill the Gap needs additional database
+   * fields such as example_target, so we
+   * hydrate those selected IDs from the full
+   * vocabulary passed by the server.
+   */
+  const items = useMemo(() => {
+    const vocabularyById =
+      new Map(
+        vocabulary.map(
+          (item) => [
+            item.id,
+            item,
+          ],
+        ),
+      );
+
+    return selectedItems
+      .map((selectedItem) => {
+        const id =
+          selectedItem.vocabularyId ??
+          selectedItem.id;
+
+        const fullItem =
+          vocabularyById.get(id);
+
+        if (!fullItem) {
           return null;
         }
 
-        const hasDoubleTarget =
-          item.example_target_1 &&
-          item.example_target_2;
-
-        if (hasDoubleTarget) {
-          const trainingSentence =
-            createDoubleGapSentence(
-              item.example,
-              item.example_target_1,
-              item.example_target_2,
-            );
-
-          if (!trainingSentence) {
-            return null;
-          }
-
-          return {
-            ...item,
-            targetMode: "double",
-            target1: item.example_target_1,
-            target2: item.example_target_2,
-            trainingSentence,
-          };
-        }
-
-        const target =
-          item.example_target;
-
-        if (!target) {
-          return null;
-        }
-
-        const trainingSentence =
-          createGapSentence(
-            item.example,
-            target,
-          );
-
-        if (!trainingSentence) {
-          return null;
-        }
-
-        return {
-          ...item,
-          targetMode: "single",
-          target,
-          trainingSentence,
-        };
+        return prepareTrainingItem(
+          fullItem,
+        );
       })
-      .filter(Boolean),
-  );
+      .filter(Boolean);
+  }, [
+    selectedItems,
+    vocabulary,
+  ]);
+
+  /*
+   * Full vocabulary is NOT the training queue.
+   * It is only used to create plausible
+   * distractors.
+   */
+  const distractorPool =
+    useMemo(
+      () =>
+        vocabulary
+          .map(
+            prepareTrainingItem,
+          )
+          .filter(Boolean),
+      [vocabulary],
+    );
 
   const {
     currentIndex,
@@ -127,24 +202,40 @@ export default function FillGapClient({
       return;
     }
 
+    const currentCategory =
+      normalizePartOfSpeech(
+        currentItem.part_of_speech,
+      );
+
+    /*
+     * SINGLE GAP
+     */
     if (
       currentItem.targetMode ===
       "single"
     ) {
       const correctAnswer =
-        currentItem.target.toLowerCase();
+        currentItem.target
+          .trim()
+          .toLowerCase();
 
       const wrongAnswers =
-        items
+        distractorPool
           .filter(
             (item) =>
               item.id !==
                 currentItem.id &&
               item.targetMode ===
-                "single",
+                "single" &&
+              normalizePartOfSpeech(
+                item.part_of_speech,
+              ) ===
+                currentCategory,
           )
           .map((item) =>
-            item.target?.toLowerCase(),
+            item.target
+              ?.trim()
+              .toLowerCase(),
           )
           .filter(Boolean)
           .filter(
@@ -153,14 +244,21 @@ export default function FillGapClient({
               correctAnswer,
           );
 
-      const uniqueWrongAnswers = [
-        ...new Set(wrongAnswers),
-      ];
+      const uniqueWrongAnswers =
+        [
+          ...new Set(
+            wrongAnswers,
+          ),
+        ];
 
+      /*
+       * 2 wrong + 1 correct
+       * = 3 options total.
+       */
       const selectedWrongAnswers =
         shuffle(
           uniqueWrongAnswers,
-        ).slice(0, 3);
+        ).slice(0, 2);
 
       setOptions(
         shuffle([
@@ -175,54 +273,80 @@ export default function FillGapClient({
       return;
     }
 
+    /*
+     * DOUBLE GAP
+     */
     const correctAnswer1 =
-      currentItem.target1.toLowerCase();
+      currentItem.target1
+        .trim()
+        .toLowerCase();
 
     const correctAnswer2 =
-      currentItem.target2.toLowerCase();
+      currentItem.target2
+        .trim()
+        .toLowerCase();
+
+    const sameCategoryItems =
+      distractorPool.filter(
+        (item) =>
+          item.id !==
+            currentItem.id &&
+          item.targetMode ===
+            "double" &&
+          normalizePartOfSpeech(
+            item.part_of_speech,
+          ) ===
+            currentCategory,
+      );
 
     const firstTargetOptions =
-      items
-        .filter(
-          (item) =>
-            item.targetMode ===
-            "double",
-        )
+      sameCategoryItems
         .map((item) =>
-          item.target1?.toLowerCase(),
+          item.target1
+            ?.trim()
+            .toLowerCase(),
         )
-        .filter(Boolean);
+        .filter(Boolean)
+        .filter(
+          (answer) =>
+            answer !==
+            correctAnswer1,
+        );
 
     const secondTargetOptions =
-      items
-        .filter(
-          (item) =>
-            item.targetMode ===
-            "double",
-        )
+      sameCategoryItems
         .map((item) =>
-          item.target2?.toLowerCase(),
+          item.target2
+            ?.trim()
+            .toLowerCase(),
         )
-        .filter(Boolean);
+        .filter(Boolean)
+        .filter(
+          (answer) =>
+            answer !==
+            correctAnswer2,
+        );
 
-    const uniqueFirstTargets = [
-      ...new Set(firstTargetOptions),
-    ];
+    const uniqueFirstTargets =
+      [
+        ...new Set(
+          firstTargetOptions,
+        ),
+      ];
 
-    const uniqueSecondTargets = [
-      ...new Set(secondTargetOptions),
-    ];
+    const uniqueSecondTargets =
+      [
+        ...new Set(
+          secondTargetOptions,
+        ),
+      ];
 
     setOptions1(
       shuffle([
         correctAnswer1,
         ...shuffle(
-          uniqueFirstTargets.filter(
-            (answer) =>
-              answer !==
-              correctAnswer1,
-          ),
-        ).slice(0, 3),
+          uniqueFirstTargets,
+        ).slice(0, 2),
       ]),
     );
 
@@ -230,20 +354,28 @@ export default function FillGapClient({
       shuffle([
         correctAnswer2,
         ...shuffle(
-          uniqueSecondTargets.filter(
-            (answer) =>
-              answer !==
-              correctAnswer2,
-          ),
-        ).slice(0, 3),
+          uniqueSecondTargets,
+        ).slice(0, 2),
       ]),
     );
 
     setOptions([]);
   }, [
     currentItem,
-    items,
+    distractorPool,
   ]);
+
+  if (isLoading) {
+    return (
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Fill the gap"
+          title="Loading words"
+          message="Preparing your selected review words…"
+        />
+      </main>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -251,9 +383,9 @@ export default function FillGapClient({
         <ExerciseState
           eyebrow="Fill the gap"
           title="No usable examples"
-          message="No vocabulary items with usable example sentences were found."
-          actionLabel="Back to training"
-          actionHref="/review/train"
+          message="Your selected Review words do not have usable gap-training examples."
+          actionLabel="Back to review"
+          actionHref="/review"
         />
       </main>
     );
@@ -285,17 +417,23 @@ export default function FillGapClient({
 
   const correctAnswer =
     !isDouble
-      ? currentItem.target.toLowerCase()
+      ? currentItem.target
+          .trim()
+          .toLowerCase()
       : "";
 
   const correctAnswer1 =
     isDouble
-      ? currentItem.target1.toLowerCase()
+      ? currentItem.target1
+          .trim()
+          .toLowerCase()
       : "";
 
   const correctAnswer2 =
     isDouble
-      ? currentItem.target2.toLowerCase()
+      ? currentItem.target2
+          .trim()
+          .toLowerCase()
       : "";
 
   const isSingleAnswered =
@@ -330,38 +468,54 @@ export default function FillGapClient({
         )
       : [];
 
-  function chooseAnswer(answer) {
+  function chooseAnswer(
+    answer,
+  ) {
     if (isSingleAnswered) {
       return;
     }
 
-    setSelectedAnswer(answer);
+    setSelectedAnswer(
+      answer,
+    );
   }
 
-  function chooseAnswer1(answer) {
+  function chooseAnswer1(
+    answer,
+  ) {
     if (
       selectedAnswer1 !== null
     ) {
       return;
     }
 
-    setSelectedAnswer1(answer);
+    setSelectedAnswer1(
+      answer,
+    );
   }
 
-  function chooseAnswer2(answer) {
+  function chooseAnswer2(
+    answer,
+  ) {
     if (
       selectedAnswer2 !== null
     ) {
       return;
     }
 
-    setSelectedAnswer2(answer);
+    setSelectedAnswer2(
+      answer,
+    );
   }
 
   function nextQuestion() {
     setSelectedAnswer(null);
     setSelectedAnswer1(null);
     setSelectedAnswer2(null);
+
+    setOptions([]);
+    setOptions1([]);
+    setOptions2([]);
 
     next();
   }
@@ -370,115 +524,165 @@ export default function FillGapClient({
     <ExerciseShell
       eyebrow="Fill the gap"
       title="Complete the sentence"
-      current={currentIndex + 1}
+      current={
+        currentIndex + 1
+      }
       total={items.length}
     >
       <ExerciseQuestionCard>
         {!isDouble && (
-          <p className={styles.sentence}>
-            {singleSentenceParts[0]}
+          <p
+            className={
+              styles.sentence
+            }
+          >
+            {
+              singleSentenceParts[0]
+            }
 
-            <span className={styles.gap}>
+            <span
+              className={
+                styles.gap
+              }
+            >
               {isAnswered ? (
                 <strong>
-                  {correctAnswer}
+                  {
+                    correctAnswer
+                  }
                 </strong>
               ) : (
                 ""
               )}
             </span>
 
-            {singleSentenceParts[1]}
+            {
+              singleSentenceParts[1]
+            }
           </p>
         )}
 
         {isDouble && (
-          <p className={styles.sentence}>
-            {doubleSentenceParts[0]}
+          <p
+            className={
+              styles.sentence
+            }
+          >
+            {
+              doubleSentenceParts[0]
+            }
 
-            <span className={styles.gap}>
+            <span
+              className={
+                styles.gap
+              }
+            >
               {isAnswered ? (
                 <strong>
-                  {correctAnswer1}
+                  {
+                    correctAnswer1
+                  }
                 </strong>
               ) : (
                 ""
               )}
             </span>
 
-            {doubleSentenceParts[1]}
+            {
+              doubleSentenceParts[1]
+            }
 
-            <span className={styles.gap}>
+            <span
+              className={
+                styles.gap
+              }
+            >
               {isAnswered ? (
                 <strong>
-                  {correctAnswer2}
+                  {
+                    correctAnswer2
+                  }
                 </strong>
               ) : (
                 ""
               )}
             </span>
 
-            {doubleSentenceParts[2]}
+            {
+              doubleSentenceParts[2]
+            }
           </p>
         )}
 
         {!isDouble && (
-          <div className={styles.options}>
-            {options.map((option) => {
-              const isCorrect =
-                option ===
-                correctAnswer;
+          <div
+            className={
+              styles.options
+            }
+          >
+            {options.map(
+              (option) => {
+                const isCorrect =
+                  option ===
+                  correctAnswer;
 
-              const isSelected =
-                option ===
-                selectedAnswer;
+                const isSelected =
+                  option ===
+                  selectedAnswer;
 
-              let optionClass =
-                styles.option;
+                let optionClass =
+                  styles.option;
 
-              if (
-                isAnswered &&
-                isCorrect
-              ) {
-                optionClass +=
-                  ` ${styles.correct}`;
-              }
+                if (
+                  isAnswered &&
+                  isCorrect
+                ) {
+                  optionClass +=
+                    ` ${styles.correct}`;
+                }
 
-              if (
-                isAnswered &&
-                isSelected &&
-                !isCorrect
-              ) {
-                optionClass +=
-                  ` ${styles.wrong}`;
-              }
+                if (
+                  isAnswered &&
+                  isSelected &&
+                  !isCorrect
+                ) {
+                  optionClass +=
+                    ` ${styles.wrong}`;
+                }
 
-              return (
-                <button
-                  key={option}
-                  type="button"
-                  className={
-                    optionClass
-                  }
-                  onClick={() =>
-                    chooseAnswer(
-                      option,
-                    )
-                  }
-                  disabled={
-                    isAnswered
-                  }
-                >
-                  {option}
-                </button>
-              );
-            })}
+                return (
+                  <button
+                    key={
+                      option
+                    }
+                    type="button"
+                    className={
+                      optionClass
+                    }
+                    onClick={() =>
+                      chooseAnswer(
+                        option,
+                      )
+                    }
+                    disabled={
+                      isAnswered
+                    }
+                  >
+                    {option}
+                  </button>
+                );
+              },
+            )}
           </div>
         )}
 
         {isDouble && (
           <>
-            <div className={styles.options}>
+            <div
+              className={
+                styles.options
+              }
+            >
               {options1.map(
                 (option) => {
                   const isCorrect =
@@ -535,7 +739,11 @@ export default function FillGapClient({
               )}
             </div>
 
-            <div className={styles.options}>
+            <div
+              className={
+                styles.options
+              }
+            >
               {options2.map(
                 (option) => {
                   const isCorrect =
@@ -595,7 +803,11 @@ export default function FillGapClient({
         )}
 
         {isAnswered && (
-          <div className={styles.feedback}>
+          <div
+            className={
+              styles.feedback
+            }
+          >
             {!isDouble &&
               (selectedAnswer ===
               correctAnswer ? (
@@ -614,7 +826,9 @@ export default function FillGapClient({
                 >
                   Correct answer:{" "}
                   <strong>
-                    {correctAnswer}
+                    {
+                      correctAnswer
+                    }
                   </strong>
                 </p>
               ))}
@@ -636,9 +850,13 @@ export default function FillGapClient({
                 >
                   Correct answer:{" "}
                   <strong>
-                    {correctAnswer1}
+                    {
+                      correctAnswer1
+                    }
                     {" ... "}
-                    {correctAnswer2}
+                    {
+                      correctAnswer2
+                    }
                   </strong>
                 </p>
               ))}

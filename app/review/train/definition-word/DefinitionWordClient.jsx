@@ -1,44 +1,77 @@
 "use client";
 
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import ExerciseQuestionCard from "@/components/exercises/ExerciseQuestionCard/ExerciseQuestionCard";
 import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
 import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
 
-import { useEffect, useState } from "react";
-
+import { useSelectedReviewItems } from "../_hooks/useSelectedReviewItems";
 import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 import { shuffle } from "../_lib/arrayUtils";
 
 import styles from "./DefinitionWord.module.css";
 
+function normalizePartOfSpeech(
+  value = "",
+) {
+  return value
+    .trim()
+    .toLowerCase();
+}
+
 export default function DefinitionWordClient({
   vocabulary,
 }) {
-  const [items] = useState(vocabulary);
+  const {
+    items,
+    isLoading,
+  } = useSelectedReviewItems();
+
+  const usableItems = useMemo(
+    () =>
+      items.filter(
+        (item) =>
+          item.term &&
+          item.definition_da,
+      ),
+    [items],
+  );
 
   const {
     currentIndex,
     finished,
     next,
-  } = useTrainingProgress(items.length);
+  } = useTrainingProgress(
+    usableItems.length,
+  );
 
   const [
     selectedAnswer,
     setSelectedAnswer,
   ] = useState(null);
 
-  const [options, setOptions] =
-    useState([]);
+  const [
+    options,
+    setOptions,
+  ] = useState([]);
 
   const currentItem =
-    items[currentIndex];
+    usableItems[currentIndex];
 
-  const correctAnswer = currentItem
-    ? {
-        id: currentItem.id,
-        term: currentItem.term,
-      }
-    : null;
+  const correctAnswer =
+    currentItem
+      ? {
+          id:
+            currentItem.id,
+          term:
+            currentItem.term,
+        }
+      : null;
 
   useEffect(() => {
     if (
@@ -49,21 +82,27 @@ export default function DefinitionWordClient({
       return;
     }
 
+    const currentCategory =
+      normalizePartOfSpeech(
+        currentItem.part_of_speech,
+      );
+
     const wrongAnswers =
       vocabulary
         .filter(
           (item) =>
             item.id !==
-            currentItem.id,
+              currentItem.id &&
+            item.term &&
+            normalizePartOfSpeech(
+              item.part_of_speech,
+            ) ===
+              currentCategory,
         )
         .map((item) => ({
           id: item.id,
           term: item.term,
-        }))
-        .filter(
-          (answer) =>
-            answer.term,
-        );
+        }));
 
     const uniqueWrongAnswers =
       wrongAnswers.filter(
@@ -83,7 +122,7 @@ export default function DefinitionWordClient({
     const selectedWrongAnswers =
       shuffle(
         uniqueWrongAnswers,
-      ).slice(0, 3);
+      ).slice(0, 2);
 
     setOptions(
       shuffle([
@@ -97,15 +136,29 @@ export default function DefinitionWordClient({
     vocabulary,
   ]);
 
-  if (items.length === 0) {
+  if (isLoading) {
+    return (
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Definition → Word"
+          title="Loading words"
+          message="Preparing your selected review words…"
+        />
+      </main>
+    );
+  }
+
+  if (
+    usableItems.length === 0
+  ) {
     return (
       <main className="mobilePage">
         <ExerciseState
           eyebrow="Definition → Word"
           title="No vocabulary available"
-          message="Choose some words in Review before starting this exercise."
-          actionLabel="Back to training"
-          actionHref="/review/train"
+          message="Choose words with Danish definitions in Review before starting this exercise."
+          actionLabel="Back to review"
+          actionHref="/review"
         />
       </main>
     );
@@ -118,9 +171,9 @@ export default function DefinitionWordClient({
           eyebrow="Definition → Word"
           title="Practice complete"
           message={`You reviewed ${
-            items.length
+            usableItems.length
           } ${
-            items.length === 1
+            usableItems.length === 1
               ? "word"
               : "words"
           }.`}
@@ -144,16 +197,21 @@ export default function DefinitionWordClient({
     );
   }
 
-  function chooseAnswer(answer) {
+  function chooseAnswer(
+    answer,
+  ) {
     if (isAnswered) {
       return;
     }
 
-    setSelectedAnswer(answer);
+    setSelectedAnswer(
+      answer,
+    );
   }
 
   function nextQuestion() {
     setSelectedAnswer(null);
+    setOptions([]);
     next();
   }
 
@@ -161,8 +219,12 @@ export default function DefinitionWordClient({
     <ExerciseShell
       eyebrow="Definition → Word"
       title="Choose the word that matches the definition"
-      current={currentIndex + 1}
-      total={items.length}
+      current={
+        currentIndex + 1
+      }
+      total={
+        usableItems.length
+      }
       instructions="Choose the correct Danish word or expression."
     >
       <ExerciseQuestionCard>
