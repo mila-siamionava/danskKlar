@@ -1,20 +1,129 @@
-.word {
-  margin: 0;
-
-  color: var(--color-text-primary);
-
-  font-family: var(--font-family-heading);
-  font-size: var(--font-size-headline-small);
-  line-height: var(--line-height-headline-small);
-  font-weight: var(--font-weight-headline-small);
-}
-.options {
-  display: grid;
-  grid-template-columns: 1fr;
+.modeSelector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   gap: var(--spacing-sm);
 
-  margin-top: var(--spacing-lg);
+  margin-bottom:
+    var(--spacing-md);
+}
+
+.modeLabel {
+  color:
+    var(--color-text-muted);
+
+  font-size:
+    var(--font-size-label-small);
+
+  line-height:
+    var(--line-height-label-small);
+
+  font-weight: 700;
+}
+
+.modeButtons {
+  display: flex;
+
+  gap:
+    var(--spacing-2xs);
+
+  padding:
+    var(--spacing-2xs);
+
+  border:
+    1px solid
+    var(--color-border-primary);
+
+  border-radius:
+    var(--border-radius-md);
+
+  background:
+    var(--color-background-soft);
+}
+
+.modeButton {
+  min-height: 2.4rem;
+
+  padding:
+    0
+    var(--spacing-sm);
+
+  border: 0;
+
+  border-radius:
+    var(--border-radius-sm);
+
+  background:
+    transparent;
+
+  color:
+    var(--color-text-secondary);
+
+  font: inherit;
+
+  font-size:
+    var(--font-size-label-small);
+
+  line-height:
+    var(--line-height-label-small);
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background
+      var(--transition-fast),
+    color
+      var(--transition-fast);
+}
+
+.modeButton:hover {
+  background:
+    var(--color-background-soft);
+}
+
+.modeButtonActive {
+  background:
+    var(--button-primary-background);
+
+  color:
+    var(--button-primary-text);
+}
+
+.word {
+  margin: 0;
+
+  color:
+    var(--color-text-primary);
+
+  font-family:
+    var(--font-family-heading);
+
+  font-size:
+    var(--font-size-headline-small);
+
+  line-height:
+    var(--line-height-headline-small);
+
+  font-weight:
+    var(--font-weight-headline-small);
+
+  text-align: center;
+}
+
+.options {
+  display: grid;
+
+  grid-template-columns:
+    1fr;
+
+  gap:
+    var(--spacing-sm);
+
+  margin-top:
+    var(--spacing-lg);
 }
 
 .option {
@@ -23,36 +132,62 @@
   justify-content: center;
 
   width: 100%;
+
   min-width: 0;
   min-height: 5.6rem;
 
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding:
+    var(--spacing-sm)
+    var(--spacing-md);
 
-  border: 1px solid var(--answer-border);
-  border-radius: var(--border-radius-sm);
+  border:
+    1px solid
+    var(--answer-border);
 
-  background: var(--answer-background);
-  color: var(--answer-text);
+  border-radius:
+    var(--border-radius-sm);
+
+  background:
+    var(--answer-background);
+
+  color:
+    var(--answer-text);
 
   text-align: center;
 
   cursor: pointer;
 
   transition:
-    border-color var(--transition-fast),
-    background var(--transition-fast),
-    transform var(--transition-fast);
+    border-color
+      var(--transition-fast),
+    background
+      var(--transition-fast),
+    transform
+      var(--transition-fast);
 }
 
 .option:hover:not(:disabled) {
-  border-color: var(--color-border-secondary);
-  background: var(--color-background-soft);
+  border-color:
+    var(--color-border-secondary);
 
-  transform: translateY(-1px);
+  background:
+    var(--color-background-soft);
+
+  transform:
+    translateY(-1px);
 }
 
 .option:active:not(:disabled) {
-  transform: scale(0.98);
+  transform:
+    scale(0.98);
+}
+
+.option:focus-visible {
+  outline:
+    2px solid
+    var(--color-border-accent);
+
+  outline-offset: 2px;
 }
 
 .option:disabled {
@@ -63,102 +198,204 @@
 .optionDefinition {
   overflow-wrap: anywhere;
 
-  font-size: var(--font-size-body-small);
-  line-height: var(--line-height-body-small);
+  font-size:
+    var(--font-size-body-small);
+
+  line-height:
+    var(--line-height-body-small);
+
   font-weight: 600;
 }
 
 .correct {
-  border-color: var(--answer-correct-border);
+  border-color:
+    var(--answer-correct-border);
 
-  background: var(--answer-correct-background);
-  color: var(--answer-correct-text);
+  background:
+    var(--answer-correct-background);
+
+  color:
+    var(--answer-correct-text);
 }
 
 .wrong {
-  border-color: var(--answer-wrong-border);
+  border-color:
+    var(--answer-wrong-border);
 
-  background: var(--answer-wrong-background);
-  color: var(--answer-wrong-text);
+  background:
+    var(--answer-wrong-background);
+
+  color:
+    var(--answer-wrong-text);
 }
 
 .noAnswer {
-  margin-top: var(--spacing-md);
+  margin-top:
+    var(--spacing-md);
 
-  padding: var(--spacing-sm);
+  padding:
+    var(--spacing-sm);
 
-  border-radius: var(--border-radius-sm);
+  border-radius:
+    var(--border-radius-sm);
 
-  background: var(--color-background-soft);
-  color: var(--color-text-muted);
+  background:
+    var(--color-background-soft);
 
-  font-size: var(--font-size-body-small);
-  line-height: var(--line-height-body-small);
+  color:
+    var(--color-text-muted);
+
+  font-size:
+    var(--font-size-body-small);
+
+  line-height:
+    var(--line-height-body-small);
 }
 
 .feedback {
-  margin-top: var(--spacing-lg);
-  padding-top: var(--spacing-md);
+  margin-top:
+    var(--spacing-lg);
 
-  border-top: 1px solid var(--color-border-primary);
+  padding-top:
+    var(--spacing-md);
+
+  border-top:
+    1px solid
+    var(--color-border-primary);
 }
 
 .feedbackCorrect {
   margin: 0;
 
-  color: var(--color-success);
+  color:
+    var(--color-success);
 
-  font-size: var(--font-size-body-medium);
+  font-size:
+    var(--font-size-body-medium);
+
   font-weight: 700;
 }
 
 .feedbackWrong {
-  color: var(--color-error);
+  color:
+    var(--color-error);
 
-  font-size: var(--font-size-body-medium);
+  font-size:
+    var(--font-size-body-medium);
+
   font-weight: 600;
 }
 
 .feedbackWrong p {
-  margin: 0 0 var(--spacing-2xs);
+  margin:
+    0
+    0
+    var(--spacing-2xs);
 }
 
 .nextButton {
   width: 100%;
-  min-height: var(--button-height);
 
-  margin-top: var(--spacing-md);
-  padding-inline: var(--button-padding-inline);
+  min-height:
+    var(--button-height);
 
-  border: 1px solid var(--button-primary-background);
-  border-radius: var(--button-radius);
+  margin-top:
+    var(--spacing-md);
 
-  background: var(--button-primary-background);
-  color: var(--button-primary-text);
+  padding-inline:
+    var(--button-padding-inline);
 
-  font-size: var(--font-size-label-medium);
+  border:
+    1px solid
+    var(--button-primary-background);
+
+  border-radius:
+    var(--button-radius);
+
+  background:
+    var(--button-primary-background);
+
+  color:
+    var(--button-primary-text);
+
+  font-size:
+    var(--font-size-label-medium);
+
   font-weight: 700;
 
   cursor: pointer;
 
   transition:
-    background var(--transition-fast),
-    border-color var(--transition-fast);
+    background
+      var(--transition-fast),
+    border-color
+      var(--transition-fast),
+    transform
+      var(--transition-fast);
 }
 
 .nextButton:hover {
-  border-color: var(--button-primary-background-hover);
-  background: var(--button-primary-background-hover);
+  border-color:
+    var(--button-primary-background-hover);
+
+  background:
+    var(--button-primary-background-hover);
+
+  transform:
+    translateY(-1px);
+}
+
+.nextButton:active {
+  transform:
+    scale(0.98);
+}
+
+.nextButton:focus-visible {
+  outline:
+    2px solid
+    var(--color-border-accent);
+
+  outline-offset: 2px;
+}
+
+@media (max-width: 23em) {
+  .modeSelector {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modeButtons {
+    width: 100%;
+  }
+
+  .modeButton {
+    flex: 1;
+
+    padding-inline:
+      var(--spacing-xs);
+  }
+
+  .option {
+    min-height: 5rem;
+
+    padding:
+      var(--spacing-xs)
+      var(--spacing-sm);
+  }
 }
 
 @media (min-width: 37.5em) {
   .word {
-    font-size: var(--font-size-headline-medium);
-    line-height: var(--line-height-headline-medium);
+    font-size:
+      var(--font-size-headline-medium);
+
+    line-height:
+      var(--line-height-headline-medium);
   }
 
   .options {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns:
+      1fr 1fr;
   }
 
   .option {
@@ -166,8 +403,11 @@
   }
 
   .optionDefinition {
-    font-size: var(--font-size-body-medium);
-    line-height: var(--line-height-body-medium);
+    font-size:
+      var(--font-size-body-medium);
+
+    line-height:
+      var(--line-height-body-medium);
   }
 
   .nextButton {

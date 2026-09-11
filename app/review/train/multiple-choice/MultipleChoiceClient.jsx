@@ -1,16 +1,49 @@
 "use client";
 
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import ExerciseQuestionCard from "@/components/exercises/ExerciseQuestionCard/ExerciseQuestionCard";
 import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
 import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
-
-import { useEffect, useMemo, useState } from "react";
 
 import { useSelectedReviewItems } from "../_hooks/useSelectedReviewItems";
 import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 import { shuffle } from "../_lib/arrayUtils";
 
 import styles from "./MultipleChoice.module.css";
+
+const MODES = [
+  {
+    key: "english",
+    label: "EN",
+    title: "English",
+    field: "english",
+  },
+  {
+    key: "russian",
+    label: "RU",
+    title: "Russian",
+    field: "russian",
+  },
+  {
+    key: "definition",
+    label: "Definition",
+    title: "Danish definition",
+    field: "definition_da",
+  },
+];
+
+function normalizePartOfSpeech(
+  value = "",
+) {
+  return value
+    .trim()
+    .toLowerCase();
+}
 
 export default function MultipleChoiceClient({
   vocabulary,
@@ -20,11 +53,46 @@ export default function MultipleChoiceClient({
     isLoading,
   } = useSelectedReviewItems();
 
+  const [
+    trainingMode,
+    setTrainingMode,
+  ] = useState("english");
+
+  const activeMode =
+    MODES.find(
+      (mode) =>
+        mode.key ===
+        trainingMode,
+    );
+
+  const activeField =
+    activeMode?.field ??
+    "english";
+
+  const usableItems =
+    useMemo(
+      () =>
+        items.filter(
+          (item) =>
+            item.term &&
+            item[
+              activeField
+            ],
+        ),
+      [
+        items,
+        activeField,
+      ],
+    );
+
   const {
     currentIndex,
     finished,
     next,
-  } = useTrainingProgress(items.length);
+    reset,
+  } = useTrainingProgress(
+    usableItems.length,
+  );
 
   const [
     selectedAnswer,
@@ -37,20 +105,32 @@ export default function MultipleChoiceClient({
   ] = useState([]);
 
   const currentItem =
-    items[currentIndex];
+    usableItems[
+      currentIndex
+    ];
 
-  const correctAnswer = useMemo(() => {
-    if (
-      !currentItem ||
-      !currentItem.english
-    ) {
-      return null;
-    }
+  const correctAnswer =
+    useMemo(() => {
+      if (!currentItem) {
+        return null;
+      }
 
-    return {
-      value: currentItem.english,
-    };
-  }, [currentItem]);
+      const value =
+        currentItem[
+          activeField
+        ];
+
+      if (!value) {
+        return null;
+      }
+
+      return {
+        value,
+      };
+    }, [
+      currentItem,
+      activeField,
+    ]);
 
   useEffect(() => {
     if (
@@ -61,18 +141,34 @@ export default function MultipleChoiceClient({
       return;
     }
 
+    const currentCategory =
+      normalizePartOfSpeech(
+        currentItem.part_of_speech,
+      );
+
     const wrongAnswers =
       vocabulary
         .filter(
           (item) =>
-            item.term !==
-              currentItem.term &&
-            item.english &&
-            item.english !==
-              correctAnswer.value,
+            item.id !==
+              currentItem.id &&
+            item[
+              activeField
+            ] &&
+            item[
+              activeField
+            ] !==
+              correctAnswer.value &&
+            normalizePartOfSpeech(
+              item.part_of_speech,
+            ) ===
+              currentCategory,
         )
         .map((item) => ({
-          value: item.english,
+          value:
+            item[
+              activeField
+            ],
         }));
 
     const uniqueWrongAnswers =
@@ -93,7 +189,7 @@ export default function MultipleChoiceClient({
     const selectedWrongAnswers =
       shuffle(
         uniqueWrongAnswers,
-      ).slice(0, 3);
+      ).slice(0, 2);
 
     setOptions(
       shuffle([
@@ -105,28 +201,49 @@ export default function MultipleChoiceClient({
     currentItem,
     correctAnswer,
     vocabulary,
+    activeField,
   ]);
+
+  function changeMode(mode) {
+    if (
+      mode ===
+      trainingMode
+    ) {
+      return;
+    }
+
+    setTrainingMode(mode);
+    setSelectedAnswer(null);
+    setOptions([]);
+    reset();
+  }
 
   if (isLoading) {
     return (
       <main className="mobilePage">
         <ExerciseState
-          title="Loading…"
-          message="Preparing your exercise."
+          eyebrow="Multiple choice"
+          title="Loading words"
+          message="Preparing your selected review words…"
         />
       </main>
     );
   }
 
-  if (items.length === 0) {
+  if (
+    usableItems.length === 0
+  ) {
     return (
       <main className="mobilePage">
         <ExerciseState
           eyebrow="Multiple choice"
-          title="No words selected"
-          message="Choose some words in Review before starting this exercise."
-          actionLabel="Back to training"
-          actionHref="/review/train"
+          title="No usable vocabulary"
+          message={`Your selected review words do not have ${
+            activeMode?.title ??
+            "the required information"
+          } yet.`}
+          actionLabel="Back to review"
+          actionHref="/review"
         />
       </main>
     );
@@ -139,9 +256,10 @@ export default function MultipleChoiceClient({
           eyebrow="Multiple choice"
           title="Practice complete"
           message={`You reviewed ${
-            items.length
+            usableItems.length
           } ${
-            items.length === 1
+            usableItems.length ===
+            1
               ? "word"
               : "words"
           }.`}
@@ -165,33 +283,105 @@ export default function MultipleChoiceClient({
     );
   }
 
-  function chooseAnswer(answer) {
+  function chooseAnswer(
+    answer,
+  ) {
     if (isAnswered) {
       return;
     }
 
-    setSelectedAnswer(answer);
+    setSelectedAnswer(
+      answer,
+    );
   }
 
   function nextQuestion() {
     setSelectedAnswer(null);
+    setOptions([]);
     next();
   }
 
   return (
     <ExerciseShell
       eyebrow="Multiple choice"
-      title="Choose the correct English translation"
-      current={currentIndex + 1}
-      total={items.length}
+      title={`Choose the correct ${
+        activeMode?.title ??
+        ""
+      } meaning`}
+      current={
+        currentIndex + 1
+      }
+      total={
+        usableItems.length
+      }
     >
+      <div
+        className={
+          styles.modeSelector
+        }
+      >
+        <span
+          className={
+            styles.modeLabel
+          }
+        >
+          Train with
+        </span>
+
+        <div
+          className={
+            styles.modeButtons
+          }
+          role="group"
+          aria-label="Choose training language"
+        >
+          {MODES.map(
+            (mode) => (
+              <button
+                key={
+                  mode.key
+                }
+                type="button"
+                className={`${styles.modeButton} ${
+                  trainingMode ===
+                  mode.key
+                    ? styles.modeButtonActive
+                    : ""
+                }`}
+                onClick={() =>
+                  changeMode(
+                    mode.key,
+                  )
+                }
+                aria-pressed={
+                  trainingMode ===
+                  mode.key
+                }
+              >
+                {
+                  mode.label
+                }
+              </button>
+            ),
+          )}
+        </div>
+      </div>
+
       <ExerciseQuestionCard>
-        <h2 className={styles.word}>
-          {currentItem.term?.toLowerCase()}
+        <h2
+          className={
+            styles.word
+          }
+        >
+          {currentItem.term}
         </h2>
 
         {correctAnswer ? (
-          <div className={styles.options}>
+          <div
+            className={
+              styles.options
+            }
+          >
             {options.map(
               (
                 option,
@@ -233,18 +423,26 @@ export default function MultipleChoiceClient({
                   <button
                     key={`${option.value}-${index}`}
                     type="button"
-                    className={optionClass}
-                    onClick={() =>
-                      chooseAnswer(option)
+                    className={
+                      optionClass
                     }
-                    disabled={isAnswered}
+                    onClick={() =>
+                      chooseAnswer(
+                        option,
+                      )
+                    }
+                    disabled={
+                      isAnswered
+                    }
                   >
                     <span
                       className={
                         styles.optionDefinition
                       }
                     >
-                      {option.value}
+                      {
+                        option.value
+                      }
                     </span>
                   </button>
                 );
@@ -252,37 +450,65 @@ export default function MultipleChoiceClient({
             )}
           </div>
         ) : (
-          <p className={styles.noAnswer}>
-            No English translation
-            is available for this word.
+          <p
+            className={
+              styles.noAnswer
+            }
+          >
+            No{" "}
+            {
+              activeMode?.title
+            }{" "}
+            meaning is
+            available for this
+            word.
           </p>
         )}
 
         {isAnswered && (
-          <div className={styles.feedback}>
+          <div
+            className={
+              styles.feedback
+            }
+          >
             {isSameAnswer(
               selectedAnswer,
               correctAnswer,
             ) ? (
-              <p className={styles.feedbackCorrect}>
+              <p
+                className={
+                  styles.feedbackCorrect
+                }
+              >
                 ✓ Correct
               </p>
             ) : (
-              <div className={styles.feedbackWrong}>
+              <div
+                className={
+                  styles.feedbackWrong
+                }
+              >
                 <p>
                   Correct answer:
                 </p>
 
                 <strong>
-                  {correctAnswer?.value}
+                  {
+                    correctAnswer
+                      ?.value
+                  }
                 </strong>
               </div>
             )}
 
             <button
               type="button"
-              className={styles.nextButton}
-              onClick={nextQuestion}
+              className={
+                styles.nextButton
+              }
+              onClick={
+                nextQuestion
+              }
             >
               Next →
             </button>
