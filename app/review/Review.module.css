@@ -16,7 +16,8 @@
 }
 
 .header {
-  margin-top: var(--spacing-xl);
+  margin-top:
+    var(--spacing-xl);
 }
 
 .header h1 {
@@ -25,13 +26,17 @@
   color:
     var(--color-text-primary);
 
+  font-family:
+    var(--font-family-heading);
+
   font-size:
     var(--font-size-headline-large);
 
   line-height:
     var(--line-height-headline-large);
 
-  font-weight: 700;
+  font-weight:
+    var(--font-weight-headline-large);
 }
 
 .header p {
@@ -52,10 +57,12 @@
 
 .actionBar {
   display: grid;
+
   grid-template-columns:
     1fr 1fr;
 
-  gap: var(--spacing-sm);
+  gap:
+    var(--spacing-sm);
 
   margin-top:
     var(--spacing-xl);
@@ -74,19 +81,27 @@
   border-radius:
     var(--button-radius);
 
-  font-family: inherit;
+  font-family:
+    var(--font-family-body);
 
   font-size:
     var(--font-size-label-medium);
 
-  font-weight: 700;
+  line-height:
+    var(--line-height-label-medium);
+
+  font-weight:
+    var(--font-weight-label-medium);
 
   cursor: pointer;
 
   transition:
-    background var(--transition-fast),
-    border-color var(--transition-fast),
-    transform var(--transition-fast);
+    background
+      var(--transition-fast),
+    border-color
+      var(--transition-fast),
+    transform
+      var(--transition-fast);
 }
 
 .secondaryButton {
@@ -156,14 +171,10 @@
 
 .trainButton:hover {
   border-color:
-    var(
-      --button-primary-background-hover
-    );
+    var(--button-primary-background-hover);
 
   background:
-    var(
-      --button-primary-background-hover
-    );
+    var(--button-primary-background-hover);
 
   transform:
     translateY(-1px);
@@ -180,7 +191,8 @@
   display: flex;
   flex-direction: column;
 
-  gap: var(--spacing-xl);
+  gap:
+    var(--spacing-xl);
 
   margin-top:
     var(--spacing-xl);
@@ -204,20 +216,27 @@
   color:
     var(--color-text-primary);
 
+  font-family:
+    var(--font-family-heading);
+
   font-size:
-    var(--font-size-title-small);
+    var(--font-size-headline-small);
 
   line-height:
-    var(--line-height-title-small);
+    var(--line-height-headline-small);
 
-  font-weight: 700;
+  font-weight:
+    var(--font-weight-headline-small);
 }
 
 .wordList {
   display: grid;
-  grid-template-columns: 1fr;
 
-  gap: var(--spacing-xs);
+  grid-template-columns:
+    1fr;
+
+  gap:
+    var(--spacing-xs);
 
   margin: 0;
   padding: 0;
@@ -233,7 +252,8 @@
   display: flex;
   align-items: center;
 
-  gap: var(--spacing-sm);
+  gap:
+    var(--spacing-sm);
 
   min-height:
     var(--control-height-md);
@@ -255,9 +275,12 @@
   cursor: pointer;
 
   transition:
-    border-color var(--transition-fast),
-    background var(--transition-fast),
-    transform var(--transition-fast);
+    border-color
+      var(--transition-fast),
+    background
+      var(--transition-fast),
+    transform
+      var(--transition-fast);
 }
 
 .wordLabel:hover {
@@ -295,6 +318,9 @@
   color:
     var(--color-text-primary);
 
+  font-family:
+    var(--font-family-body);
+
   font-size:
     var(--font-size-body-medium);
 
@@ -310,6 +336,9 @@
 
   color:
     var(--color-text-secondary);
+
+  font-family:
+    var(--font-family-body);
 
   font-size:
     var(--font-size-body-medium);
@@ -329,14 +358,6 @@
         var(--bottom-nav-height) +
         var(--spacing-2xl)
       );
-  }
-
-  .header h1 {
-    font-size:
-      var(--font-size-display-small);
-
-    line-height:
-      var(--line-height-display-small);
   }
 
   .wordList {

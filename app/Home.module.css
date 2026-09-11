@@ -231,7 +231,7 @@
     var(--color-background-surface);
 
   box-shadow:
-    var(--shadow-md);
+       var(--shadow-elevated);
 }
 
 .accountInfo {

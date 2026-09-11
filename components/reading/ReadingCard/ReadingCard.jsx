@@ -70,7 +70,7 @@ export default function ReadingCard({
               href={conjunctionsHref}
               className={`${styles.action} ${styles.secondaryAction}`}
             >
-              Conjunctions
+            Connectors
             </Link>
           )}
         </div>

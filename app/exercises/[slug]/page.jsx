@@ -84,7 +84,7 @@ export default async function ExercisePage({ params, searchParams }) {
                 }
                 size="md"
               >
-                Bindeord
+                Connectors
               </Button>
             </Link>
           </div>

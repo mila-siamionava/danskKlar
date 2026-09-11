@@ -1,7 +1,13 @@
 .select {
-  min-height: var(--control-height-md);
+  width: auto;
 
-  margin-inline: var(--spacing-2xs);
+  max-width: 100%;
+
+  min-height:
+    var(--control-height-md);
+
+  margin-inline:
+    var(--spacing-2xs);
 
   padding:
     var(--spacing-xs)
@@ -9,69 +15,114 @@
     var(--spacing-xs)
     var(--spacing-sm);
 
-  background-color: var(--color-surface-subtle);
-  color: var(--color-text);
+  border:
+    1px solid
+    var(--color-border-accent);
 
- border: 1px solid var(--color-border-accent);
-  border-radius: var(--border-radius-sm);
+  border-radius:
+    var(--border-radius-sm);
 
-  font-family: var(--font-family-body);
-  font-size: var(--font-size-body-medium);
-  line-height: var(--line-height-body-medium);
+  background:
+    var(--color-background-surface);
+
+  color:
+    var(--color-text-primary);
+
+  font-family:
+    var(--font-family-body);
+
+  font-size:
+    var(--font-size-body-medium);
+
+  line-height:
+    var(--line-height-body-medium);
+
   font-weight: 500;
 
   cursor: pointer;
 
   transition:
-    background-color var(--transition-fast),
-    border-color var(--transition-fast),
-    box-shadow var(--transition-fast);
+    background
+      var(--transition-fast),
+    border-color
+      var(--transition-fast),
+    box-shadow
+      var(--transition-fast);
 }
 
 .select option {
-  background-color: var(--color-surface);
-  color: var(--color-text);
+  background:
+    var(--color-background-surface);
+
+  color:
+    var(--color-text-primary);
 }
 
 .select:hover:not(:disabled) {
-  background-color: var(--color-surface);
-  border-color: var(--color-primary-hover);
+  background:
+    var(--color-background-soft);
+
+  border-color:
+    var(--color-border-secondary);
 }
 
 .select:focus-visible {
   outline: none;
-  border-color: var(--color-primary-hover);
+
+  border-color:
+    var(--color-focus);
 
   box-shadow:
-    0 0 0 3px
+    0
+    0
+    0
+    3px
     color-mix(
       in srgb,
-      var(--color-primary) 30%,
+      var(--color-focus) 18%,
       transparent
     );
 }
 
 .correct {
-  background-color: var(--answer-correct-background);
-  color: var(--answer-correct-text);
-  border-color: var(--answer-correct-border);
+  background:
+    var(--answer-correct-background);
+
+  color:
+    var(--answer-correct-text);
+
+  border-color:
+    var(--answer-correct-border);
 }
 
 .wrong {
-  background-color: var(--answer-wrong-background);
-  color: var(--answer-wrong-text);
-  border-color: var(--answer-wrong-border);
+  background:
+    var(--answer-wrong-background);
+
+  color:
+    var(--answer-wrong-text);
+
+  border-color:
+    var(--answer-wrong-border);
 }
 
 .select:disabled {
-  opacity: var(--opacity-disabled);
+  opacity:
+    var(--opacity-disabled);
+
   cursor: not-allowed;
 }
 
-@media only screen and (max-width: 37.5em) {
+@media (max-width: 37.5em) {
   .select {
-    width: 100%;
-    margin: var(--spacing-xs) 0;
-    font-size: var(--font-size-body-medium);
+    width:
+      min(100%, 28rem);
+
+    margin:
+      var(--spacing-xs)
+      0;
+
+    font-size:
+      var(--font-size-body-medium);
   }
 }

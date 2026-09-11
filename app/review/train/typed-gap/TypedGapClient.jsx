@@ -1,57 +1,105 @@
 "use client";
 
+import {
+  useMemo,
+  useState,
+} from "react";
+
 import ExerciseQuestionCard from "@/components/exercises/ExerciseQuestionCard/ExerciseQuestionCard";
 import ExerciseShell from "@/components/exercises/ExerciseShell/ExerciseShell";
 import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
 
-import { useState } from "react";
-
 import { createGapSentence } from "../_lib/sentenceUtils";
+import { useSelectedReviewItems } from "../_hooks/useSelectedReviewItems";
 import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 
 import styles from "./TypedGap.module.css";
 
+function prepareTrainingItem(item) {
+  if (!item?.example) {
+    return null;
+  }
+
+  const target =
+    item.example_target;
+
+  if (!target) {
+    return null;
+  }
+
+  const trainingSentence =
+    createGapSentence(
+      item.example,
+      target,
+    );
+
+  if (!trainingSentence) {
+    return null;
+  }
+
+  return {
+    ...item,
+    target,
+    trainingSentence,
+  };
+}
+
 export default function TypedGapClient({
   vocabulary,
 }) {
-  const [items] = useState(() =>
-    vocabulary
-      .map((item) => {
-        if (!item.example) {
+  const {
+    items: selectedItems,
+    isLoading,
+  } = useSelectedReviewItems();
+
+  const items = useMemo(() => {
+    const vocabularyById =
+      new Map(
+        vocabulary.map(
+          (item) => [
+            item.id,
+            item,
+          ],
+        ),
+      );
+
+    return selectedItems
+      .map((selectedItem) => {
+        const id =
+          selectedItem.vocabularyId ??
+          selectedItem.id;
+
+        const fullItem =
+          vocabularyById.get(id);
+
+        if (!fullItem) {
           return null;
         }
 
-        const target =
-          item.example_target;
-
-        if (!target) {
-          return null;
-        }
-
-        const trainingSentence =
-          createGapSentence(
-            item.example,
-            target,
-          );
-
-        if (!trainingSentence) {
-          return null;
-        }
-
-        return {
-          ...item,
-          target,
-          trainingSentence,
-        };
+        return prepareTrainingItem(
+          fullItem,
+        );
       })
-      .filter(Boolean),
-  );
+      .filter(Boolean);
+  }, [
+    selectedItems,
+    vocabulary,
+  ]);
 
-  const [answer, setAnswer] =
-    useState("");
+  const [
+    answer,
+    setAnswer,
+  ] = useState("");
 
-  const [checked, setChecked] =
-    useState(false);
+  const [
+    checked,
+    setChecked,
+  ] = useState(false);
+
+  const [
+    hintType,
+    setHintType,
+  ] = useState(null);
 
   const {
     currentIndex,
@@ -64,15 +112,27 @@ export default function TypedGapClient({
   const currentItem =
     items[currentIndex];
 
+  if (isLoading) {
+    return (
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Typed gap"
+          title="Loading words"
+          message="Preparing your selected review words…"
+        />
+      </main>
+    );
+  }
+
   if (items.length === 0) {
     return (
       <main className="mobilePage">
         <ExerciseState
           eyebrow="Typed gap"
           title="No usable examples"
-          message="No usable example sentences were found."
-          actionLabel="Back to training"
-          actionHref="/review/train"
+          message="Your selected Review words do not have usable example sentences for this exercise."
+          actionLabel="Back to review"
+          actionHref="/review"
         />
       </main>
     );
@@ -117,6 +177,11 @@ export default function TypedGapClient({
       "{{gap}}",
     );
 
+  const hasHint =
+    currentItem.english ||
+    currentItem.russian ||
+    currentItem.definition_da;
+
   function checkAnswer(event) {
     event.preventDefault();
 
@@ -130,6 +195,8 @@ export default function TypedGapClient({
   function nextQuestion() {
     setAnswer("");
     setChecked(false);
+    setHintType(null);
+
     next();
   }
 
@@ -137,24 +204,169 @@ export default function TypedGapClient({
     <ExerciseShell
       eyebrow="Typed gap"
       title="Complete the sentence"
-      current={currentIndex + 1}
-      total={items.length}
+      current={
+        currentIndex + 1
+      }
+      total={
+        items.length
+      }
     >
       <ExerciseQuestionCard>
-        <p className={styles.sentence}>
+        <p
+          className={
+            styles.sentence
+          }
+        >
           {sentenceParts[0]}
 
           <span
-            className={styles.gap}
+            className={
+              styles.gap
+            }
             aria-hidden="true"
           />
 
           {sentenceParts[1]}
         </p>
 
+        {hasHint && (
+          <details
+            className={
+              styles.hint
+            }
+            onToggle={(
+              event,
+            ) => {
+              if (
+                !event.currentTarget.open
+              ) {
+                setHintType(
+                  null,
+                );
+              }
+            }}
+          >
+            <summary
+              className={
+                styles.hintSummary
+              }
+            >
+              Hint
+            </summary>
+
+            <div
+              className={
+                styles.hintContent
+              }
+            >
+              <div
+                className={
+                  styles.hintButtons
+                }
+              >
+                {currentItem.english && (
+                  <button
+                    type="button"
+                    className={`${styles.hintButton} ${
+                      hintType ===
+                      "english"
+                        ? styles.hintButtonActive
+                        : ""
+                    }`}
+                    onClick={() =>
+                      setHintType(
+                        "english",
+                      )
+                    }
+                  >
+                    English
+                  </button>
+                )}
+
+                {currentItem.russian && (
+                  <button
+                    type="button"
+                    className={`${styles.hintButton} ${
+                      hintType ===
+                      "russian"
+                        ? styles.hintButtonActive
+                        : ""
+                    }`}
+                    onClick={() =>
+                      setHintType(
+                        "russian",
+                      )
+                    }
+                  >
+                    Russian
+                  </button>
+                )}
+
+                {currentItem.definition_da && (
+                  <button
+                    type="button"
+                    className={`${styles.hintButton} ${
+                      hintType ===
+                      "definition"
+                        ? styles.hintButtonActive
+                        : ""
+                    }`}
+                    onClick={() =>
+                      setHintType(
+                        "definition",
+                      )
+                    }
+                  >
+                    Definition
+                  </button>
+                )}
+              </div>
+
+              {hintType && (
+                <div
+                  className={
+                    styles.hintResult
+                  }
+                >
+                  {hintType ===
+                    "english" && (
+                    <p>
+                      {
+                        currentItem.english
+                      }
+                    </p>
+                  )}
+
+                  {hintType ===
+                    "russian" && (
+                    <p>
+                      {
+                        currentItem.russian
+                      }
+                    </p>
+                  )}
+
+                  {hintType ===
+                    "definition" && (
+                    <p>
+                      {
+                        currentItem.definition_da
+                      }
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          </details>
+        )}
+
         <form
-          className={styles.form}
-          onSubmit={checkAnswer}
+          className={
+            styles.form
+          }
+          onSubmit={
+            checkAnswer
+          }
         >
           <label
             className={
@@ -167,15 +379,22 @@ export default function TypedGapClient({
 
           <input
             id="typed-answer"
-            className={styles.input}
+            className={
+              styles.input
+            }
             value={answer}
-            onChange={(event) =>
+            onChange={(
+              event,
+            ) =>
               setAnswer(
                 event.target.value,
               )
             }
-            disabled={checked}
+            disabled={
+              checked
+            }
             autoComplete="off"
+            spellCheck="false"
           />
 
           {!checked && (
@@ -191,13 +410,25 @@ export default function TypedGapClient({
         </form>
 
         {checked && (
-          <div className={styles.feedback}>
+          <div
+            className={
+              styles.feedback
+            }
+          >
             {isCorrect ? (
-              <p className={styles.correct}>
+              <p
+                className={
+                  styles.correct
+                }
+              >
                 ✓ Correct
               </p>
             ) : (
-              <div className={styles.wrong}>
+              <div
+                className={
+                  styles.wrong
+                }
+              >
                 <p>
                   Correct answer:
                 </p>

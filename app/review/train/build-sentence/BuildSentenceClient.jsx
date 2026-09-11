@@ -6,8 +6,8 @@ import ExerciseState from "@/components/exercises/ExerciseState/ExerciseState";
 
 import {
   DndContext,
-  PointerSensor,
   KeyboardSensor,
+  PointerSensor,
   closestCenter,
   useSensor,
   useSensors,
@@ -30,6 +30,7 @@ import {
 } from "react";
 
 import { shuffle } from "../_lib/arrayUtils";
+import { useSelectedReviewItems } from "../_hooks/useSelectedReviewItems";
 import { useTrainingProgress } from "../_hooks/useTrainingProgress";
 
 import styles from "./BuildSentence.module.css";
@@ -52,9 +53,14 @@ function SortableWord({
 
   const style = {
     transform:
-      CSS.Transform.toString(transform),
+      CSS.Transform.toString(
+        transform,
+      ),
     transition,
-    zIndex: isDragging ? 2 : undefined,
+    zIndex:
+      isDragging
+        ? 2
+        : undefined,
   };
 
   return (
@@ -76,20 +82,74 @@ function SortableWord({
   );
 }
 
+function prepareTrainingItem(item) {
+  if (!item?.example) {
+    return null;
+  }
+
+  const words =
+    item.example
+      .trim()
+      .split(/\s+/);
+
+  if (words.length < 3) {
+    return null;
+  }
+
+  return {
+    ...item,
+    words,
+  };
+}
+
 export default function BuildSentenceClient({
   vocabulary,
 }) {
-  const usableItems = useMemo(
-    () =>
-      vocabulary.filter(
-        (item) =>
-          item.example &&
-          item.example
-            .trim()
-            .split(/\s+/).length >= 3,
-      ),
-    [vocabulary],
-  );
+  const {
+    items: selectedItems,
+    isLoading,
+  } = useSelectedReviewItems();
+
+  const usableItems =
+    useMemo(() => {
+      const vocabularyById =
+        new Map(
+          vocabulary.map(
+            (item) => [
+              item.id,
+              item,
+            ],
+          ),
+        );
+
+      return selectedItems
+        .map(
+          (
+            selectedItem,
+          ) => {
+            const id =
+              selectedItem.vocabularyId ??
+              selectedItem.id;
+
+            const fullItem =
+              vocabularyById.get(
+                id,
+              );
+
+            if (!fullItem) {
+              return null;
+            }
+
+            return prepareTrainingItem(
+              fullItem,
+            );
+          },
+        )
+        .filter(Boolean);
+    }, [
+      selectedItems,
+      vocabulary,
+    ]);
 
   const {
     currentIndex,
@@ -99,48 +159,71 @@ export default function BuildSentenceClient({
     usableItems.length,
   );
 
-  const [words, setWords] =
-    useState([]);
+  const [
+    words,
+    setWords,
+  ] = useState([]);
 
-  const [checked, setChecked] =
-    useState(false);
+  const [
+    checked,
+    setChecked,
+  ] = useState(false);
+
+  const [
+    hintType,
+    setHintType,
+  ] = useState(null);
 
   const currentItem =
     usableItems[currentIndex];
 
   const originalWords =
     useMemo(() => {
-      if (!currentItem?.example) {
+      if (
+        !currentItem?.words
+      ) {
         return [];
       }
 
-      return currentItem.example
-        .trim()
-        .split(/\s+/);
+      return currentItem.words;
     }, [currentItem]);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 6,
-      },
-    }),
+  const sensors =
+    useSensors(
+      useSensor(
+        PointerSensor,
+        {
+          activationConstraint: {
+            distance: 6,
+          },
+        },
+      ),
 
-    useSensor(KeyboardSensor, {
-      coordinateGetter:
-        sortableKeyboardCoordinates,
-    }),
-  );
+      useSensor(
+        KeyboardSensor,
+        {
+          coordinateGetter:
+            sortableKeyboardCoordinates,
+        },
+      ),
+    );
 
   useEffect(() => {
-    if (originalWords.length === 0) {
+    if (
+      originalWords.length ===
+      0
+    ) {
       setWords([]);
+
       return;
     }
 
     const wordItems =
       originalWords.map(
-        (text, index) => ({
+        (
+          text,
+          index,
+        ) => ({
           id: `${index}-${text}`,
           text,
         }),
@@ -153,11 +236,21 @@ export default function BuildSentenceClient({
 
   const isCorrect =
     words
-      .map((item) => item.text)
+      .map(
+        (item) =>
+          item.text,
+      )
       .join(" ") ===
     originalWords.join(" ");
 
-  function handleDragEnd(event) {
+  const hasHint =
+    currentItem?.english ||
+    currentItem?.russian ||
+    currentItem?.definition_da;
+
+  function handleDragEnd(
+    event,
+  ) {
     const {
       active,
       over,
@@ -171,32 +264,38 @@ export default function BuildSentenceClient({
       return;
     }
 
-    setWords((currentWords) => {
-      const oldIndex =
-        currentWords.findIndex(
-          (item) =>
-            item.id === active.id,
-        );
-
-      const newIndex =
-        currentWords.findIndex(
-          (item) =>
-            item.id === over.id,
-        );
-
-      if (
-        oldIndex === -1 ||
-        newIndex === -1
-      ) {
-        return currentWords;
-      }
-
-      return arrayMove(
+    setWords(
+      (
         currentWords,
-        oldIndex,
-        newIndex,
-      );
-    });
+      ) => {
+        const oldIndex =
+          currentWords.findIndex(
+            (item) =>
+              item.id ===
+              active.id,
+          );
+
+        const newIndex =
+          currentWords.findIndex(
+            (item) =>
+              item.id ===
+              over.id,
+          );
+
+        if (
+          oldIndex === -1 ||
+          newIndex === -1
+        ) {
+          return currentWords;
+        }
+
+        return arrayMove(
+          currentWords,
+          oldIndex,
+          newIndex,
+        );
+      },
+    );
   }
 
   function checkSentence() {
@@ -205,18 +304,34 @@ export default function BuildSentenceClient({
 
   function nextSentence() {
     setChecked(false);
+    setHintType(null);
+
     next();
   }
 
-  if (usableItems.length === 0) {
+  if (isLoading) {
+    return (
+      <main className="mobilePage">
+        <ExerciseState
+          eyebrow="Build sentence"
+          title="Loading words"
+          message="Preparing your selected review words…"
+        />
+      </main>
+    );
+  }
+
+  if (
+    usableItems.length === 0
+  ) {
     return (
       <main className="mobilePage">
         <ExerciseState
           eyebrow="Build sentence"
           title="No usable examples"
-          message="No usable example sentences were found."
-          actionLabel="Back to training"
-          actionHref="/review/train"
+          message="Your selected Review words do not have usable example sentences for this exercise."
+          actionLabel="Back to review"
+          actionHref="/review"
         />
       </main>
     );
@@ -231,7 +346,8 @@ export default function BuildSentenceClient({
           message={`You completed ${
             usableItems.length
           } ${
-            usableItems.length === 1
+            usableItems.length ===
+            1
               ? "sentence"
               : "sentences"
           }.`}
@@ -246,20 +362,160 @@ export default function BuildSentenceClient({
     <ExerciseShell
       eyebrow="Build sentence"
       title="Put the words in the correct order"
-      current={currentIndex + 1}
-      total={usableItems.length}
+      current={
+        currentIndex + 1
+      }
+      total={
+        usableItems.length
+      }
     >
       <ExerciseQuestionCard>
+        {hasHint && (
+          <details
+            className={
+              styles.hint
+            }
+            onToggle={(
+              event,
+            ) => {
+              if (
+                !event
+                  .currentTarget
+                  .open
+              ) {
+                setHintType(
+                  null,
+                );
+              }
+            }}
+          >
+            <summary
+              className={
+                styles.hintSummary
+              }
+            >
+              Hint
+            </summary>
+
+            <div
+              className={
+                styles.hintContent
+              }
+            >
+              <div
+                className={
+                  styles.hintButtons
+                }
+              >
+                {currentItem.english && (
+                  <button
+                    type="button"
+                    className={`${styles.hintButton} ${
+                      hintType ===
+                      "english"
+                        ? styles.hintButtonActive
+                        : ""
+                    }`}
+                    onClick={() =>
+                      setHintType(
+                        "english",
+                      )
+                    }
+                  >
+                    English
+                  </button>
+                )}
+
+                {currentItem.russian && (
+                  <button
+                    type="button"
+                    className={`${styles.hintButton} ${
+                      hintType ===
+                      "russian"
+                        ? styles.hintButtonActive
+                        : ""
+                    }`}
+                    onClick={() =>
+                      setHintType(
+                        "russian",
+                      )
+                    }
+                  >
+                    Russian
+                  </button>
+                )}
+
+                {currentItem.definition_da && (
+                  <button
+                    type="button"
+                    className={`${styles.hintButton} ${
+                      hintType ===
+                      "definition"
+                        ? styles.hintButtonActive
+                        : ""
+                    }`}
+                    onClick={() =>
+                      setHintType(
+                        "definition",
+                      )
+                    }
+                  >
+                    Definition
+                  </button>
+                )}
+              </div>
+
+              {hintType && (
+                <div
+                  className={
+                    styles.hintResult
+                  }
+                >
+                  {hintType ===
+                    "english" && (
+                    <p>
+                      {
+                        currentItem.english
+                      }
+                    </p>
+                  )}
+
+                  {hintType ===
+                    "russian" && (
+                    <p>
+                      {
+                        currentItem.russian
+                      }
+                    </p>
+                  )}
+
+                  {hintType ===
+                    "definition" && (
+                    <p>
+                      {
+                        currentItem.definition_da
+                      }
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          </details>
+        )}
+
         <DndContext
           sensors={sensors}
           collisionDetection={
             closestCenter
           }
-          onDragEnd={handleDragEnd}
+          onDragEnd={
+            handleDragEnd
+          }
         >
           <SortableContext
             items={words.map(
-              (item) => item.id,
+              (item) =>
+                item.id,
             )}
             strategy={
               horizontalListSortingStrategy
@@ -270,13 +526,21 @@ export default function BuildSentenceClient({
                 styles.words
               }
             >
-              {words.map((item) => (
-                <SortableWord
-                  key={item.id}
-                  item={item}
-                  checked={checked}
-                />
-              ))}
+              {words.map(
+                (item) => (
+                  <SortableWord
+                    key={
+                      item.id
+                    }
+                    item={
+                      item
+                    }
+                    checked={
+                      checked
+                    }
+                  />
+                ),
+              )}
             </div>
           </SortableContext>
         </DndContext>

@@ -1,9 +1,15 @@
 .sentence {
-  margin: 0 0 var(--spacing-lg);
+  margin:
+    0
+    0
+    var(--spacing-lg);
 
-  color: var(--color-text-primary);
+  color:
+    var(--color-text-primary);
 
-  font-size: var(--font-size-body-medium);
+  font-size:
+    var(--font-size-body-medium);
+
   line-height: 1.7;
 
   text-align: center;
@@ -14,51 +20,238 @@
 
   min-width: 8rem;
 
-  margin-inline: var(--spacing-xs);
+  margin-inline:
+    var(--spacing-xs);
 
-  border-bottom: 2px solid var(--color-text-primary);
+  border-bottom:
+    2px solid
+    var(--color-text-primary);
 }
+
+/* HINT */
+
+.hint {
+  margin:
+    0
+    0
+    var(--spacing-md);
+
+  border:
+    1px solid
+    var(--color-border-primary);
+
+  border-radius:
+    var(--border-radius-sm);
+
+  background:
+    var(--color-background-soft);
+
+  overflow: hidden;
+}
+
+.hintSummary {
+  padding:
+    var(--spacing-sm)
+    var(--spacing-md);
+
+  color:
+    var(--color-text-primary);
+
+  font-size:
+    var(--font-size-label-medium);
+
+  line-height:
+    var(--line-height-label-medium);
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  user-select: none;
+}
+
+.hintSummary:hover {
+  background:
+    var(--color-background-surface);
+}
+
+.hintContent {
+  padding:
+    var(--spacing-sm)
+    var(--spacing-md)
+    var(--spacing-md);
+
+  border-top:
+    1px solid
+    var(--color-border-primary);
+}
+
+.hintButtons {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap:
+    var(--spacing-xs);
+}
+
+.hintButton {
+  flex: 1;
+
+  min-width: 5.5rem;
+  min-height: 2.6rem;
+
+  padding:
+    var(--spacing-xs)
+    var(--spacing-sm);
+
+  border:
+    1px solid
+    var(--color-border-primary);
+
+  border-radius:
+    var(--border-radius-sm);
+
+  background:
+    var(--color-background-surface);
+
+  color:
+    var(--color-text-primary);
+
+  font: inherit;
+
+  font-size:
+    var(--font-size-label-small);
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background
+      var(--transition-fast),
+    border-color
+      var(--transition-fast),
+    color
+      var(--transition-fast);
+}
+
+.hintButton:hover {
+  border-color:
+    var(--color-border-secondary);
+
+  background:
+    var(--color-background-soft);
+}
+
+.hintButtonActive {
+  border-color:
+    var(--button-primary-background);
+
+  background:
+    var(--button-primary-background);
+
+  color:
+    var(--button-primary-text);
+}
+
+.hintResult {
+  margin-top:
+    var(--spacing-sm);
+
+  padding:
+    var(--spacing-sm);
+
+  border:
+    1px solid
+    var(--color-border-primary);
+
+  border-radius:
+    var(--border-radius-sm);
+
+  background:
+    var(--color-background-surface);
+}
+
+.hintResult p {
+  margin: 0;
+
+  color:
+    var(--color-text-primary);
+
+  font-size:
+    var(--font-size-body-small);
+
+  line-height:
+    var(--line-height-body-small);
+}
+
+/* FORM */
 
 .form {
   display: flex;
   flex-direction: column;
 
-  gap: var(--spacing-xs);
+  gap:
+    var(--spacing-xs);
 }
 
 .inputLabel {
-  color: var(--color-text-primary);
+  color:
+    var(--color-text-primary);
 
-  font-size: var(--font-size-label-small);
-  line-height: var(--line-height-label-small);
+  font-size:
+    var(--font-size-label-small);
+
+  line-height:
+    var(--line-height-label-small);
+
   font-weight: 700;
 }
 
 .input {
   width: 100%;
-  min-height: var(--control-height-lg);
 
-  padding: var(--spacing-xs) var(--spacing-sm);
+  min-height:
+    var(--control-height-lg);
 
-  border: 1px solid var(--color-border-primary);
-  border-radius: var(--border-radius-sm);
+  padding:
+    var(--spacing-xs)
+    var(--spacing-sm);
 
-  background: var(--color-background-surface);
-  color: var(--color-text-primary);
+  border:
+    1px solid
+    var(--color-border-primary);
 
-  font-size: var(--font-size-body-medium);
+  border-radius:
+    var(--border-radius-sm);
+
+  background:
+    var(--color-background-surface);
+
+  color:
+    var(--color-text-primary);
+
+  font-size:
+    var(--font-size-body-medium);
 
   transition:
-    border-color var(--transition-fast),
-    box-shadow var(--transition-fast);
+    border-color
+      var(--transition-fast),
+    box-shadow
+      var(--transition-fast);
 }
 
 .input:focus {
   outline: none;
 
-  border-color: var(--color-focus);
+  border-color:
+    var(--color-focus);
 
-  box-shadow: 0 0 0 3px
+  box-shadow:
+    0
+    0
+    0
+    3px
     color-mix(
       in srgb,
       var(--color-focus) 14%,
@@ -66,94 +259,163 @@
     );
 }
 
+/* BUTTONS */
+
 .checkButton,
 .nextButton {
   width: 100%;
-  min-height: var(--button-height);
 
-  padding-inline: var(--button-padding-inline);
+  min-height:
+    var(--button-height);
 
-  border: 1px solid var(--button-primary-background);
-  border-radius: var(--button-radius);
+  padding-inline:
+    var(--button-padding-inline);
 
-  background: var(--button-primary-background);
-  color: var(--button-primary-text);
+  border:
+    1px solid
+    var(--button-primary-background);
 
-  font-size: var(--font-size-label-medium);
+  border-radius:
+    var(--button-radius);
+
+  background:
+    var(--button-primary-background);
+
+  color:
+    var(--button-primary-text);
+
+  font-size:
+    var(--font-size-label-medium);
+
   font-weight: 700;
 
   cursor: pointer;
 
   transition:
-    background var(--transition-fast),
-    border-color var(--transition-fast),
-    transform var(--transition-fast);
+    background
+      var(--transition-fast),
+    border-color
+      var(--transition-fast),
+    transform
+      var(--transition-fast);
 }
 
 .checkButton {
-  margin-top: var(--spacing-2xs);
+  margin-top:
+    var(--spacing-2xs);
 }
 
 .nextButton {
-  margin-top: var(--spacing-md);
+  margin-top:
+    var(--spacing-md);
 }
 
 .checkButton:hover:not(:disabled),
 .nextButton:hover {
-  border-color: var(--button-primary-background-hover);
-  background: var(--button-primary-background-hover);
+  border-color:
+    var(--button-primary-background-hover);
 
-  transform: translateY(-1px);
+  background:
+    var(--button-primary-background-hover);
+
+  transform:
+    translateY(-1px);
 }
 
 .checkButton:active:not(:disabled),
 .nextButton:active {
-  transform: scale(0.98);
+  transform:
+    scale(0.98);
 }
 
 .checkButton:disabled {
-  opacity: var(--opacity-disabled);
+  opacity:
+    var(--opacity-disabled);
+
   cursor: default;
 }
 
-.feedback {
-  margin-top: var(--spacing-lg);
-  padding-top: var(--spacing-md);
+/* FEEDBACK */
 
-  border-top: 1px solid var(--color-border-primary);
+.feedback {
+  margin-top:
+    var(--spacing-lg);
+
+  padding-top:
+    var(--spacing-md);
+
+  border-top:
+    1px solid
+    var(--color-border-primary);
 }
 
 .correct {
   margin: 0;
 
-  color: var(--color-success);
+  color:
+    var(--color-success);
 
-  font-size: var(--font-size-body-medium);
+  font-size:
+    var(--font-size-body-medium);
+
   font-weight: 700;
 }
 
 .wrong {
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding:
+    var(--spacing-sm)
+    var(--spacing-md);
 
-  border: 1px solid var(--answer-wrong-border);
-  border-radius: var(--border-radius-sm);
+  border:
+    1px solid
+    var(--answer-wrong-border);
 
-  background: var(--answer-wrong-background);
-  color: var(--answer-wrong-text);
+  border-radius:
+    var(--border-radius-sm);
+
+  background:
+    var(--answer-wrong-background);
+
+  color:
+    var(--answer-wrong-text);
 }
 
 .wrong p {
-  margin: 0 0 var(--spacing-2xs);
+  margin:
+    0
+    0
+    var(--spacing-2xs);
 
-  color: var(--answer-wrong-text);
+  color:
+    var(--answer-wrong-text);
 
-  font-size: var(--font-size-body-small);
-  line-height: var(--line-height-body-small);
+  font-size:
+    var(--font-size-body-small);
+
+  line-height:
+    var(--line-height-body-small);
+}
+
+@media (max-width: 23em) {
+  .hintButtons {
+    display: grid;
+
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+
+  .hintButton {
+    min-width: 0;
+
+    padding-inline:
+      var(--spacing-2xs);
+  }
 }
 
 @media (min-width: 37.5em) {
   .sentence {
-    font-size: var(--font-size-body-large);
+    font-size:
+      var(--font-size-body-large);
   }
 
   .gap {
@@ -166,6 +428,7 @@
   }
 
   .checkButton {
-    align-self: flex-start;
+    align-self:
+      flex-start;
   }
 }

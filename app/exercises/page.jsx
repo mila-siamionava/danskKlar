@@ -85,7 +85,7 @@ export default async function ExercisesPage() {
 
           <p className={styles.instruction}>
             Choose a text to practice vocabulary
-            or conjunctions.
+            or connectors.
           </p>
         </div>
 
