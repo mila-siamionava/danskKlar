@@ -1,6 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
 import BackLink from "@/components/navigation/BackLink/BackLink";
 
@@ -167,18 +170,6 @@ export default function ReviewPage() {
               <button
                 type="button"
                 className={
-                  styles.deleteButton
-                }
-                onClick={
-                  deleteSelectedWords
-                }
-              >
-                Delete selected
-              </button>
-
-              <button
-                type="button"
-                className={
                   styles.trainButton
                 }
                 onClick={
@@ -186,6 +177,18 @@ export default function ReviewPage() {
                 }
               >
                 Train selected
+              </button>
+
+              <button
+                type="button"
+                className={
+                  styles.deleteButton
+                }
+                onClick={
+                  deleteSelectedWords
+                }
+              >
+                Delete selected
               </button>
             </>
           )}
