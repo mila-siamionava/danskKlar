@@ -21,6 +21,9 @@ export default function RootLayout({
     <html
       lang="da"
       className={inter.variable}
+      data-theme="warm"
+      data-appearance="light"
+      suppressHydrationWarning
     >
       <body>{children}</body>
     </html>

@@ -7,11 +7,11 @@ import {
   ClipboardList,
   UserRound,
   LogOut,
-  Settings,
 } from "lucide-react";
 
 import HomeNavigationCard from "@/components/navigation/HomeNavigationCard/HomeNavigationCard";
 import AarhusSketch from "@/components/ui/AarhusSketch/AarhusSketch";
+import ThemeToggle from "@/components/theme/ThemeToggle/ThemeToggle";
 import { createClient } from "@/lib/supabase/server";
 
 import styles from "./Home.module.css";
@@ -61,18 +61,7 @@ export default async function Home() {
 
                 <div className={styles.accountDivider} />
 
-                <div className={styles.futureItem}>
-                  <Settings
-                    size={17}
-                    strokeWidth={1.7}
-                    aria-hidden="true"
-                  />
-
-                  <div>
-                    <span>Settings</span>
-                    <small>Coming later</small>
-                  </div>
-                </div>
+                <ThemeToggle />
 
                 <div className={styles.accountDivider} />
 
