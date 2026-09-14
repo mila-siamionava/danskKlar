@@ -20,6 +20,9 @@ export default async function LoginPage({
   const error = params?.error;
   const message = params?.message;
 
+  const showResend =
+    params?.showResend === "true";
+
   return (
     <main className={styles.page}>
       <section className={styles.auth}>
@@ -63,6 +66,21 @@ export default async function LoginPage({
           </p>
         )}
 
+        {showResend && (
+          <div className={styles.authHelpBlock}>
+            <p>
+              Need a new confirmation link?
+            </p>
+
+            <Link
+              href="/resend-confirmation"
+              className={styles.authLink}
+            >
+              Resend confirmation email
+            </Link>
+          </div>
+        )}
+
         <form className={styles.form}>
           <div className={styles.field}>
             <label htmlFor="email">
@@ -100,6 +118,17 @@ export default async function LoginPage({
               <span className={styles.hint}>
                 At least 8 characters
               </span>
+            )}
+
+            {!isSignup && (
+              <div className={styles.authHelp}>
+                <Link
+                  href="/forgot-password"
+                  className={styles.authLink}
+                >
+                  Forgot password?
+                </Link>
+              </div>
             )}
           </div>
 

@@ -34,11 +34,15 @@ export async function GET(request) {
     }
   }
 
-  redirectTo.pathname = "/login";
-  redirectTo.searchParams.set(
-    "error",
-    "The confirmation link is invalid or has expired.",
-  );
+ redirectTo.pathname = "/login";
+redirectTo.searchParams.set(
+  "error",
+  "This confirmation link has already been used or has expired. If your account is confirmed, sign in below. Otherwise, request a new confirmation email.",
+);
+redirectTo.searchParams.set(
+  "showResend",
+  "true",
+);
 
   return NextResponse.redirect(
     redirectTo,
