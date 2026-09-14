@@ -87,10 +87,9 @@ export async function signup(formData) {
     );
   }
 
-  redirect(
-    "/login?message=Check your email to confirm your account.",
-  );
-}
+redirect(
+  "/login?message=Account created. You can sign in now.",
+);
 
 export async function resendConfirmation(
   formData,
