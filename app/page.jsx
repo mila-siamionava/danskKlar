@@ -5,13 +5,11 @@ import {
   RotateCcw,
   Dumbbell,
   ClipboardList,
-  UserRound,
-  LogOut,
 } from "lucide-react";
 
 import HomeNavigationCard from "@/components/navigation/HomeNavigationCard/HomeNavigationCard";
 import AarhusSketch from "@/components/ui/AarhusSketch/AarhusSketch";
-import ThemeToggle from "@/components/theme/ThemeToggle/ThemeToggle";
+import AccountMenu from "@/components/auth/AccountMenu/AccountMenu";
 import { createClient } from "@/lib/supabase/server";
 
 import styles from "./Home.module.css";
@@ -36,54 +34,7 @@ export default async function Home() {
 
         <div className={styles.authActions}>
           {user ? (
-            <details className={styles.accountMenu}>
-              <summary
-                className={styles.accountButton}
-                aria-label="Open account menu"
-              >
-                <UserRound
-                  size={20}
-                  strokeWidth={1.8}
-                  aria-hidden="true"
-                />
-              </summary>
-
-              <div className={styles.accountDropdown}>
-                <div className={styles.accountInfo}>
-                  <span className={styles.accountLabel}>
-                    Signed in as
-                  </span>
-
-                  <span className={styles.accountEmail}>
-                    {user.email}
-                  </span>
-                </div>
-
-                <div className={styles.accountDivider} />
-
-                <ThemeToggle />
-
-                <div className={styles.accountDivider} />
-
-                <form
-                  action="/auth/signout"
-                  method="post"
-                >
-                  <button
-                    type="submit"
-                    className={styles.menuItem}
-                  >
-                    <LogOut
-                      size={17}
-                      strokeWidth={1.7}
-                      aria-hidden="true"
-                    />
-
-                    Sign out
-                  </button>
-                </form>
-              </div>
-            </details>
+            <AccountMenu email={user.email} />
           ) : (
             <Link
               href="/login"
@@ -97,7 +48,15 @@ export default async function Home() {
 
       <header className={styles.header}>
         <h1>DanskKlar</h1>
-        <p>Get ready for PD3.5</p>
+
+        <p className={styles.tagline}>
+          Get ready for PD3.5
+        </p>
+
+        <p className={styles.description}>
+          Read Danish texts, save unknown words,
+          practise them with exercises.
+        </p>
       </header>
 
       <nav
@@ -115,14 +74,14 @@ export default async function Home() {
           href="/review"
           icon={RotateCcw}
           title="Review"
-          description="Review words you know"
+          description="Review saved words"
         />
 
         <HomeNavigationCard
           href="/review/train"
           icon={Dumbbell}
           title="Train"
-          description="Practice your vocabulary"
+          description="Practise your vocabulary"
         />
 
         <HomeNavigationCard
