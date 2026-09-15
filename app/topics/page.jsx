@@ -1,62 +1,84 @@
 import Link from "next/link";
 
+import BackLink from "@/components/navigation/BackLink/BackLink";
 import BottomNavigation from "@/components/navigation/BottomNavigation/BottomNavigation";
 import { navItems } from "@/data/navigation";
 import { createClient } from "@/lib/supabase/server";
+
+import styles from "./Topics.module.css";
 
 export default async function TopicsPage() {
   const supabase = await createClient();
 
   const { data: topics, error } = await supabase
     .from("topics")
-    .select("id, name, slug, description")
+    .select(`
+      id,
+      name,
+      slug,
+      vocabulary_topics(count)
+    `)
+    .in("slug", [
+      "arbejde",
+      "sundhed",
+      "miljo",
+    ])
     .order("name", { ascending: true });
 
   if (error) {
-    console.error("Failed to load topics:", error);
+    console.error(
+      "Failed to load topics:",
+      error,
+    );
   }
 
   return (
     <>
-      <main className="mobilePage">
-        <h1>Emner</h1>
+      <main className={styles.page}>
+        <div className={styles.headerRow}>
+          <BackLink
+            href="/"
+            label="Back to home"
+            title="Topics"
+          />
+        </div>
 
         {error ? (
-          <p>Kunne ikke hente emner.</p>
+          <p>Could not load topics.</p>
         ) : (
-          <div
-            style={{
-              display: "grid",
-              gap: "1rem",
-              marginTop: "1.5rem",
-            }}
-          >
+          <div className={styles.topicList}>
             {topics?.map((topic) => (
               <Link
                 key={topic.id}
                 href={`/topics/${topic.slug}`}
-                style={{
-                  display: "block",
-                  padding: "1rem",
-                  border: "1px solid var(--color-border)",
-                  borderRadius: "var(--border-radius-md)",
-                  background: "var(--color-surface)",
-                  color: "inherit",
-                  textDecoration: "none",
-                }}
+                className={styles.topicLink}
               >
-                <h2>{topic.name}</h2>
+                <div className={styles.topicIcon}>
+                  {topic.slug === "arbejde"
+                    ? "💼"
+                    : topic.slug === "miljo"
+                      ? "🌱"
+                      : "♡"}
+                </div>
 
-                {topic.description && (
-                  <p
-                    style={{
-                      marginTop: "0.5rem",
-                      color: "var(--color-text-muted)",
-                    }}
-                  >
-                    {topic.description}
-                  </p>
-                )}
+                <div className={styles.topicContent}>
+                  <h2 className={styles.topicTitle}>
+                    {topic.name}
+                  </h2>
+                </div>
+
+                <span className={styles.wordCount}>
+                  {topic.vocabulary_topics?.[0]
+                    ?.count ?? 0}{" "}
+                  words
+                </span>
+
+                <span
+                  className={styles.topicArrow}
+                  aria-hidden="true"
+                >
+                  ›
+                </span>
               </Link>
             ))}
           </div>

@@ -1,7 +1,7 @@
 import styles from "./AppHeader.module.css";
 
 export default function AppHeader({
-  title = "Dansk Trainer",
+  title = "DanskKlar",
   rightContent = null,
   className = "",
 }) {

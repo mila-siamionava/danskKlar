@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import BottomNavigation from "@/components/navigation/BottomNavigation/BottomNavigation";
@@ -58,16 +57,6 @@ export default async function TopicPage({ params }) {
   return (
     <>
       <main className="mobilePage">
-      <Link href="/topics">
-  ← Back to topics
-</Link>
-
-        <h1>{topic.name}</h1>
-
-        <p>
-          {words.length} words or phrases
-        </p>
-
         <TopicVocabularyList
           words={words}
           topicName={topic.name}

@@ -1,105 +1,107 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import {
-  addReviewItem,
-  getReviewItems,
-  removeReviewItem,
-} from "@/lib/reviewStorage";
+import BackLink from "@/components/navigation/BackLink/BackLink";
+import { addReviewItem } from "@/lib/reviewStorage";
+
+import styles from "./TopicVocabularyList.module.css";
 
 export default function TopicVocabularyList({
-  words,
+  words = [],
   topicName,
 }) {
   const [selectedIds, setSelectedIds] = useState(
     new Set(),
   );
 
-  useEffect(() => {
-    const reviewItems = getReviewItems();
+  function toggleWord(id) {
+    setSelectedIds((current) => {
+      const updated = new Set(current);
 
-    setSelectedIds(
-      new Set(reviewItems.map((item) => item.id)),
+      if (updated.has(id)) {
+        updated.delete(id);
+      } else {
+        updated.add(id);
+      }
+
+      return updated;
+    });
+  }
+
+  function addSelectedToReview() {
+    const selectedWords = words.filter(
+      (word) => selectedIds.has(word.id),
     );
-  }, []);
 
-  function handleChange(word, checked) {
-    if (checked) {
+    selectedWords.forEach((word) => {
       addReviewItem({
         ...word,
         exerciseTitle: topicName,
       });
+    });
 
-      setSelectedIds((current) => {
-        const updated = new Set(current);
-        updated.add(word.id);
-        return updated;
-      });
-    } else {
-      removeReviewItem(word.id);
-
-      setSelectedIds((current) => {
-        const updated = new Set(current);
-        updated.delete(word.id);
-        return updated;
-      });
-    }
+    setSelectedIds(new Set());
   }
 
+  const selectedCount = selectedIds.size;
+
   return (
-    <div
-      style={{
-        display: "grid",
-        gap: "0.75rem",
-        marginTop: "1.5rem",
-      }}
-    >
-      {words.map((word) => (
-        <label
-          key={word.id}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.75rem",
-            padding: "1rem",
-            border:
-              "1px solid var(--color-border)",
-            borderRadius:
-              "var(--border-radius-md)",
-            background:
-              "var(--color-surface)",
-            cursor: "pointer",
-          }}
+    <>
+      <div className={styles.headerRow}>
+        <BackLink
+          href="/topics"
+          label="Back to topics"
+          title={topicName}
+        />
+
+        <button
+          type="button"
+          className={styles.addButton}
+          onClick={addSelectedToReview}
+          disabled={selectedCount === 0}
         >
-          <input
-            type="checkbox"
-            checked={selectedIds.has(word.id)}
-            onChange={(event) =>
-              handleChange(
-                word,
-                event.target.checked,
-              )
-            }
-          />
+          {selectedCount > 0
+            ? `Add ${selectedCount} / ${words.length} to review`
+            : "Add to review"}
+        </button>
+      </div>
 
-          <span>
-            <span>{word.term}</span>
+      <div className={styles.wordList}>
+        {words.map((word) => {
+          const isSelected =
+            selectedIds.has(word.id);
 
-            {word.part_of_speech && (
-              <span
-                style={{
-                  marginLeft: "0.5rem",
-                  color:
-                    "var(--color-text-muted)",
-                }}
-              >
-                {word.part_of_speech}
+          return (
+            <label
+              key={word.id}
+              className={styles.wordRow}
+            >
+              <input
+                type="checkbox"
+                checked={isSelected}
+                onChange={() =>
+                  toggleWord(word.id)
+                }
+              />
+
+              <span className={styles.word}>
+                {word.term}
               </span>
-            )}
-          </span>
-        </label>
-      ))}
-    </div>
+
+              {word.part_of_speech && (
+                <span
+                  className={
+                    styles.partOfSpeech
+                  }
+                >
+                  {word.part_of_speech}
+                </span>
+              )}
+            </label>
+          );
+        })}
+      </div>
+    </>
   );
 }

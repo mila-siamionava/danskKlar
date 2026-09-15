@@ -1,0 +1,118 @@
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: var(--spacing-sm);
+
+  margin-bottom: var(--spacing-md);
+}
+.reviewCount {
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-body-medium);
+  line-height: var(--line-height-body-medium);
+}
+
+.addButton {
+  min-height: var(--button-height);
+
+  padding-inline: var(--button-padding-inline);
+
+  border:
+    1px solid
+    var(--button-primary-background);
+
+  border-radius: var(--button-radius);
+
+  background:
+    var(--button-primary-background);
+
+  color:
+    var(--button-primary-text);
+    
+  font-family: inherit;
+  font-size: var(--font-size-label-medium);
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.addButton:hover:not(:disabled) {
+  border-color:
+    var(--button-primary-background-hover);
+
+  background:
+    var(--button-primary-background-hover);
+
+  transform: translateY(-1px);
+}
+
+.addButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.addButton:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.wordList {
+  display: grid;
+
+  gap: var(--spacing-xs);
+}
+
+.wordRow {
+  display: flex;
+  align-items: center;
+
+  gap: var(--spacing-sm);
+
+  min-height: var(--control-height-md);
+
+  padding:
+    var(--spacing-xs)
+    var(--spacing-sm);
+
+  cursor: pointer;
+}
+
+.wordRow input {
+  width: 1.25rem;
+  height: 1.25rem;
+
+  flex-shrink: 0;
+
+  accent-color:
+    var(--color-text-accent);
+}
+
+.word {
+  color:
+    var(--color-text-primary);
+
+  font-size:
+    var(--font-size-body-medium);
+
+  line-height:
+    var(--line-height-body-medium);
+
+  font-weight: 400;
+}
+
+.partOfSpeech {
+  color:
+    var(--color-text-secondary);
+
+  font-size:
+    var(--font-size-body-small);
+
+  line-height:
+    var(--line-height-body-small);
+}
