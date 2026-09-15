@@ -7,6 +7,12 @@ import { createClient } from "@/lib/supabase/server";
 
 import styles from "./Topics.module.css";
 
+const topicLabels = {
+  arbejde: "Work",
+  miljo: "Environment",
+  sundhed: "Health",
+};
+
 export default async function TopicsPage() {
   const supabase = await createClient();
 
@@ -63,7 +69,8 @@ export default async function TopicsPage() {
 
                 <div className={styles.topicContent}>
                   <h2 className={styles.topicTitle}>
-                    {topic.name}
+                    {topicLabels[topic.slug] ??
+                      topic.name}
                   </h2>
                 </div>
 
@@ -85,7 +92,9 @@ export default async function TopicsPage() {
         )}
       </main>
 
-      <BottomNavigation items={navItems} />
+      <BottomNavigation
+        items={navItems}
+      />
     </>
   );
 }
