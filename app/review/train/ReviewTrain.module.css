@@ -1,12 +1,22 @@
-.back {
-  margin-bottom: var(--spacing-md);
+.titleRow {
+  display: flex;
+  align-items: center;
+
+  gap: var(--spacing-sm);
+
+  margin-bottom: var(--spacing-xs);
 }
 
-.header h1 {
-  margin-bottom: var(--spacing-xs);
+.titleRow h1 {
+  margin: 0;
 
-  font-size: clamp(2.8rem, 4vw, 3.6rem);
-  line-height: 1.08;
+  font-family: var(--font-family-heading);
+
+  font-size: var(--font-size-headline-medium);
+
+  line-height: var(--line-height-headline-medium);
+
+  font-weight: var(--font-weight-headline-medium);
 }
 
 .header {
@@ -14,7 +24,12 @@
 }
 
 .header p {
+   text-align: center;
   color: var(--color-text-secondary);
+
+  font-size: var(--font-size-body-medium);
+
+  line-height: var(--line-height-body-medium);
 }
 
 .groups {

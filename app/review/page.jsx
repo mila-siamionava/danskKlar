@@ -111,24 +111,20 @@ export default function ReviewPage() {
 
   return (
     <main className={styles.page}>
-      <BackLink
-        href="/"
-        label="Back to home"
-      />
+      <div className={styles.titleRow}>
+        <BackLink
+          href="/"
+          label="Back to home"
+        />
 
-      <header
-        className={
-          styles.header
-        }
-      >
         <h1>
           Vocabulary review
         </h1>
+      </div>
 
+      <header className={styles.header}>
         <p>
-          Select the words and
-          expressions you want to
-          practice.
+          Select the words and expressions you want to practice.
         </p>
       </header>
 
