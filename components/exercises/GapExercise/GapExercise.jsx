@@ -13,311 +13,187 @@ import { addReviewItem } from "@/lib/reviewStorage";
 
 import styles from "./GapExercise.module.css";
 
-export default function GapExercise({
-  exercise,
-}) {
-  const [answers, setAnswers] =
-    useState({});
+export default function GapExercise({ exercise }) {
+  const [answers, setAnswers] = useState({});
 
-  const [
-    activeFeedbackId,
-    setActiveFeedbackId,
-  ] = useState(null);
+  const [activeFeedbackId, setActiveFeedbackId] = useState(null);
 
-  const totalQuestions =
-    exercise.questions.length;
+  const totalQuestions = exercise.questions.length;
 
-  const answeredCount =
-    Object.keys(answers).length;
+  const answeredCount = Object.keys(answers).length;
 
-  const score =
-    exercise.questions.filter(
-      (question) =>
-        answers[question.id]
-          ?.firstIsCorrect === true,
-    ).length;
+  const score = exercise.questions.filter(
+    (question) => answers[question.id]?.firstIsCorrect === true,
+  ).length;
 
-  function getGapContext(
-    questionId,
-  ) {
-    const placeholder =
-      `{{${questionId}}}`;
+  function getGapContext(questionId) {
+    const placeholder = `{{${questionId}}}`;
 
-    const paragraphs =
-      exercise.content
-        .split("\n")
-        .map((paragraph) =>
-          paragraph.trim(),
-        )
-        .filter(Boolean);
+    const paragraphs = exercise.content
+      .split("\n")
+      .map((paragraph) => paragraph.trim())
+      .filter(Boolean);
 
-    const paragraph =
-      paragraphs.find(
-        (paragraph) =>
-          paragraph.includes(
-            placeholder,
-          ),
-      );
+    const paragraph = paragraphs.find((paragraph) =>
+      paragraph.includes(placeholder),
+    );
 
     if (!paragraph) {
       return "";
     }
 
-    return paragraph.replace(
-      placeholder,
-      "{{gap}}",
-    );
+    return paragraph.replace(placeholder, "{{gap}}");
   }
 
-  function addWrongVocabularyToReview(
-    question,
-    selectedOptionId,
-  ) {
-    const selectedOption =
-      question.options.find(
-        (option) =>
-          option.id ===
-          selectedOptionId,
-      );
+  function addWrongVocabularyToReview(question, selectedOptionId) {
+    const selectedOption = question.options.find(
+      (option) => option.id === selectedOptionId,
+    );
 
-    if (
-      !selectedOption?.vocabularyId
-    ) {
+    if (!selectedOption?.vocabularyId) {
       return;
     }
 
-    const gapContext =
-      getGapContext(question.id);
+    const gapContext = getGapContext(question.id);
 
-    const correctOption =
-      question.options.find(
-        (option) =>
-          option.id ===
-          question.correctOptionId,
-      );
+    const correctOption = question.options.find(
+      (option) => option.id === question.correctOptionId,
+    );
 
     addReviewItem({
       id: selectedOption.vocabularyId,
 
-      vocabularyId:
-        selectedOption.vocabularyId,
+      vocabularyId: selectedOption.vocabularyId,
 
-      term:
-        selectedOption.text?.toLowerCase() ||
-        "",
+      term: selectedOption.text?.toLowerCase() || "",
 
-      exerciseTitle:
-        exercise.title,
+      exerciseTitle: exercise.title,
 
-      exerciseId:
-        exercise.id,
+      exerciseId: exercise.id,
 
-      questionId:
-        question.id,
+      questionId: question.id,
 
       sourceType: "text",
 
-      sourceKey:
-        exercise.slug,
+      sourceKey: exercise.slug,
 
-      exerciseType:
-        exercise.exerciseType,
+      exerciseType: exercise.exerciseType,
 
-      reason:
-        "wrong_answer",
+      reason: "wrong_answer",
 
-      gapSentence:
-        gapContext,
+      gapSentence: gapContext,
 
-      originalCorrectAnswer:
-        correctOption?.text?.toLowerCase() ||
-        "",
+      originalCorrectAnswer: correctOption?.text?.toLowerCase() || "",
 
-      options:
-        question.options,
+      options: question.options,
 
-      correctOptionId:
-        question.correctOptionId,
+      correctOptionId: question.correctOptionId,
 
-      explanation:
-        question.explanation,
+      explanation: question.explanation,
     });
   }
 
-  function handleAnswer(
-    questionId,
-    optionId,
-  ) {
-    const question =
-      exercise.questions.find(
-        (item) =>
-          item.id === questionId,
-      );
+  function handleAnswer(questionId, optionId) {
+    const question = exercise.questions.find((item) => item.id === questionId);
 
     if (!question) {
       return;
     }
 
-    const previousAnswer =
-      answers[questionId];
+    const previousAnswer = answers[questionId];
 
-    const isFirstAttempt =
-      !previousAnswer;
+    const isFirstAttempt = !previousAnswer;
 
-    const isCorrect =
-      optionId ===
-      question.correctOptionId;
+    const isCorrect = optionId === question.correctOptionId;
 
     if (!isCorrect) {
-      setActiveFeedbackId(
-        questionId,
-      );
+      setActiveFeedbackId(questionId);
     } else {
       setActiveFeedbackId(null);
     }
 
-    if (
-      !isCorrect &&
-      exercise.exerciseType ===
-        "vocabulary_gap"
-    ) {
-      addWrongVocabularyToReview(
-        question,
-        optionId,
-      );
+    if (!isCorrect && exercise.exerciseType === "vocabulary_gap") {
+      addWrongVocabularyToReview(question, optionId);
     }
 
-    setAnswers(
-      (previousAnswers) => {
-        const previousAnswer =
-          previousAnswers[
-            questionId
-          ];
+    setAnswers((previousAnswers) => {
+      const previousAnswer = previousAnswers[questionId];
 
-        if (!previousAnswer) {
-          return {
-            ...previousAnswers,
-
-            [questionId]: {
-              selectedOptionId:
-                optionId,
-
-              firstOptionId:
-                optionId,
-
-              firstIsCorrect:
-                isCorrect,
-            },
-          };
-        }
-
+      if (!previousAnswer) {
         return {
           ...previousAnswers,
 
           [questionId]: {
-            ...previousAnswer,
+            selectedOptionId: optionId,
 
-            selectedOptionId:
-              optionId,
+            firstOptionId: optionId,
+
+            firstIsCorrect: isCorrect,
           },
         };
-      },
-    );
+      }
+
+      return {
+        ...previousAnswers,
+
+        [questionId]: {
+          ...previousAnswer,
+
+          selectedOptionId: optionId,
+        },
+      };
+    });
   }
 
   function renderContent() {
-    const parts =
-      exercise.content.split(
-        /(\{\{\d+\}\})/,
+    const parts = exercise.content.split(/(\{\{\d+\}\})/);
+
+    return parts.map((part, index) => {
+      const match = part.match(/\{\{(\d+)\}\}/);
+
+      if (!match) {
+        return <Fragment key={index}>{part}</Fragment>;
+      }
+
+      const questionId = Number(match[1]);
+
+      const question = exercise.questions.find(
+        (item) => item.id === questionId,
       );
 
-    return parts.map(
-      (part, index) => {
-        const match =
-          part.match(
-            /\{\{(\d+)\}\}/,
-          );
+      if (!question) {
+        return <Fragment key={index}>{part}</Fragment>;
+      }
 
-        if (!match) {
-          return (
-            <Fragment key={index}>
-              {part}
-            </Fragment>
-          );
-        }
+      const answer = answers[questionId];
 
-        const questionId =
-          Number(match[1]);
+      const selectedOptionId = answer?.selectedOptionId || "";
 
-        const question =
-          exercise.questions.find(
-            (item) =>
-              item.id ===
-              questionId,
-          );
+      return (
+        <span key={`${questionId}-${index}`} className={styles.gapWrapper}>
+          <GapSelect
+            question={question}
+            value={selectedOptionId}
+            checked={Boolean(selectedOptionId)}
+            onChange={handleAnswer}
+          />
 
-        if (!question) {
-          return (
-            <Fragment key={index}>
-              {part}
-            </Fragment>
-          );
-        }
-
-        const answer =
-          answers[questionId];
-
-        const selectedOptionId =
-          answer
-            ?.selectedOptionId ||
-          "";
-
-        return (
-          <span
-            key={`${questionId}-${index}`}
-            className={
-              styles.gapWrapper
-            }
-          >
-            <GapSelect
+          {activeFeedbackId === questionId && (
+            <AnswerFeedback
               question={question}
-              value={
-                selectedOptionId
-              }
-              checked={Boolean(
-                selectedOptionId,
-              )}
-              onChange={
-                handleAnswer
-              }
+              selectedOptionId={selectedOptionId}
             />
-
-            {activeFeedbackId ===
-              questionId && (
-              <AnswerFeedback
-                question={
-                  question
-                }
-                selectedOptionId={
-                  selectedOptionId
-                }
-              />
-            )}
-          </span>
-        );
-      },
-    );
+          )}
+        </span>
+      );
+    });
   }
 
   return (
-    <div
-      className={styles.exercise}
-    >
+    <div className={styles.exercise}>
       <ExerciseHeader
         title={exercise.title}
-        instructions={
-          exercise.instructions
-        }
+        instructions={exercise.instructions}
       />
 
       <ProgressBar
@@ -326,76 +202,28 @@ export default function GapExercise({
         label={`${answeredCount} of ${totalQuestions} answered`}
       />
 
-      <section
-        className={styles.content}
-      >
-        {renderContent()}
-      </section>
+      <section className={styles.content}>{renderContent()}</section>
 
-      {answeredCount ===
-        totalQuestions && (
+      {answeredCount === totalQuestions && (
         <>
-          <section
-            className={
-              styles.result
-            }
-            aria-live="polite"
-          >
+          <section className={styles.result} aria-live="polite">
             <div>
-              <p
-                className={
-                  styles.resultLabel
-                }
-              >
-                Exercise complete
-              </p>
+              <p className={styles.resultLabel}>Exercise complete</p>
 
-              <p
-                className={
-                  styles.resultScore
-                }
-              >
-                {score} of{" "}
-                {totalQuestions}{" "}
-                correct on the first
-                attempt
+              <p className={styles.resultScore}>
+                {score} of {totalQuestions} correct on the first attempt
               </p>
             </div>
 
-            <p
-              className={
-                styles.resultPercentage
-              }
-            >
-              {Math.round(
-                (score /
-                  totalQuestions) *
-                  100,
-              )}
-              %
+            <p className={styles.resultPercentage}>
+              {Math.round((score / totalQuestions) * 100)}%
             </p>
           </section>
 
-          <div
-            className={
-              styles.reviewActions
-            }
-          >
+          <div className={styles.reviewActions}>
             <Link href="/review">
-              <Button
-                variant="secondary"
-                size="md"
-              >
-                Review wrong answers
-              </Button>
-            </Link>
-
-            <Link href="/review/train">
-              <Button
-                variant="primary"
-                size="md"
-              >
-                Train review words
+              <Button variant="secondary" size="md">
+                Review wrong answers and train
               </Button>
             </Link>
           </div>

@@ -21,7 +21,11 @@ export default function GapSelect({
   const [activeIndex, setActiveIndex] =
     useState(0);
 
+  const [openUpward, setOpenUpward] =
+    useState(false);
+
   const rootRef = useRef(null);
+  const triggerRef = useRef(null);
   const optionRefs = useRef([]);
 
   const isCorrect =
@@ -79,7 +83,8 @@ export default function GapSelect({
 
     const selectedIndex =
       question.options.findIndex(
-        (option) => option.id === value,
+        (option) =>
+          option.id === value,
       );
 
     const nextIndex =
@@ -101,11 +106,57 @@ export default function GapSelect({
   ]);
 
   function openDropdown() {
+    const rect =
+      rootRef.current?.getBoundingClientRect();
+
+    if (rect) {
+      const spaceBelow =
+        window.innerHeight -
+        rect.bottom;
+
+      const spaceAbove =
+        rect.top;
+
+      const estimatedDropdownHeight =
+        Math.min(
+          question.options.length * 52 +
+            16,
+          260,
+        );
+
+      const shouldOpenUpward =
+        spaceBelow <
+          estimatedDropdownHeight &&
+        spaceAbove >
+          spaceBelow;
+
+      setOpenUpward(
+        shouldOpenUpward,
+      );
+    }
+
     setIsOpen(true);
   }
 
-  function closeDropdown() {
+  function closeDropdown({
+    returnFocus = false,
+  } = {}) {
     setIsOpen(false);
+
+    if (returnFocus) {
+      requestAnimationFrame(() => {
+        triggerRef.current?.focus();
+      });
+    }
+  }
+
+  function toggleDropdown() {
+    if (isOpen) {
+      closeDropdown();
+      return;
+    }
+
+    openDropdown();
   }
 
   function selectOption(option) {
@@ -114,7 +165,9 @@ export default function GapSelect({
       option.id,
     );
 
-    closeDropdown();
+    closeDropdown({
+      returnFocus: true,
+    });
   }
 
   function handleTriggerKeyDown(event) {
@@ -125,7 +178,21 @@ export default function GapSelect({
       event.key === "ArrowUp"
     ) {
       event.preventDefault();
-      openDropdown();
+
+      if (!isOpen) {
+        openDropdown();
+      }
+    }
+
+    if (
+      event.key === "Escape" &&
+      isOpen
+    ) {
+      event.preventDefault();
+
+      closeDropdown({
+        returnFocus: true,
+      });
     }
   }
 
@@ -183,12 +250,14 @@ export default function GapSelect({
 
       case "Escape":
         event.preventDefault();
+
+        closeDropdown({
+          returnFocus: true,
+        });
+        break;
+
+      case "Tab":
         closeDropdown();
-        rootRef.current
-          ?.querySelector(
-            `.${styles.trigger}`,
-          )
-          ?.focus();
         break;
 
       default:
@@ -202,16 +271,13 @@ export default function GapSelect({
       className={styles.root}
     >
       <button
+        ref={triggerRef}
         type="button"
         className={classes}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-controls={`gap-options-${question.id}`}
-        onClick={() =>
-          setIsOpen(
-            (current) => !current,
-          )
-        }
+        onClick={toggleDropdown}
         onKeyDown={
           handleTriggerKeyDown
         }
@@ -243,7 +309,11 @@ export default function GapSelect({
       {isOpen && (
         <div
           id={`gap-options-${question.id}`}
-          className={styles.dropdown}
+          className={`${styles.dropdown} ${
+            openUpward
+              ? styles.dropdownUp
+              : ""
+          }`}
           role="listbox"
           aria-label={`Question ${question.id} answers`}
         >
