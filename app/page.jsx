@@ -66,15 +66,15 @@ export default async function Home() {
         <HomeNavigationCard
           href="/exercises"
           icon={BookOpen}
-          title="Reading"
-          description="Texts and reading practice"
+          title="Mockup Reading Tests"
+          description="Practise PD3-style reading"
         />
 
         <HomeNavigationCard
           href="/review"
           icon={RotateCcw}
-          title="Review"
-          description="Review saved words"
+          title="Review Vocabulary"
+          description="Review your saved words"
         />
 
         <HomeNavigationCard
