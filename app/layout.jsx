@@ -1,5 +1,8 @@
 import { Inter } from "next/font/google";
 
+import BottomNavigation from "@/components/navigation/BottomNavigation/BottomNavigation";
+import { navItems } from "@/data/navigation";
+
 import "@/styles/global.css";
 
 const inter = Inter({
@@ -25,7 +28,11 @@ export default function RootLayout({
       data-appearance="light"
       suppressHydrationWarning
     >
-      <body>{children}</body>
+      <body>
+        {children}
+
+        <BottomNavigation items={navItems} />
+      </body>
     </html>
   );
 }

@@ -18,11 +18,16 @@ const icons = {
   topics: ClipboardList,
 };
 
-export default function BottomNavigation({
+
+  export default function BottomNavigation({
   items = [],
   className = "",
 }) {
   const pathname = usePathname();
+
+  if (pathname === "/") {
+    return null;
+  }
 
   const classes = [
     styles.navigation,
