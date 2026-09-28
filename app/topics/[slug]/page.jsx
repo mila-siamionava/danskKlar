@@ -79,32 +79,32 @@ export default async function TopicPage({ params }) {
             </span>
           </Link>
 
-          <div
-            className={`${styles.optionCard} ${styles.optionCardDisabled}`}
-            aria-disabled="true"
-          >
-            <div className={styles.optionContent}>
-              <h2 className={styles.optionTitle}>
-                Texts
-              </h2>
+         <Link
+  href={`/exercises?topic=${slug}`}
+  className={styles.optionCard}
+>
+  <div className={styles.optionContent}>
+    <h2 className={styles.optionTitle}>
+      Texts
+    </h2>
 
-              <p className={styles.optionDescription}>
-                Practise reading texts related to this
-                topic.
-              </p>
+    <p className={styles.optionDescription}>
+      Practise reading texts related to this
+      topic.
+    </p>
 
-              <span className={styles.optionMeta}>
-                Coming next
-              </span>
-            </div>
+    <span className={styles.optionMeta}>
+      Reading practice
+    </span>
+  </div>
 
-            <span
-              className={styles.optionArrow}
-              aria-hidden="true"
-            >
-              ›
-            </span>
-          </div>
+  <span
+    className={styles.optionArrow}
+    aria-hidden="true"
+  >
+    ›
+  </span>
+</Link>
         </div>
       </main>
 

@@ -32,7 +32,28 @@ const readingImages = {
     "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=500&q=80",
 };
 
-export default async function ExercisesPage() {
+const validTopics = [
+  "arbejde",
+  "miljo",
+  "sundhed",
+];
+
+export default async function ExercisesPage({
+  searchParams,
+}) {
+  const query = await searchParams;
+
+  const requestedTopic =
+    typeof query?.topic === "string"
+      ? query.topic
+      : null;
+
+  const initialTopic = validTopics.includes(
+    requestedTopic,
+  )
+    ? requestedTopic
+    : null;
+
   const [texts, access] = await Promise.all([
     getTexts(),
     getCurrentAccess(),
@@ -72,6 +93,14 @@ export default async function ExercisesPage() {
         canUseConjunctions,
     }));
 
+  const backHref = initialTopic
+    ? `/topics/${initialTopic}`
+    : "/";
+
+  const backLabel = initialTopic
+    ? "Back to topic"
+    : "Back to home";
+
   return (
     <main>
       <AppHeader title="DanskKlar" />
@@ -79,8 +108,8 @@ export default async function ExercisesPage() {
       <div className={styles.page}>
         <div className={styles.introRow}>
           <BackLink
-            href="/"
-            label="Back to home"
+            href={backHref}
+            label={backLabel}
           />
 
           <p className={styles.instruction}>
@@ -92,6 +121,7 @@ export default async function ExercisesPage() {
         <ReadingPracticeClient
           texts={visibleTexts}
           readingImages={readingImages}
+          initialTopic={initialTopic}
         />
       </div>
 

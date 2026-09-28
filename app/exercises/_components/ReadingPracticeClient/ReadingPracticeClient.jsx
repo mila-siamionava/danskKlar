@@ -29,9 +29,10 @@ const filters = [
 export default function ReadingPracticeClient({
   texts,
   readingImages = {},
+  initialTopic = null,
 }) {
   const [activeFilter, setActiveFilter] =
-    useState(null);
+    useState(initialTopic);
 
   const filteredTexts =
     activeFilter === null
