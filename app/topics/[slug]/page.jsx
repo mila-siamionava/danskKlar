@@ -1,10 +1,12 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import BackLink from "@/components/navigation/BackLink/BackLink";
 import BottomNavigation from "@/components/navigation/BottomNavigation/BottomNavigation";
 import { navItems } from "@/data/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-import TopicVocabularyList from "./_components/TopicVocabularyList";
+import styles from "./Topic.module.css";
 
 export default async function TopicPage({ params }) {
   const { slug } = await params;
@@ -12,7 +14,12 @@ export default async function TopicPage({ params }) {
 
   const { data: topic, error } = await supabase
     .from("topics")
-    .select("id, name, description")
+    .select(`
+      id,
+      name,
+      description,
+      vocabulary_topics(count)
+    `)
     .eq("slug", slug)
     .single();
 
@@ -20,47 +27,85 @@ export default async function TopicPage({ params }) {
     notFound();
   }
 
-  const {
-    data: vocabulary,
-    error: vocabularyError,
-  } = await supabase
-    .from("vocabulary_topics")
-    .select(`
-      vocabulary (
-        id,
-        term,
-        part_of_speech,
-        level,
-        definition_da,
-        english,
-        russian,
-        example
-      )
-    `)
-    .eq("topic_id", topic.id);
-
-  if (vocabularyError) {
-    console.error(
-      "Failed to load vocabulary:",
-      vocabularyError,
-    );
-  }
-
-  const words =
-    vocabulary
-      ?.map((item) => item.vocabulary)
-      .filter(Boolean)
-      .sort((a, b) =>
-        a.term.localeCompare(b.term, "da"),
-      ) ?? [];
+  const wordCount =
+    topic.vocabulary_topics?.[0]?.count ?? 0;
 
   return (
     <>
       <main className="mobilePage">
-        <TopicVocabularyList
-          words={words}
-          topicName={topic.name}
-        />
+        <div className={styles.headerRow}>
+          <BackLink
+            href="/topics"
+            label="Back to topics"
+            title={topic.name}
+          />
+        </div>
+
+        {topic.description && (
+          <p className={styles.description}>
+            {topic.description}
+          </p>
+        )}
+
+        <p className={styles.intro}>
+          Choose what you want to practise
+        </p>
+
+        <div className={styles.optionList}>
+          <Link
+            href={`/topics/${slug}/vocabulary`}
+            className={styles.optionCard}
+          >
+            <div className={styles.optionContent}>
+              <h2 className={styles.optionTitle}>
+                Vocabulary
+              </h2>
+
+              <p className={styles.optionDescription}>
+                Learn useful topic words and add them
+                to your review list.
+              </p>
+
+              <span className={styles.optionMeta}>
+                {wordCount} words
+              </span>
+            </div>
+
+            <span
+              className={styles.optionArrow}
+              aria-hidden="true"
+            >
+              ›
+            </span>
+          </Link>
+
+          <div
+            className={`${styles.optionCard} ${styles.optionCardDisabled}`}
+            aria-disabled="true"
+          >
+            <div className={styles.optionContent}>
+              <h2 className={styles.optionTitle}>
+                Texts
+              </h2>
+
+              <p className={styles.optionDescription}>
+                Practise reading texts related to this
+                topic.
+              </p>
+
+              <span className={styles.optionMeta}>
+                Coming next
+              </span>
+            </div>
+
+            <span
+              className={styles.optionArrow}
+              aria-hidden="true"
+            >
+              ›
+            </span>
+          </div>
+        </div>
       </main>
 
       <BottomNavigation items={navItems} />

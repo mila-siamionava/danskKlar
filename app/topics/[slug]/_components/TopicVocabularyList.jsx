@@ -18,6 +18,7 @@ import styles from "./TopicVocabularyList.module.css";
 export default function TopicVocabularyList({
   words = [],
   topicName,
+  topicSlug,
 }) {
   const [reviewIds, setReviewIds] = useState(
     new Set(),
@@ -108,11 +109,11 @@ export default function TopicVocabularyList({
   return (
     <>
       <div className={styles.headerRow}>
-        <BackLink
-          href="/topics"
-          label="Back to topics"
-          title={topicName}
-        />
+       <BackLink
+  href={`/topics/${topicSlug}`}
+  label={`Back to ${topicName}`}
+  title="Vocabulary"
+/>
       </div>
 
       <div className={styles.wordList}>

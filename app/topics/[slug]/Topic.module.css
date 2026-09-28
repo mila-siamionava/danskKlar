@@ -1,0 +1,178 @@
+.headerRow {
+  margin-bottom: var(--spacing-md);
+}
+
+/* INTRO */
+
+.description {
+  margin:
+    0
+    0
+    var(--spacing-sm);
+
+  max-width: 38rem;
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-body-medium);
+  line-height: 1.55;
+}
+
+.intro {
+  margin:
+    0
+    0
+    var(--spacing-lg);
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-body-medium);
+  line-height: var(--line-height-body-medium);
+}
+
+/* OPTIONS */
+
+.optionList {
+  display: grid;
+
+  gap: var(--spacing-md);
+}
+
+/* OPTION CARD */
+
+.optionCard {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: var(--spacing-md);
+
+  min-height: 8rem;
+
+  padding: var(--spacing-lg);
+
+  border: 1px solid var(--color-border);
+
+  border-radius: var(--border-radius-lg);
+
+  background: var(--color-surface);
+
+  color: inherit;
+
+  text-decoration: none;
+
+  box-shadow:
+    0 1px 4px rgb(0 0 0 / 4%);
+
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.optionCard:hover {
+  border-color: var(--color-text-accent);
+
+  box-shadow:
+    0 4px 12px rgb(0 0 0 / 7%);
+
+  transform: translateY(-1px);
+}
+
+.optionCard:focus-visible {
+  outline:
+    2px solid
+    var(--color-focus);
+
+  outline-offset: 3px;
+}
+
+/* CARD CONTENT */
+
+.optionContent {
+  min-width: 0;
+}
+
+.optionTitle {
+  margin:
+    0
+    0
+    var(--spacing-xs);
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-title-medium);
+  line-height: var(--line-height-title-medium);
+
+  font-weight: 600;
+}
+
+.optionDescription {
+  margin: 0;
+
+  max-width: 32rem;
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-body-medium);
+  line-height: 1.5;
+
+  font-weight: 400;
+}
+
+.optionMeta {
+  display: block;
+
+  margin-top: var(--spacing-md);
+
+  color: var(--color-text-accent);
+
+  font-size: var(--font-size-body-small);
+  line-height: var(--line-height-body-small);
+
+  font-weight: 500;
+}
+
+/* ARROW */
+
+.optionArrow {
+  align-self: center;
+
+  color: var(--color-text-accent);
+
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+/* TEXTS — TEMPORARILY DISABLED */
+
+.optionCardDisabled {
+  opacity: 0.6;
+
+  cursor: default;
+}
+
+.optionCardDisabled:hover {
+  border-color: var(--color-border);
+
+  box-shadow:
+    0 1px 4px rgb(0 0 0 / 4%);
+
+  transform: none;
+}
+
+/* DESKTOP */
+
+@media (min-width: 37.5em) {
+  .optionCard {
+    min-height: 9rem;
+
+    padding:
+      var(--spacing-lg)
+      calc(var(--spacing-lg) * 1.25);
+  }
+}
