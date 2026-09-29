@@ -5,21 +5,31 @@ import {
   useState,
 } from "react";
 
+import { useRouter } from "next/navigation";
+
 import BackLink from "@/components/navigation/BackLink/BackLink";
 
 import {
   addReviewItem,
   getReviewItems,
-  removeReviewItem,
 } from "@/lib/reviewStorage";
 
 import styles from "./TopicVocabularyList.module.css";
+
+const SELECTED_REVIEW_KEY =
+  "danskTrainerSelectedReview";
 
 export default function TopicVocabularyList({
   words = [],
   topicName,
   topicSlug,
 }) {
+  const router = useRouter();
+
+  const [selectedIds, setSelectedIds] = useState(
+    new Set(),
+  );
+
   const [reviewIds, setReviewIds] = useState(
     new Set(),
   );
@@ -31,6 +41,9 @@ export default function TopicVocabularyList({
   const [openSections, setOpenSections] = useState(
     new Set(),
   );
+
+  const [statusMessage, setStatusMessage] =
+    useState("");
 
   useEffect(() => {
     const reviewItems = getReviewItems();
@@ -44,36 +57,109 @@ export default function TopicVocabularyList({
     );
   }, []);
 
-  function toggleReview(word) {
-    const isInReview = reviewIds.has(word.id);
+  const selectedWords = words.filter((word) =>
+    selectedIds.has(word.id),
+  );
 
-    if (isInReview) {
-      removeReviewItem(word.id);
+  const selectedCount = selectedIds.size;
+  const totalCount = words.length;
 
-      setReviewIds((current) => {
-        const updated = new Set(current);
+  const allSelected =
+    totalCount > 0 &&
+    selectedCount === totalCount;
 
-        updated.delete(word.id);
+  function toggleSelected(id) {
+    setStatusMessage("");
 
-        return updated;
-      });
+    setSelectedIds((current) => {
+      const updated = new Set(current);
 
+      if (updated.has(id)) {
+        updated.delete(id);
+      } else {
+        updated.add(id);
+      }
+
+      return updated;
+    });
+  }
+
+  function toggleSelectAll() {
+    setStatusMessage("");
+
+    if (allSelected) {
+      setSelectedIds(new Set());
       return;
     }
 
-    addReviewItem({
-      ...word,
-      vocabularyId: word.id,
-      exerciseTitle: topicName,
+    setSelectedIds(
+      new Set(words.map((word) => word.id)),
+    );
+  }
+
+  function addSelectedToReview() {
+    if (selectedWords.length === 0) {
+      return;
+    }
+
+    selectedWords.forEach((word) => {
+      addReviewItem({
+        ...word,
+        vocabularyId: word.id,
+        exerciseTitle: topicName,
+      });
     });
 
     setReviewIds((current) => {
       const updated = new Set(current);
 
-      updated.add(word.id);
+      selectedWords.forEach((word) => {
+        updated.add(word.id);
+      });
 
       return updated;
     });
+
+    const amount = selectedWords.length;
+
+    setStatusMessage(
+      `✓ ${amount} ${
+        amount === 1 ? "word" : "words"
+      } added to Review`,
+    );
+
+    setSelectedIds(new Set());
+  }
+
+  function trainSelected() {
+    if (selectedWords.length === 0) {
+      return;
+    }
+
+    const trainingItems = selectedWords.map(
+      (word) => ({
+        ...word,
+        vocabularyId: word.id,
+        exerciseTitle: topicName,
+      }),
+    );
+
+    localStorage.setItem(
+      SELECTED_REVIEW_KEY,
+      JSON.stringify(trainingItems),
+    );
+
+    const amount = selectedWords.length;
+
+    setStatusMessage(
+      `✓ ${amount} ${
+        amount === 1 ? "word" : "words"
+      } ready for training`,
+    );
+
+    setTimeout(() => {
+      router.push("/review/train");
+    }, 600);
   }
 
   function toggleDetails(id) {
@@ -109,15 +195,73 @@ export default function TopicVocabularyList({
   return (
     <>
       <div className={styles.headerRow}>
-       <BackLink
-  href={`/topics/${topicSlug}`}
-  label={`Back to ${topicName}`}
-  title="Vocabulary"
-/>
+        <BackLink
+          href={`/topics/${topicSlug}`}
+          label={`Back to ${topicName}`}
+          title="Vocabulary"
+        />
       </div>
+
+      <section
+        className={styles.selectionPanel}
+        aria-label="Vocabulary selection"
+      >
+        <div className={styles.selectionTop}>
+          <p className={styles.selectionCount}>
+            <strong>{selectedCount}</strong>
+            <span>
+              {" "}
+              of {totalCount} selected
+            </span>
+          </p>
+
+          <button
+            type="button"
+            className={styles.selectAllButton}
+            onClick={toggleSelectAll}
+          >
+            {allSelected
+              ? "Clear all"
+              : "Select all"}
+          </button>
+        </div>
+
+        <div className={styles.selectionActions}>
+          <button
+            type="button"
+            className={styles.secondaryButton}
+            onClick={addSelectedToReview}
+            disabled={selectedCount === 0}
+          >
+            Add to review
+          </button>
+
+          <button
+            type="button"
+            className={styles.primaryButton}
+            onClick={trainSelected}
+            disabled={selectedCount === 0}
+          >
+            Train selected
+          </button>
+        </div>
+
+        {statusMessage && (
+          <div
+            className={styles.statusMessage}
+            role="status"
+            aria-live="polite"
+          >
+            {statusMessage}
+          </div>
+        )}
+      </section>
 
       <div className={styles.wordList}>
         {words.map((word) => {
+          const isSelected =
+            selectedIds.has(word.id);
+
           const isInReview =
             reviewIds.has(word.id);
 
@@ -139,34 +283,57 @@ export default function TopicVocabularyList({
           return (
             <article
               key={word.id}
-              className={styles.wordItem}
+              className={[
+                styles.wordItem,
+                isSelected
+                  ? styles.wordItemSelected
+                  : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
             >
               <div className={styles.wordRow}>
-                <label className={styles.wordSelection}>
-  <input
-    type="checkbox"
-    className={styles.checkbox}
-    checked={isInReview}
-    onChange={() => toggleReview(word)}
-    aria-label={
-      isInReview
-        ? `Remove ${word.term} from review`
-        : `Add ${word.term} to review`
-    }
-  />
+                <label
+                  className={styles.wordSelection}
+                >
+                  <input
+                    type="checkbox"
+                    className={styles.checkbox}
+                    checked={isSelected}
+                    onChange={() =>
+                      toggleSelected(word.id)
+                    }
+                    aria-label={`Select ${word.term}`}
+                  />
 
-  <span className={styles.wordInfo}>
-    <span className={styles.word}>
-      {word.term}
-    </span>
+                  <span
+                    className={styles.wordInfo}
+                  >
+                    <span className={styles.word}>
+                      {word.term}
+                    </span>
 
-    {word.part_of_speech && (
-      <span className={styles.partOfSpeech}>
-        {word.part_of_speech}
-      </span>
-    )}
-  </span>
-</label>
+                    {word.part_of_speech && (
+                      <span
+                        className={
+                          styles.partOfSpeech
+                        }
+                      >
+                        {word.part_of_speech}
+                      </span>
+                    )}
+
+                    {isInReview && (
+                      <span
+                        className={
+                          styles.reviewBadge
+                        }
+                      >
+                        In review
+                      </span>
+                    )}
+                  </span>
+                </label>
 
                 <button
                   type="button"
@@ -176,9 +343,11 @@ export default function TopicVocabularyList({
                   }
                   aria-expanded={isExpanded}
                 >
-                  {isExpanded
-                    ? "Hide details"
-                    : "Details"}
+                  <span>
+                    {isExpanded
+                      ? "Hide details"
+                      : "Details"}
+                  </span>
 
                   <span
                     className={styles.chevron}
@@ -246,7 +415,9 @@ export default function TopicVocabularyList({
                           isDefinitionOpen
                         }
                       >
-                        <span>Definition</span>
+                        <span>
+                          Definition
+                        </span>
 
                         <span
                           className={
@@ -267,7 +438,9 @@ export default function TopicVocabularyList({
                           }
                         >
                           <p>
-                            {word.definition_da}
+                            {
+                              word.definition_da
+                            }
                           </p>
                         </div>
                       )}
@@ -315,9 +488,7 @@ export default function TopicVocabularyList({
                             styles.dropdownContent
                           }
                         >
-                          <p>
-                            {word.example}
-                          </p>
+                          <p>{word.example}</p>
                         </div>
                       )}
                     </div>

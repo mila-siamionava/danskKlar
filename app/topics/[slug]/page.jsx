@@ -41,11 +41,7 @@ export default async function TopicPage({ params }) {
           />
         </div>
 
-        {topic.description && (
-          <p className={styles.description}>
-            {topic.description}
-          </p>
-        )}
+        
 
         <p className={styles.intro}>
           Choose what you want to practise
